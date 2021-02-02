@@ -334,6 +334,64 @@ hello vincent!!!<span aria-hidden="true" class="line-numbers-rows"><span></span>
       </tags>
   </entry>
   <entry>
+    <title>Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh</title>
+    <url>/2019/03/05/mac-pei-zhi/</url>
+    <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-d655dfa497bbcfd7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="电脑配置"></p>
+<p>哎，一年换了个21-inch iMac，两个27-inch iMac，加上重做系统就更不说了，每次都要下载各种软件，各种配置。。。故记录这篇文章以免自己以后老了记不住，希望可以帮到更多人吧！</p>
+<h4 id="效率神器Alfred、Go2shell"><a href="#效率神器Alfred、Go2shell" class="headerlink" title="效率神器Alfred、Go2shell"></a>效率神器Alfred、Go2shell</h4><p>首先，拿到新电脑，需要下载很多软件，第一时间把<code>Alfred</code>和<code>Go2shell</code>安装好，这里有<a href="xclient.info">各种破解软件免费下载平台</a>，里面安装教程很详细，默认<code>alt + 空格</code>打开Alfred，Go2shell就是可以快速打开当前路径的终端，用起来还是很方便的。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-8400d17b9f794546.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Go2shell"></p>
+<h4 id="终端配置"><a href="#终端配置" class="headerlink" title="终端配置"></a>终端配置</h4><p>接下来根据个人喜好配置终端，之前也一直在用苹果自带的终端，但是自从接触了iTerm2后就无法自拔了。</p>
+<ul>
+<li><p>安装iTerm2<br>先去官网下载iTerm2，<a href="http s://www.iterm2.com/downloads.html">iTerm2下载地址：</a><a href="https://www.iterm2.com/downloads.html">https://www.iterm2.com/downloads.html</a></p>
+</li>
+<li><p>配置iTerm2<br>目前iTerm2 最常用的主题是<code>Solarized Dark theme</code>，下载地址：<a href="http://ethanschoonover.com/solarized">http://ethanschoonover.com/solarized</a>，下载好的压缩文件解压后，打开 iTerm2的<code>Preferences</code>配置界面，可以按<code>Command + ,</code>键打开 ，然后<code>Profiles -&gt; Colors -&gt; Color Presets -&gt; Import</code></p>
+</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-889dc79aadf6e185.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="添加主题文件"></p>
+<p>选择刚才解压的solarized-&gt;iterm2-colors-solarized-&gt;Solarized Dark.itermcolors文件，导入成功，最后选择 Solarized Dark 主题。</p>
+<h4 id="配置Oh-My-Zsh"><a href="#配置Oh-My-Zsh" class="headerlink" title="配置Oh My Zsh"></a>配置Oh My Zsh</h4><p>一款用于管理zsh配置，可以提供超级多而强大的插件和漂亮的主题。可以去GitHub下载<a href="https://github.com/robbyrussell/oh-my-zsh">Oh My Zsh</a></p>
+<ul>
+<li>安装Oh My Zsh<pre class="line-numbers language-none"><code class="language-none">// 使用 crul 安装：
+$ sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+或者<pre class="line-numbers language-none"><code class="language-none">// 使用wget：
+$ sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+安装成功后</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-3fe231151c615c15.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="配置Oh My Zsh"></p>
+<ul>
+<li>卸载Oh My Zsh<pre class="line-numbers language-none"><code class="language-none">// 卸载oh-my-zsh命令：
+$ uninstall_oh_my_zsh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>设置当前用户的默认Shell为Zsh<pre class="line-numbers language-none"><code class="language-none">$ chsh -s /bin/zsh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+接下来，将主题配置修改为ZSH_THEME=”agnoster”<pre class="line-numbers language-none"><code class="language-none">$ vim ~/.zshrc<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+到目前为止，不出意外的话，iTerm2外观应该是这样的</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-92007dc6e28a9a86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="iTerm2外观"></p>
+<p>界面显示乱码原因是没有安装<code>Meslo</code>字体，字体下载地址：<a href="https://github.com/powerline/fonts/blob/master/Meslo%20Slashed/Meslo%20LG%20M%20Regular%20for%20Powerline.ttf">Meslo LG M Regular for Powerline.ttf</a>，下载后安装接下来还是打开 iTerm2的Preferences 配置界面，可以按<code>Command + ,</code>键打开 ，然后<code>Profiles -&gt; Text -&gt; Font -&gt; Chanage Font</code></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-ffed44579f071798.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="配置Meslo字体"><br>成功后的截图<br><img src="https://upload-images.jianshu.io/upload_images/5741330-e95f6971f45f9469.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="iTerm2+Oh My Zsh"></p>
+<p>也可以修改合适的字体大小。</p>
+<h4 id="自动填充"><a href="#自动填充" class="headerlink" title="自动填充"></a>自动填充</h4><p>这个功能是非常实用的，可以方便我们快速的敲命令。</p>
+<p>配置步骤，先克隆<code>zsh-autosuggestions</code>项目，到指定目录：<br></p><pre class="line-numbers language-none"><code class="language-none">$ git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>然后编辑<code>vim ~/.zshrc</code>文件，找到<code>plugins</code>配置，增加<code>zsh-autosuggestions</code>插件。如果配置不生效增加zsh-syntax-highlighting插件试试。<p></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-275b4a55100f9dac.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="自动填充"></p>
+<h4 id="隐藏用户名和主机名"><a href="#隐藏用户名和主机名" class="headerlink" title="隐藏用户名和主机名"></a>隐藏用户名和主机名</h4><p>进入Oh My Zsh主题文件列表<br></p><pre class="line-numbers language-none"><code class="language-none">$ cd ~/.oh-my-zsh/themes<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>进入已选的主题，并找到<code>prompt_context</code>，然后进行修改<br><pre class="line-numbers language-none"><code class="language-none">### Prompt components
+# Each component will draw itself, and hide itself if no information needs to be shown
+
+# Context: user@hostname (who am I and where am I)
+prompt_context() {
+  if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
+    # prompt_segment black default "%(!.%{%F{yellow}%}.)%n@%m"
+    prompt_segment black default "Vincent" // Vincent是写死的名字 可以根据个人爱好随意设置
+  fi
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br><img src="https://upload-images.jianshu.io/upload_images/5741330-3c6300f5a99d9272.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="隐藏用户名和主机名"><p></p>
+<p>还有一些插件和功能网上很多，暂不做更多介绍。</p>
+<p>该文章为记录本人的电脑配置，希望能够帮助大家！！！</p>
+]]></content>
+      <categories>
+        <category>软件</category>
+      </categories>
+      <tags>
+        <tag>Mac配置</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>非对称加密算法--RSA加密原理及运用</title>
     <url>/2018/12/02/rsa-jia-mi-yuan-li-ji-yun-yong/</url>
     <content><![CDATA[<p><img src="https://s.im5i.com/2021/02/02/kIFKH.png" alt="RSA加密原理及运用"></p>
@@ -456,61 +514,263 @@ $ cat dec.bin
       </tags>
   </entry>
   <entry>
-    <title>Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh</title>
-    <url>/2019/03/05/mac-pei-zhi/</url>
-    <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-d655dfa497bbcfd7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="电脑配置"></p>
-<p>哎，一年换了个21-inch iMac，两个27-inch iMac，加上重做系统就更不说了，每次都要下载各种软件，各种配置。。。故记录这篇文章以免自己以后老了记不住，希望可以帮到更多人吧！</p>
-<h4 id="效率神器Alfred、Go2shell"><a href="#效率神器Alfred、Go2shell" class="headerlink" title="效率神器Alfred、Go2shell"></a>效率神器Alfred、Go2shell</h4><p>首先，拿到新电脑，需要下载很多软件，第一时间把<code>Alfred</code>和<code>Go2shell</code>安装好，这里有<a href="xclient.info">各种破解软件免费下载平台</a>，里面安装教程很详细，默认<code>alt + 空格</code>打开Alfred，Go2shell就是可以快速打开当前路径的终端，用起来还是很方便的。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-8400d17b9f794546.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Go2shell"></p>
-<h4 id="终端配置"><a href="#终端配置" class="headerlink" title="终端配置"></a>终端配置</h4><p>接下来根据个人喜好配置终端，之前也一直在用苹果自带的终端，但是自从接触了iTerm2后就无法自拔了。</p>
-<ul>
-<li><p>安装iTerm2<br>先去官网下载iTerm2，<a href="http s://www.iterm2.com/downloads.html">iTerm2下载地址：</a><a href="https://www.iterm2.com/downloads.html">https://www.iterm2.com/downloads.html</a></p>
-</li>
-<li><p>配置iTerm2<br>目前iTerm2 最常用的主题是<code>Solarized Dark theme</code>，下载地址：<a href="http://ethanschoonover.com/solarized">http://ethanschoonover.com/solarized</a>，下载好的压缩文件解压后，打开 iTerm2的<code>Preferences</code>配置界面，可以按<code>Command + ,</code>键打开 ，然后<code>Profiles -&gt; Colors -&gt; Color Presets -&gt; Import</code></p>
-</li>
-</ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-889dc79aadf6e185.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="添加主题文件"></p>
-<p>选择刚才解压的solarized-&gt;iterm2-colors-solarized-&gt;Solarized Dark.itermcolors文件，导入成功，最后选择 Solarized Dark 主题。</p>
-<h4 id="配置Oh-My-Zsh"><a href="#配置Oh-My-Zsh" class="headerlink" title="配置Oh My Zsh"></a>配置Oh My Zsh</h4><p>一款用于管理zsh配置，可以提供超级多而强大的插件和漂亮的主题。可以去GitHub下载<a href="https://github.com/robbyrussell/oh-my-zsh">Oh My Zsh</a></p>
-<ul>
-<li>安装Oh My Zsh<pre class="line-numbers language-none"><code class="language-none">// 使用 crul 安装：
-$ sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-或者<pre class="line-numbers language-none"><code class="language-none">// 使用wget：
-$ sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-安装成功后</li>
-</ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-3fe231151c615c15.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="配置Oh My Zsh"></p>
-<ul>
-<li>卸载Oh My Zsh<pre class="line-numbers language-none"><code class="language-none">// 卸载oh-my-zsh命令：
-$ uninstall_oh_my_zsh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
-<li>设置当前用户的默认Shell为Zsh<pre class="line-numbers language-none"><code class="language-none">$ chsh -s /bin/zsh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-接下来，将主题配置修改为ZSH_THEME=”agnoster”<pre class="line-numbers language-none"><code class="language-none">$ vim ~/.zshrc<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-到目前为止，不出意外的话，iTerm2外观应该是这样的</li>
-</ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-92007dc6e28a9a86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="iTerm2外观"></p>
-<p>界面显示乱码原因是没有安装<code>Meslo</code>字体，字体下载地址：<a href="https://github.com/powerline/fonts/blob/master/Meslo%20Slashed/Meslo%20LG%20M%20Regular%20for%20Powerline.ttf">Meslo LG M Regular for Powerline.ttf</a>，下载后安装接下来还是打开 iTerm2的Preferences 配置界面，可以按<code>Command + ,</code>键打开 ，然后<code>Profiles -&gt; Text -&gt; Font -&gt; Chanage Font</code></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-ffed44579f071798.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="配置Meslo字体"><br>成功后的截图<br><img src="https://upload-images.jianshu.io/upload_images/5741330-e95f6971f45f9469.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="iTerm2+Oh My Zsh"></p>
-<p>也可以修改合适的字体大小。</p>
-<h4 id="自动填充"><a href="#自动填充" class="headerlink" title="自动填充"></a>自动填充</h4><p>这个功能是非常实用的，可以方便我们快速的敲命令。</p>
-<p>配置步骤，先克隆<code>zsh-autosuggestions</code>项目，到指定目录：<br></p><pre class="line-numbers language-none"><code class="language-none">$ git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>然后编辑<code>vim ~/.zshrc</code>文件，找到<code>plugins</code>配置，增加<code>zsh-autosuggestions</code>插件。如果配置不生效增加zsh-syntax-highlighting插件试试。<p></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-275b4a55100f9dac.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="自动填充"></p>
-<h4 id="隐藏用户名和主机名"><a href="#隐藏用户名和主机名" class="headerlink" title="隐藏用户名和主机名"></a>隐藏用户名和主机名</h4><p>进入Oh My Zsh主题文件列表<br></p><pre class="line-numbers language-none"><code class="language-none">$ cd ~/.oh-my-zsh/themes<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>进入已选的主题，并找到<code>prompt_context</code>，然后进行修改<br><pre class="line-numbers language-none"><code class="language-none">### Prompt components
-# Each component will draw itself, and hide itself if no information needs to be shown
-
-# Context: user@hostname (who am I and where am I)
-prompt_context() {
-  if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    # prompt_segment black default "%(!.%{%F{yellow}%}.)%n@%m"
-    prompt_segment black default "Vincent" // Vincent是写死的名字 可以根据个人爱好随意设置
-  fi
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br><img src="https://upload-images.jianshu.io/upload_images/5741330-3c6300f5a99d9272.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="隐藏用户名和主机名"><p></p>
-<p>还有一些插件和功能网上很多，暂不做更多介绍。</p>
-<p>该文章为记录本人的电脑配置，希望能够帮助大家！！！</p>
+    <title>Runloop底层原理--源码分析</title>
+    <url>/2021/02/02/runtime-fan-hui-bian/</url>
+    <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-0353c6ce7788cf39.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="反汇编分析消息转发"></p>
+<blockquote>
+<p>消息转发：发送一个消息，也就是sel查找imp，当没有找到imp，接下来进入动态方法解析，如果开发者并没有处理，会进入消息转发。</p>
+<h4 id="消息转发"><a href="#消息转发" class="headerlink" title="消息转发"></a>消息转发</h4><p>前几篇文章介绍了<a href="https://www.jianshu.com/p/1ddd15e47343">Runtime底层原理</a>和<a href="https://www.jianshu.com/p/a7db9f0c82d6">动态方法解析总结</a></p>
+</blockquote>
+<p>，我们知道如果前面的动态方法解析也没有解决问题的话，那么就会进入消息转发<code>_objc_msgForward_impcache</code>方法，会有快速消息转发和慢速消息转发。<br><code>_objc_msgForward_impcache</code>方法会从C转换到汇编部分<code>__objc_msgForward_impcache</code>进行快速消息转发，执行闭源<code>__objc_msgForward</code>。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-3eb7d8eb18b221b2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="汇编部分__objc_msgForward"></p>
+<p>如果我们的方法没有查找到会报错<code>_forwarding_prep_0</code><br><img src="https://upload-images.jianshu.io/upload_images/5741330-9ef2ef6fcc43679a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="崩溃信息"></p>
+<p>但是我们在源代码中找不到该方法，除了前面文章—<a href="https://www.jianshu.com/p/1ddd15e47343">Runtime底层原理—动态方法解析、消息转发源码分析</a>提到的方法外，我们可以用反汇编分析消息转发。</p>
+<p>首先进入<code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/System/Library/Frameworks/CoreFoundation.framework</code>中，找到可执行文件<code>CoreFoundation</code>，将该文件拖入hopper中，找到<code>CFInitialze</code>可以看到了<code>___forwarding_prep_0___</code><br><img src="https://upload-images.jianshu.io/upload_images/5741330-0b90c8c5ea93efc0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="forwarding_prep_0"></p>
+<p>进入<code>___forwarding_prep_0___</code>内部，<br><img src="https://upload-images.jianshu.io/upload_images/5741330-05fba25f458f9938.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="____forwarding___"></p>
+<p>从崩溃堆栈信息中看到有执行forwarding，进入forwarding内部，里面判断了_objc_msgSend_stret、_objc_msgSend、taggedpointer之后有个<code>forwardingTargetForSelector:</code>，判断<code>forwardingTargetForSelector:</code>没有实现，没有实现跳转到loc_126fc7，<br><img src="https://upload-images.jianshu.io/upload_images/5741330-0a615756710dd4d5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="forwardingTargetForSelector"></p>
+<p>进入loc_126fc7，判断僵尸对象之后执行方法签名<code>methodSignatureForSelector:</code>，如果有值，获取Name、是否有效的位移等，之后会响应<code>_forwardStackInvocation:</code>，</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-828729004c8eb7f0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="_forwardStackInvocation"></p>
+<p>如果没有响应<code>_forwardStackInvocation:</code>，则会响应<code>forwardInvocation:</code>，给rdi发送rax消息，rdi就是NSInvocation，rax就是sel<code>forwardInvocation:</code>，<strong>这就是消息转发的流程</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-025bfb972fbb00fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="selforwardInvocation"></p>
+<p>对<code>_objc_msgForward</code>部分进行反汇编成OC代码：<br></p><pre class="line-numbers language-none"><code class="language-none">
+int __forwarding__(void *frameStackPointer, int isStret) {
+    id receiver = *(id *)frameStackPointer;
+    SEL sel = *(SEL *)(frameStackPointer + 8);
+    const char *selName = sel_getName(sel);
+    Class receiverClass = object_getClass(receiver);
+    
+    // 调用 forwardingTargetForSelector:
+    if (class_respondsToSelector(receiverClass, @selector(forwardingTargetForSelector:))) {
+        id forwardingTarget = [receiver forwardingTargetForSelector:sel];
+        if (forwardingTarget &amp;&amp; forwarding != receiver) {
+            if (isStret == 1) {
+                int ret;
+                objc_msgSend_stret(&amp;ret,forwardingTarget, sel, ...);
+                return ret;
+            }
+            return objc_msgSend(forwardingTarget, sel, ...);
+        }
+    }
+    
+    // 僵尸对象
+    const char *className = class_getName(receiverClass);
+    const char *zombiePrefix = "_NSZombie_";
+    size_t prefixLen = strlen(zombiePrefix); // 0xa
+    if (strncmp(className, zombiePrefix, prefixLen) == 0) {
+        CFLog(kCFLogLevelError,
+              @"*** -[%s %s]: message sent to deallocated instance %p",
+              className + prefixLen,
+              selName,
+              receiver);
+        &lt;breakpoint-interrupt&gt;
+    }
+    
+    // 调用 methodSignatureForSelector 获取方法签名后再调用 forwardInvocation
+    if (class_respondsToSelector(receiverClass, @selector(methodSignatureForSelector:))) {
+        NSMethodSignature *methodSignature = [receiver methodSignatureForSelector:sel];
+        if (methodSignature) {
+            BOOL signatureIsStret = [methodSignature _frameDescriptor]-&gt;returnArgInfo.flags.isStruct;
+            if (signatureIsStret != isStret) {
+                CFLog(kCFLogLevelWarning ,
+                      @"*** NSForwarding: warning: method signature and compiler disagree on struct-return-edness of '%s'.  Signature thinks it does%s return a struct, and compiler thinks it does%s.",
+                      selName,
+                      signatureIsStret ? "" : not,
+                      isStret ? "" : not);
+            }
+            if (class_respondsToSelector(receiverClass, @selector(forwardInvocation:))) {
+                NSInvocation *invocation = [NSInvocation _invocationWithMethodSignature:methodSignature frame:frameStackPointer];
+                
+                [receiver forwardInvocation:invocation];
+                
+                void *returnValue = NULL;
+                [invocation getReturnValue:&amp;value];
+                return returnValue;
+            } else {
+                CFLog(kCFLogLevelWarning ,
+                      @"*** NSForwarding: warning: object %p of class '%s' does not implement forwardInvocation: -- dropping message",
+                      receiver,
+                      className);
+                return 0;
+            }
+        }
+    }
+    
+    SEL *registeredSel = sel_getUid(selName);
+    
+    // selector 是否已经在 Runtime 注册过
+    if (sel != registeredSel) {
+        CFLog(kCFLogLevelWarning ,
+              @"*** NSForwarding: warning: selector (%p) for message '%s' does not match selector known to Objective C runtime (%p)-- abort",
+              sel,
+              selName,
+              registeredSel);
+    } // doesNotRecognizeSelector
+    else if (class_respondsToSelector(receiverClass,@selector(doesNotRecognizeSelector:))) {
+        [receiver doesNotRecognizeSelector:sel];
+    }
+    else {
+        CFLog(kCFLogLevelWarning ,
+              @"*** NSForwarding: warning: object %p of class '%s' does not implement doesNotRecognizeSelector: -- abort",
+              receiver,
+              className);
+    }
+    
+    // The point of no return.
+    kill(getpid(), 9);
+}
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>该文章为记录本人的学习路程，希望能够帮助大家！！！<p></p>
 ]]></content>
       <categories>
-        <category>软件</category>
+        <category>底层原理</category>
+        <category>源码分析</category>
       </categories>
       <tags>
-        <tag>Mac配置</tag>
+        <tag>Runtime</tag>
+        <tag>反汇编</tag>
+        <tag>源码分析</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Runloop底层原理--源码分析</title>
+    <url>/2019/04/05/runtime-jian-jie/</url>
+    <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-7f293e1c5c8cb366.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Runtime底层原理"></p>
+<p><a href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtVersionsPlatforms.html#//apple_ref/doc/uid/TP40008048-CH106-SW2">Runtime官方文档介绍直通车</a></p>
+<blockquote>
+<p>扩展：编译时<br>看到运行时就会想到编译时，编译时主要是将源代码翻译成可识别的机器语言，如果编译时类型检查等翻译过程中发现语法分析之类有错误会给出相应的提示。比如OC，swift，Java等高级语言的可读性比较强，但是一般不会被机器直接识别，所以需要将他们编译成机器语言（汇编等），转为二进制</p>
+</blockquote>
+<h4 id="Runtime简介"><a href="#Runtime简介" class="headerlink" title="Runtime简介"></a>Runtime简介</h4><p>在 Objective-C 中，消息是直到运行的时候才和方法实现绑定的。编译器会把一个消息表达式，<br></p><pre class="line-numbers language-none"><code class="language-none">[receiver message]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>转换成一个对消息函数objc_msgSend的调用。该函数有两个主要参数:消息接收者和消息对应的方法——也就是方法编号（name），<strong>发送消息时候，通过sel找到函数实现的指针imp</strong><br><pre class="line-numbers language-none"><code class="language-none">objc_msgSend(receiver, selector)<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>编译器将自动插入调用该消息函数的代码，同时接收消息中的任意数目的参数:<br><pre class="line-numbers language-none"><code class="language-none">objc_msgSend(receiver, selector, arg1, arg2, ...)<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br><strong>该消息函数做了动态绑定所需要的一切:</strong><p></p>
+<ul>
+<li>它首先找到选标所对应的方法实现。因为不同的类对同一方法可能会有不同的实现，所以找到的方法实现依赖于消息接收者的类型。</li>
+<li>然后将消息接收者对象(指向消息接收者对象的指针)以及方法中指定的参数传给找到的方法实现。</li>
+<li>最后，将方法实现的返回值作为该函数的返回值返回。</li>
+</ul>
+<p><strong>消息机制的关键在于编译器为类和对象生成的结构。每个类的结构中至少包括两个基本元素:</strong></p>
+<ul>
+<li>指向父类的指针。</li>
+<li>类的方法表。方法表将方法选标和该类的方法实现的地址关联起来。</li>
+</ul>
+<h4 id="和运行时系统的交互"><a href="#和运行时系统的交互" class="headerlink" title="和运行时系统的交互"></a>和运行时系统的交互</h4><p>Objective-C 程序有三种途径和运行时系统交互:</p>
+<ul>
+<li>通过Objective-C源代码<br>大部分情况下，运行时系统在后台自动运行，当编译Objective-C类和方法时，编译器为实现语言动态特性将自动创建一些数据结构和函数。运行时系统的主要功能就是根据源代码中的表达式发送消息。</li>
+<li>通过Foundation框架中 NSObject 的方法<br>Cocoa程序中绝大部分类都是NSObject类的子类，所以大部分都继承了NSObject类的方法，因而继承 了NSObject的行为。然而，某些情况下， NSObject类仅仅定义了完成某件事情的模板，而没有提供所有需要的代码（比如 description 方法）。某些 NSObject 的方法只是简单地从运行时系统中获得信息，从而允许对象进行一定程度的自我检查（比如methodForSelector方法返回指定方法实现的地址）。</li>
+<li>通过调用运行时系统函数<br>直接调用运行时系统给我们提供的API接口</li>
+</ul>
+<h4 id="Runtime函数注释"><a href="#Runtime函数注释" class="headerlink" title="Runtime函数注释"></a>Runtime函数注释</h4><pre class="line-numbers language-none"><code class="language-none">
+// 1.objc_xxx系列函数  宏观使用,如类与协议的空间分配,注册,注销等操作
+// 函数名称     函数作用
+objc_getClass     获取Class对象
+objc_getMetaClass     获取MetaClass对象
+objc_allocateClassPair     分配空间,创建类(仅在 创建之后,注册之前 能够添加成员变量)
+objc_registerClassPair     注册一个类(注册后方可使用该类创建对象)
+objc_disposeClassPair     注销某个类
+objc_allocateProtocol     开辟空间创建协议
+objc_registerProtocol     注册一个协议
+objc_constructInstance     构造一个实例对象(ARC下无效)
+objc_destructInstance     析构一个实例对象(ARC下无效)
+objc_setAssociatedObject     为实例对象关联对象
+objc_getAssociatedObje*ct     获取实例对象的关联对象
+objc_removeAssociatedObjects     清空实例对象的所有关联对象
+
+// 2.class_xxx系列函数   类的内部,如实例变量,属性,方法,协议等相关问题
+函数名称     函数作用
+class_addIvar     为类添加实例变量
+class_addProperty     为类添加属性
+class_addMethod     为类添加方法
+class_addProtocol     为类遵循协议
+class_replaceMethod     替换类某方法的实现
+class_getName     获取类名
+class_isMetaClass     判断是否为元类
+objc_getProtocol     获取某个协议
+objc_copyProtocolList     拷贝在运行时中注册过的协议列表
+class_getSuperclass     获取某类的父类
+class_setSuperclass     设置某类的父类
+class_getProperty     获取某类的属性
+class_getInstanceVariable     获取实例变量
+class_getClassVariable     获取类变量
+class_getInstanceMethod     获取实例方法
+class_getClassMethod     获取类方法
+class_getMethodImplementation     获取方法的实现
+class_getInstanceSize     获取类的实例的大小
+class_respondsToSelector     判断类是否实现某方法
+class_conformsToProtocol     判断类是否遵循某协议
+class_createInstance     创建类的实例
+class_copyIvarList     拷贝类的实例变量列表
+class_copyMethodList     拷贝类的方法列表
+class_copyProtocolList     拷贝类遵循的协议列表
+class_copyPropertyList     拷贝类的属性列表
+
+// 3.object_xxx系列函数   对象的角度,如实例变量
+函数名称     函数作用
+object_copy     对象copy(ARC无效)
+object_dispose     对象释放(ARC无效)
+object_getClassName     获取对象的类名
+object_getClass     获取对象的Class
+object_setClass     设置对象的Class
+object_getIvar     获取对象中实例变量的值
+object_setIvar     设置对象中实例变量的值
+object_getInstanceVariable     获取对象中实例变量的值 (ARC中无效,使用object_getIvar)
+object_setInstanceVariable     设置对象中实例变量的值 (ARC中无效,使用object_setIvar)
+
+// 4.method_xxx系列函数   方法内部,如方法的参数及返回值类型和方法的实现
+函数名称     函数作用
+method_getName     获取方法名
+method_getImplementation     获取方法的实现
+method_getTypeEncoding     获取方法的类型编码
+method_getNumberOfArguments     获取方法的参数个数
+method_copyReturnType     拷贝方法的返回类型
+method_getReturnType     获取方法的返回类型
+method_copyArgumentType     拷贝方法的参数类型
+method_getArgumentType     获取方法的参数类型
+method_getDescription     获取方法的描述
+method_setImplementation     设置方法的实现
+method_exchangeImplementations     替换方法的实现
+
+// 5.property_xxx系列函数   属性*内部,如属性的特性等
+函数名称     函数作用
+property_getName     获取属性名
+property_getAttributes     获取属性的特性列表
+property_copyAttributeList     拷贝属性的特性列表
+property_copyAttributeValue     拷贝属性中某特性的值
+
+// 6.protocol_xxx系列函数 协议相关
+函数名称     函数作用
+protocol_conformsToProtocol     判断一个协议是否遵循另一个协议
+protocol_isEqual     判断两个协议是否一致
+protocol_getName     获取协议名称
+protocol_copyPropertyList     拷贝协议的属性列表
+protocol_copyProtocolList     拷贝某协议所遵循的协议列表
+protocol_copyMethodDescriptionList     拷贝协议的方法列表
+protocol_addProtocol     为一个协议遵循另一协议
+protocol_addProperty     为协议添加属性
+protocol_getProperty     获取协议中的某个属性
+protocol_addMethodDescription     为协议添加方法描述
+protocol_getMethodDescription     获取协议中某方法的描述
+
+// 7.ivar_xxx 系列函数  实例变量相关
+函数名称     函数作用
+ivar_getName     获取Ivar名称
+ivar_getTypeEncoding     获取类型编码
+ivar_getOffset     获取偏移量
+
+// 8.sel_xxx系列函数   方法编号相关
+函数名称     函数作用
+sel_getName     获取名称
+sel_getUid     注册方法
+sel_registerName     注册方法名
+sel_isEqual     判断方法是否相等
+
+// 9.imp_xxx系列函数   方法实现相关
+函数名称     函数作用
+imp_implementationWithBlock     通过代码块创建IMP
+imp_getBlock     获取函数指针中的代码块
+imp_removeBlock     移除IMP中的代码块
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果想继续探究Runtime底层原理，下篇是<a href="[https://www.jianshu.com/p/1ddd15e47343](https://www.jianshu.com/p/1ddd15e47343">Runtime源码分析</a><br>)，包括动态方法解析和消息转发。<br>该文章为记录本人的学习路程，希望能够帮助大家！！！</p>
+]]></content>
+      <categories>
+        <category>底层原理</category>
+      </categories>
+      <tags>
+        <tag>Runtime</tag>
       </tags>
   </entry>
   <entry>
@@ -628,6 +888,241 @@ Verifying - Enter Export Password:<span aria-hidden="true" class="line-numbers-r
         <tag>非对称加密原理</tag>
         <tag>OpenSSL</tag>
         <tag>签名</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Runtime底层原理--IMP查找流程、动态方法解析、消息转发源码分析</title>
+    <url>/2019/04/12/imp-yuan-ma-fen-xi/</url>
+    <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-3e21c38f5be9a8d5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Runtime底层原理"></p>
+<p>了解了<a href="https://www.jianshu.com/p/eddc9bdb46ea">Runtime函数含义</a>，我们就可以直接使用Runtime的API了，那接下来继续探究Runtime的源码，经过源码分析来更加深刻的了解Runtime原理。</p>
+<h4 id="开发应用"><a href="#开发应用" class="headerlink" title="开发应用"></a>开发应用</h4><blockquote>
+<p>都知道Runtime很重要，但是有很多小伙伴根本不了解，或者只是知道可以替换方法啊、可以交换两个方法的调用，项目中也用不到，<br>从进入iOS开始，写了无数个<code>[[objc alloc] init]</code>，这个到底在干嘛？初始化和init？alloc和init到底做了什么？</p>
+</blockquote>
+<h5 id="通过汇编查看方法调用"><a href="#通过汇编查看方法调用" class="headerlink" title="通过汇编查看方法调用"></a>通过汇编查看方法调用</h5><pre class="line-numbers language-none"><code class="language-none">Person *person = [Person alloc];
+Person *person1 = [person init];
+Person *person2 = [person init];
+NSLog(@"%p-----%p------%p", person, person1, person2);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里会输出什么呢？</p>
+<pre class="line-numbers language-none"><code class="language-none">0x10102e1a0-----0x10102e1a0------0x10102e1a0<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>来，让我们断点看下，<code>alloc</code>和<code>init</code>是怎么调用的</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-df50f7ae402013ac.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="objc_msgSend"></p>
+<p>我们看到调用<code>alloc</code>和<code>init</code>都调起了<code>objc_msgSend</code>，接下来跟着符号断点走</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-7706f8564d5b447d.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="libobjc"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-7f2f3a95f30891e6.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="callAlloc"></p>
+<p>进入<code>libobjc</code>库的dylib之后走<code>+[NSObject alloc]</code>方法，指针调起<code>_objc_rootAlloc</code>，进入<code>_objc_rootAlloc</code>方法，继续调起<code>callAlloc</code>，通过寄存器，可以看到alloc已经通过类创建实例对象</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-6839fe399aa384bd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="类对象"></p>
+<p><code>init</code>按照同样方法 依然可以通过汇编看出方法调用顺序，可以用真机进行测试并打印 </p>
+<h5 id="通过编译C"><a href="#通过编译C" class="headerlink" title="通过编译C++"></a>通过编译C++</h5><p>当新的对象被创建时，其内存同时被分配，实例变量也同时被初始化。对象的第一个实例变量是一个指向该对象的类结构的指针，叫做 isa。通过该指针，对象可以访问它对应的类以及相应的父类。在 Objective-C 运行时系统中对象需要有 isa 指针，我们一般创建的从 NSObject 或者 NSProxy 继承的对象都自动包括 isa 变量。接下来看下对象被创建的过程<br>首先，我们通过clang命令<br></p><pre class="line-numbers language-none"><code class="language-none">$ xcrun -sdk iphoneos clang -arch arm64 -rewrite-objc main.m -o testMain.c++<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>也可以用<code>clang -rewrite-objc main.m -o test.c++</code>命令，只不过会有很多警告、代码会更长（大概9万多行）。<br>编译main函数中的OC代码为C++代码<br><pre class="line-numbers language-none"><code class="language-none">int main(int argc, const char * argv[]) {
+    @autoreleasepool {
+        
+        Person *p = [[Person alloc] init];
+        [p run];
+  
+    }
+    return 0;
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>编译后多一个testMain.c++文件，打开后在代码最后面会发现我们的main函数<br><pre class="line-numbers language-none"><code class="language-none">int main(int argc, const char * argv[]) {
+    /* @autoreleasepool */ { __AtAutoreleasePool __autoreleasepool; 
+        Person *p = ((Person *(*)(id, SEL))(void *)objc_msgSend)((id)((Person *(*)(id, SEL))(void *)objc_msgSend)((id)objc_getClass("Person"), sel_registerName("alloc")), sel_registerName("init"));
+        ((void (*)(id, SEL))(void *)objc_msgSend)((id)p, sel_registerName("run"));
+
+    }
+    return 0;
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>可以看出，我们的方法调用会编译成objc_msgSend，<p></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-6b959a3252ac08d6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="person对象"></p>
+<p>由此还会发现对象的本质其实就是一个结构体</p>
+<h4 id="下层通讯-通过源码查看objc-msgSend内部实现"><a href="#下层通讯-通过源码查看objc-msgSend内部实现" class="headerlink" title="下层通讯(通过源码查看objc_msgSend内部实现)"></a>下层通讯(通过源码查看objc_msgSend内部实现)</h4><p>首先我们到<a href="https://upload-images.jianshu.io/upload_images/5741330-3acf8ade7f319c5f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">苹果open source</a>官网下载最新源码<br><img src="https://upload-images.jianshu.io/upload_images/5741330-3acf8ade7f319c5f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="源码"></p>
+<p>在<strong>方法调用的时候，会发送<code>objc_msgSend</code>消息，<code>objc_msgSend</code>会根据sel找到函数实现的指针imp</strong>，进而执行函数，那sel是如何找到imp的呢？<br><code>objc_msgSend</code>在发送消息时候根据sel查找imp有两种方式</p>
+<ul>
+<li>快速（通过汇编的缓存快速查找）</li>
+<li>慢速（C配合C++、汇编一起查找）<br>先看下objc_class</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-da01958ba32dd572.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="objc_class"></p>
+<p>bits中包含各种数据，cache（每个类都有一个）用来存储方法select和imp，select和imp会以哈希表形式存在<br><code>objc_msgSend</code>在快速查找的时候，就是通过汇编查找objc_class中的cache，如果找到则直接返回，否则通过C的lookup，找到后再存入cache</p>
+<h5 id="汇编部分快速查找"><a href="#汇编部分快速查找" class="headerlink" title="汇编部分快速查找"></a>汇编部分快速查找</h5><p>首先调用<code>objc_msgSend</code>会走到ENTRY</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-4d838bce5a43c8e6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="ENTRY"></p>
+<p>先判断p0检查是否为空和tagged pointer（特殊类型）判断，调用<code>LNilOrTagged</code>进行isa处理，通过isa找到相应类class，最后调用<code>LGetIsaDone</code>来执行<code>CacheLookup</code>在缓存中查找imp，如果查找到直接调起imp否则调起objc_msgSend_uncached，objc_msgSend_uncached有两种情况</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-41e6fb32bc6de43d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="CacheLookup"></p>
+<p>首先，第一个是CacheHit，直接调起imp，第二个是CheckMiss，之后调用objc_msgSend_uncached，第三个就是add，下面是CacheHit和CheckMiss的宏</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-a88860fb2c1871b0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="CacheLookup macro"></p>
+<p>那如果在缓存中没有查找到imp，调起<code>objc_msgSend_uncached</code>，在方法列表中找到imp之后再<code>TailCallFunctionPointer</code>调起imp<br></p><pre class="line-numbers language-none"><code class="language-none">   STATIC_ENTRY __objc_msgSend_uncached
+UNWIND __objc_msgSend_uncached, FrameWithNoSaves
+
+// THIS IS NOT A CALLABLE C FUNCTION
+// Out-of-band p16 is the class to search
+
+MethodTableLookup      // 方法列表中找到imp
+TailCallFunctionPointer x17<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br><strong>重点:MethodTableLookup是怎么操作的</strong><p></p>
+<blockquote>
+<p>小知识点：通过method list查找method，下面是method_t的结构，method其实是一个哈希表，sel和imp是键值对<br></p><pre class="line-numbers language-none"><code class="language-none">struct method_t {
+    SEL name;
+    const char *types;       // 参数类型
+    MethodListIMP imp;
+    struct SortBySELAddress :
+        public std::binary_function&lt;const method_t&amp;,
+                                    const method_t&amp;, bool&gt;
+    {
+        bool operator() (const method_t&amp; lhs,
+                         const method_t&amp; rhs)
+        { return lhs.name &lt; rhs.name; }
+    };
+};
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>进入<code>MethodTableLookup</code>之后，调起了<code>__class_lookupMethodAndLoadCache3</code>，如下图<p></p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-e53cc3c30a78bbe9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="MethodTableLookup"></p>
+<p><code>__class_lookupMethodAndLoadCache3</code>是C方法，再次进入<code>_class_lookupMethodAndLoadCache3</code>方法，<strong>注意，因为这里由汇编跳转到C，所以要全局搜索<code>_class_lookupMethodAndLoadCache3</code>，要删去一个<code>"_"</code></strong>,下面是<code>_class_lookupMethodAndLoadCache3</code>函数</p>
+<pre class="line-numbers language-none"><code class="language-none">/***********************************************************************
+* _class_lookupMethodAndLoadCache.
+* Method lookup for dispatchers ONLY. OTHER CODE SHOULD USE lookUpImp().
+* This lookup avoids optimistic cache scan because the dispatcher 
+* already tried that.
+**********************************************************************/
+IMP _class_lookupMethodAndLoadCache3(id obj, SEL sel, Class cls)
+{
+    return lookUpImpOrForward(cls, sel, obj, 
+                              YES/*initialize*/, NO/*cache*/, YES/*resolver*/);
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h5 id="C-C-部分查找"><a href="#C-C-部分查找" class="headerlink" title="C/C++部分查找"></a>C/C++部分查找</h5><p>调起<code>lookUpImpOrForward</code>，因为当前cls对象已经经过汇编编译到结构，有了isa，并且在cache中没有找到，所以这里的initialize为YES，cache为NO，resolver为YES</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-71ad5c6ba37152f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>进入<code>lookUpImpOrForward</code>，这里再次判断是否存在cache，如果有则直接快速查找，但是这里是NO，所以不会走。接下来走<code>checkIsKnownClass</code>判断是否是已经声明的类，如果没有则报错”Attempt to use unknown class %p.”，之后走<code>realizeClass</code>判断是否已经实现，如果就相应赋值data。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-8916248bb091fe67.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="realizeClass"></p>
+<p>data赋值后走<code>_class_initialize</code>初始化cls，接下来开始<code>retry</code>操作。<br><strong>前方高能</strong><br>再次进行cache_getImp，why？并发啊，还有重映射（在初始化init的时候有个remap（class）第一次通过汇编找不到，但是在加载类的时候对当前类进行重映射）<br><img src="https://upload-images.jianshu.io/upload_images/5741330-cbe3379e8e73bf14.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="cache_getImp"></p>
+<p>接下来开始先在自己的class_rw_t的methods中根据sel查找方法返回method_t</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-22158fedc376e3de.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="method_t"></p>
+<p>如果拿到Method后保存到缓存中，保证以后调用可以直接走汇编的CacheHit快速查找，如果拿不到则继续从父类开始查找，直到找到NSObject(因为NSObject的父类为nil)，如果找到imp则一样保存在缓存中，如果到最后还是没有查找到，则进入动态方法解析。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-348eeda298ad6d52.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="父类查找方法"></p>
+<h5 id="动态方法解析"><a href="#动态方法解析" class="headerlink" title="动态方法解析"></a>动态方法解析</h5><p>如果前面一系列操作还是没有找到方法，那么就会进行动态方法解析，动态方法解析只执行一次</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-9cbb884006c3e59c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="动态方法解析"></p>
+<p>首先执行<code>_class_resolveMethod</code>，这里会执行<code>+resolveClassMethod</code> 或者 <code>+resolveInstanceMethod</code>。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-c5cda417fae04acb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="class resolveMethod"></p>
+<p>先判断当前cls是否为元类，如果是元类则执行<code>_class_resolveClassMethod</code>，再执行<code>_class_resolveInstanceMethod</code>，如果不是元类则直接执行<code>_class_resolveInstanceMethod</code>，<code>_class_resolveInstanceMethod</code>内部调用objc_msgSend实现消息发送，对cls发送了<code>SEL_resolveInstanceMethod</code>类型的消息，所以在方法中会走到<code>resolveInstanceMethod</code>方法。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-0ed2701ca3678b01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="class resolveInstanceMethod"></p>
+<p>为什么元类最后也执行了<code>_class_resolveInstanceMethod</code>方法呢？因为类方法以实例对象的形态存在元类里面，比如类方法中没有找到方法，会去元类中查找，元类中没有再继续去根元类中查找，最后会查到NSObject。</p>
+<h6 id="代码示例："><a href="#代码示例：" class="headerlink" title="代码示例："></a>代码示例：</h6><p>.h实现<br></p><pre class="line-numbers language-none"><code class="language-none">- (void)run;
++ (void)eat;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><br>.m实现(没有实现-run方法和+eat方法)<br><pre class="line-numbers language-none"><code class="language-none">- (void)walk {
+    NSLog(@"%s",__func__);
+}
++ (void)drink {
+    NSLog(@"%s",__func__);
+}
+
+// .m没有实现,并且父类也没有,那么我们就开启动态方法解析
+//- (void)walk{
+//    NSLog(@"%s",__func__);
+//}
+//+ (void)drink{
+//    NSLog(@"%s",__func__);
+//}
+
+
+#pragma mark - 动态方法解析
+
++ (BOOL)resolveInstanceMethod:(SEL)sel{
+    if (sel == @selector(run)) {
+        // 我们动态解析我们的 对象方法
+        NSLog(@"对象方法解析走这里");
+        SEL walkSEL = @selector(walk);
+        Method readM= class_getInstanceMethod(self, walkSEL);
+        IMP readImp = method_getImplementation(readM);
+        const char *type = method_getTypeEncoding(readM);
+        return class_addMethod(self, sel, readImp, type);
+    }
+    return [super resolveInstanceMethod:sel];
+}
+
+
++ (BOOL)resolveClassMethod:(SEL)sel{
+    if (sel == @selector(eat)) {
+        // 我们动态解析我们的 对象方法
+        NSLog(@"类方法解析走这里");
+        SEL drinkSEL = @selector(drink);
+        // 类方法就存在我们的元类的方法列表
+        // 类 类犯法
+        // 元类 对象实例方法
+        //        Method hellowordM1= class_getClassMethod(self, hellowordSEL);
+        Method drinkM= class_getInstanceMethod(object_getClass(self), drinkSEL);
+        IMP drinkImp = method_getImplementation(drinkM);
+        const char *type = method_getTypeEncoding(drinkM);
+        NSLog(@"%s",type);
+        return class_addMethod(object_getClass(self), sel, drinkImp, type);
+    }
+    return [super resolveClassMethod:sel];
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h5 id="消息转发"><a href="#消息转发" class="headerlink" title="消息转发"></a>消息转发</h5><p>经历了动态方法决议还没有找到，会进入苹果尚未开源的消息转发，继续查找方法，<code>_objc_msgForward_impcache</code>再次跨域到汇编。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-c9fa6f055cdbc9d6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="消息转发"></p>
+<p>走到<code>__objc_msgForward_impcache</code>后执行<code>__objc_msgForward</code></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-bb97c18875125e49.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="__objc_msgForward_impcache"></p>
+<p>没有了源码实现，但是我们可以通过<code>instrumentObjcMessageSends</code>函数来打印调用堆栈信息。可以进入<code>instrumentObjcMessageSends</code>内部看下具体实现。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-f7a9ba5a7514aff9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="instrumentObjcMessageSends"></p>
+<p>先判断了是否可以写入日志信息等，接下来同步日志文件</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-e67afa0438c44bd0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="logMessageSend"></p>
+<p>所以我们每次运行会在<code>/private/tmp</code>文件下多一个<code>msgSends-xxx</code>文件，里面是所有调用过程</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-7879482357d545ad.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="堆栈调用信息"></p>
+<p>如果还没有找到的话最后会报错调用<code>__objc_forward_handler</code></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-0c3110e83a8752ff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="__objc_forward_handler"></p>
+<p>这也是我们在方法报错的时候会报<code>unrecognized selector sent to instance %p " "(no message forward handler is installed)"</code>错误的原因，会提示出元类信息，<code>+</code>或者<code>-</code>方法，方法的名字还有SEL方法编号</p>
+<h6 id="代码示例：-1"><a href="#代码示例：-1" class="headerlink" title="代码示例："></a>代码示例：</h6><pre class="line-numbers language-none"><code class="language-none">#pragma mark - 实例对象消息转发
+
+- (id)forwardingTargetForSelector:(SEL)aSelector{
+    NSLog(@"%s",__func__);
+    //    if (aSelector == @selector(run)) {
+    //        // 转发给Student对象
+    //        return [Student new];
+    //    }
+    return [super forwardingTargetForSelector:aSelector];
+}
+
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector{
+    NSLog(@"%s",__func__);
+    if (aSelector == @selector(run)) {
+        // forwardingTargetForSelector 没有实现，就只能方法签名了
+        return [NSMethodSignature signatureWithObjCTypes:"v@:@"];
+    }
+    return [super methodSignatureForSelector:aSelector];
+}
+
+- (void)forwardInvocation:(NSInvocation *)anInvocation{
+    NSLog(@"%s",__func__);
+    NSLog(@"------%@-----",anInvocation);
+    anInvocation.selector = @selector(walk);
+    [anInvocation invoke];
+}
+
+#pragma mark - 类消息转发
+
++ (id)forwardingTargetForSelector:(SEL)aSelector{
+    NSLog(@"%s",__func__);
+    return [super forwardingTargetForSelector:aSelector];
+}
+//
+
++ (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector{
+    NSLog(@"%s",__func__);
+    if (aSelector == @selector(walk)) {
+        return [NSMethodSignature signatureWithObjCTypes:"v@:@"];
+    }
+    return [super methodSignatureForSelector:aSelector];
+}
+
++ (void)forwardInvocation:(NSInvocation *)anInvocation{
+    NSLog(@"%s",__func__);
+    
+    NSString *sto = @"奔跑吧";
+    anInvocation.target = [Student class];
+    [anInvocation setArgument:&amp;sto atIndex:2];
+    NSLog(@"%@",anInvocation.methodSignature);
+    anInvocation.selector = @selector(run:);
+    [anInvocation invoke];
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>现在我们应该也知道了为什么<code>objc_msgSend</code>的源码用的汇编，因为汇编可以通过寄存器x0-x31来保留未知参数来跳转到任意的指针，还有汇编更高效一点，而C满足不了。</p>
+<h4 id="言而总之，总而言之"><a href="#言而总之，总而言之" class="headerlink" title="言而总之，总而言之"></a>言而总之，总而言之</h4><blockquote>
+<p>Runtime就是C、C++、汇编实现的一套API，给OC增加的一个运行时功能，也就是我们平时所说的运行时。<br>在运行工程时工程会被装载到内存，来提供运行时功能。</p>
+</blockquote>
+<p>该文章为记录本人的学习路程，希望能够帮助大家！！！</p>
+]]></content>
+      <categories>
+        <category>底层原理</category>
+        <category>源码分析</category>
+      </categories>
+      <tags>
+        <tag>Runtime</tag>
       </tags>
   </entry>
   <entry>

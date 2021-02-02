@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh, OC, Swift">
+    <meta name="keywords" content="Runloop底层原理--源码分析, OC, Swift">
     <meta name="description" content="iOS开发技术分享">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh | Vincent&#39;s blogs</title>
+    <title>Runloop底层原理--源码分析 | Vincent&#39;s blogs</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -301,12 +301,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/6.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh</h1>
+                    <h1 class="description center-align post-title">Runloop底层原理--源码分析</h1>
                 </div>
             </div>
         </div>
@@ -422,8 +422,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Mac%E9%85%8D%E7%BD%AE/">
-                                <span class="chip bg-color">Mac配置</span>
+                            <a href="/tags/Runtime/">
+                                <span class="chip bg-color">Runtime</span>
                             </a>
                         
                     </div>
@@ -434,8 +434,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E8%BD%AF%E4%BB%B6/" class="post-category">
-                                软件
+                            <a href="/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="post-category">
+                                底层原理
                             </a>
                         
                     </div>
@@ -447,7 +447,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-02-02
+                    2019-04-05
                 </div>
                 
 
@@ -458,7 +458,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    6 分
                 </div>
                 
 
@@ -476,53 +476,139 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://upload-images.jianshu.io/upload_images/5741330-d655dfa497bbcfd7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="电脑配置"></p>
-<p>哎，一年换了个21-inch iMac，两个27-inch iMac，加上重做系统就更不说了，每次都要下载各种软件，各种配置。。。故记录这篇文章以免自己以后老了记不住，希望可以帮到更多人吧！</p>
-<h4 id="效率神器Alfred、Go2shell"><a href="#效率神器Alfred、Go2shell" class="headerlink" title="效率神器Alfred、Go2shell"></a>效率神器Alfred、Go2shell</h4><p>首先，拿到新电脑，需要下载很多软件，第一时间把<code>Alfred</code>和<code>Go2shell</code>安装好，这里有<a href="xclient.info">各种破解软件免费下载平台</a>，里面安装教程很详细，默认<code>alt + 空格</code>打开Alfred，Go2shell就是可以快速打开当前路径的终端，用起来还是很方便的。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-8400d17b9f794546.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Go2shell"></p>
-<h4 id="终端配置"><a href="#终端配置" class="headerlink" title="终端配置"></a>终端配置</h4><p>接下来根据个人喜好配置终端，之前也一直在用苹果自带的终端，但是自从接触了iTerm2后就无法自拔了。</p>
+                <p><img src="https://upload-images.jianshu.io/upload_images/5741330-7f293e1c5c8cb366.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Runtime底层原理"></p>
+<p><a target="_blank" rel="noopener" href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtVersionsPlatforms.html#//apple_ref/doc/uid/TP40008048-CH106-SW2">Runtime官方文档介绍直通车</a></p>
+<blockquote>
+<p>扩展：编译时<br>看到运行时就会想到编译时，编译时主要是将源代码翻译成可识别的机器语言，如果编译时类型检查等翻译过程中发现语法分析之类有错误会给出相应的提示。比如OC，swift，Java等高级语言的可读性比较强，但是一般不会被机器直接识别，所以需要将他们编译成机器语言（汇编等），转为二进制</p>
+</blockquote>
+<h4 id="Runtime简介"><a href="#Runtime简介" class="headerlink" title="Runtime简介"></a>Runtime简介</h4><p>在 Objective-C 中，消息是直到运行的时候才和方法实现绑定的。编译器会把一个消息表达式，<br></p><pre class="line-numbers language-none"><code class="language-none">[receiver message]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>转换成一个对消息函数objc_msgSend的调用。该函数有两个主要参数:消息接收者和消息对应的方法——也就是方法编号（name），<strong>发送消息时候，通过sel找到函数实现的指针imp</strong><br><pre class="line-numbers language-none"><code class="language-none">objc_msgSend(receiver, selector)<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>编译器将自动插入调用该消息函数的代码，同时接收消息中的任意数目的参数:<br><pre class="line-numbers language-none"><code class="language-none">objc_msgSend(receiver, selector, arg1, arg2, ...)<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br><strong>该消息函数做了动态绑定所需要的一切:</strong><p></p>
 <ul>
-<li><p>安装iTerm2<br>先去官网下载iTerm2，<a href="http s://www.iterm2.com/downloads.html">iTerm2下载地址：</a><a target="_blank" rel="noopener" href="https://www.iterm2.com/downloads.html">https://www.iterm2.com/downloads.html</a></p>
-</li>
-<li><p>配置iTerm2<br>目前iTerm2 最常用的主题是<code>Solarized Dark theme</code>，下载地址：<a target="_blank" rel="noopener" href="http://ethanschoonover.com/solarized">http://ethanschoonover.com/solarized</a>，下载好的压缩文件解压后，打开 iTerm2的<code>Preferences</code>配置界面，可以按<code>Command + ,</code>键打开 ，然后<code>Profiles -&gt; Colors -&gt; Color Presets -&gt; Import</code></p>
-</li>
+<li>它首先找到选标所对应的方法实现。因为不同的类对同一方法可能会有不同的实现，所以找到的方法实现依赖于消息接收者的类型。</li>
+<li>然后将消息接收者对象(指向消息接收者对象的指针)以及方法中指定的参数传给找到的方法实现。</li>
+<li>最后，将方法实现的返回值作为该函数的返回值返回。</li>
 </ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-889dc79aadf6e185.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="添加主题文件"></p>
-<p>选择刚才解压的solarized-&gt;iterm2-colors-solarized-&gt;Solarized Dark.itermcolors文件，导入成功，最后选择 Solarized Dark 主题。</p>
-<h4 id="配置Oh-My-Zsh"><a href="#配置Oh-My-Zsh" class="headerlink" title="配置Oh My Zsh"></a>配置Oh My Zsh</h4><p>一款用于管理zsh配置，可以提供超级多而强大的插件和漂亮的主题。可以去GitHub下载<a target="_blank" rel="noopener" href="https://github.com/robbyrussell/oh-my-zsh">Oh My Zsh</a></p>
+<p><strong>消息机制的关键在于编译器为类和对象生成的结构。每个类的结构中至少包括两个基本元素:</strong></p>
 <ul>
-<li>安装Oh My Zsh<pre class="line-numbers language-none"><code class="language-none">// 使用 crul 安装：
-$ sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-或者<pre class="line-numbers language-none"><code class="language-none">// 使用wget：
-$ sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-安装成功后</li>
+<li>指向父类的指针。</li>
+<li>类的方法表。方法表将方法选标和该类的方法实现的地址关联起来。</li>
 </ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-3fe231151c615c15.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="配置Oh My Zsh"></p>
+<h4 id="和运行时系统的交互"><a href="#和运行时系统的交互" class="headerlink" title="和运行时系统的交互"></a>和运行时系统的交互</h4><p>Objective-C 程序有三种途径和运行时系统交互:</p>
 <ul>
-<li>卸载Oh My Zsh<pre class="line-numbers language-none"><code class="language-none">// 卸载oh-my-zsh命令：
-$ uninstall_oh_my_zsh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
-<li>设置当前用户的默认Shell为Zsh<pre class="line-numbers language-none"><code class="language-none">$ chsh -s /bin/zsh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-接下来，将主题配置修改为ZSH_THEME=”agnoster”<pre class="line-numbers language-none"><code class="language-none">$ vim ~/.zshrc<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-到目前为止，不出意外的话，iTerm2外观应该是这样的</li>
+<li>通过Objective-C源代码<br>大部分情况下，运行时系统在后台自动运行，当编译Objective-C类和方法时，编译器为实现语言动态特性将自动创建一些数据结构和函数。运行时系统的主要功能就是根据源代码中的表达式发送消息。</li>
+<li>通过Foundation框架中 NSObject 的方法<br>Cocoa程序中绝大部分类都是NSObject类的子类，所以大部分都继承了NSObject类的方法，因而继承 了NSObject的行为。然而，某些情况下， NSObject类仅仅定义了完成某件事情的模板，而没有提供所有需要的代码（比如 description 方法）。某些 NSObject 的方法只是简单地从运行时系统中获得信息，从而允许对象进行一定程度的自我检查（比如methodForSelector方法返回指定方法实现的地址）。</li>
+<li>通过调用运行时系统函数<br>直接调用运行时系统给我们提供的API接口</li>
 </ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-92007dc6e28a9a86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="iTerm2外观"></p>
-<p>界面显示乱码原因是没有安装<code>Meslo</code>字体，字体下载地址：<a target="_blank" rel="noopener" href="https://github.com/powerline/fonts/blob/master/Meslo%20Slashed/Meslo%20LG%20M%20Regular%20for%20Powerline.ttf">Meslo LG M Regular for Powerline.ttf</a>，下载后安装接下来还是打开 iTerm2的Preferences 配置界面，可以按<code>Command + ,</code>键打开 ，然后<code>Profiles -&gt; Text -&gt; Font -&gt; Chanage Font</code></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-ffed44579f071798.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="配置Meslo字体"><br>成功后的截图<br><img src="https://upload-images.jianshu.io/upload_images/5741330-e95f6971f45f9469.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="iTerm2+Oh My Zsh"></p>
-<p>也可以修改合适的字体大小。</p>
-<h4 id="自动填充"><a href="#自动填充" class="headerlink" title="自动填充"></a>自动填充</h4><p>这个功能是非常实用的，可以方便我们快速的敲命令。</p>
-<p>配置步骤，先克隆<code>zsh-autosuggestions</code>项目，到指定目录：<br></p><pre class="line-numbers language-none"><code class="language-none">$ git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>然后编辑<code>vim ~/.zshrc</code>文件，找到<code>plugins</code>配置，增加<code>zsh-autosuggestions</code>插件。如果配置不生效增加zsh-syntax-highlighting插件试试。<p></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-275b4a55100f9dac.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="自动填充"></p>
-<h4 id="隐藏用户名和主机名"><a href="#隐藏用户名和主机名" class="headerlink" title="隐藏用户名和主机名"></a>隐藏用户名和主机名</h4><p>进入Oh My Zsh主题文件列表<br></p><pre class="line-numbers language-none"><code class="language-none">$ cd ~/.oh-my-zsh/themes<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>进入已选的主题，并找到<code>prompt_context</code>，然后进行修改<br><pre class="line-numbers language-none"><code class="language-none">### Prompt components
-# Each component will draw itself, and hide itself if no information needs to be shown
+<h4 id="Runtime函数注释"><a href="#Runtime函数注释" class="headerlink" title="Runtime函数注释"></a>Runtime函数注释</h4><pre class="line-numbers language-none"><code class="language-none">
+// 1.objc_xxx系列函数  宏观使用,如类与协议的空间分配,注册,注销等操作
+// 函数名称     函数作用
+objc_getClass     获取Class对象
+objc_getMetaClass     获取MetaClass对象
+objc_allocateClassPair     分配空间,创建类(仅在 创建之后,注册之前 能够添加成员变量)
+objc_registerClassPair     注册一个类(注册后方可使用该类创建对象)
+objc_disposeClassPair     注销某个类
+objc_allocateProtocol     开辟空间创建协议
+objc_registerProtocol     注册一个协议
+objc_constructInstance     构造一个实例对象(ARC下无效)
+objc_destructInstance     析构一个实例对象(ARC下无效)
+objc_setAssociatedObject     为实例对象关联对象
+objc_getAssociatedObje*ct     获取实例对象的关联对象
+objc_removeAssociatedObjects     清空实例对象的所有关联对象
 
-# Context: user@hostname (who am I and where am I)
-prompt_context() {
-  if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    # prompt_segment black default "%(!.%{%F{yellow}%}.)%n@%m"
-    prompt_segment black default "Vincent" // Vincent是写死的名字 可以根据个人爱好随意设置
-  fi
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br><img src="https://upload-images.jianshu.io/upload_images/5741330-3c6300f5a99d9272.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="隐藏用户名和主机名"><p></p>
-<p>还有一些插件和功能网上很多，暂不做更多介绍。</p>
-<p>该文章为记录本人的电脑配置，希望能够帮助大家！！！</p>
+// 2.class_xxx系列函数   类的内部,如实例变量,属性,方法,协议等相关问题
+函数名称     函数作用
+class_addIvar     为类添加实例变量
+class_addProperty     为类添加属性
+class_addMethod     为类添加方法
+class_addProtocol     为类遵循协议
+class_replaceMethod     替换类某方法的实现
+class_getName     获取类名
+class_isMetaClass     判断是否为元类
+objc_getProtocol     获取某个协议
+objc_copyProtocolList     拷贝在运行时中注册过的协议列表
+class_getSuperclass     获取某类的父类
+class_setSuperclass     设置某类的父类
+class_getProperty     获取某类的属性
+class_getInstanceVariable     获取实例变量
+class_getClassVariable     获取类变量
+class_getInstanceMethod     获取实例方法
+class_getClassMethod     获取类方法
+class_getMethodImplementation     获取方法的实现
+class_getInstanceSize     获取类的实例的大小
+class_respondsToSelector     判断类是否实现某方法
+class_conformsToProtocol     判断类是否遵循某协议
+class_createInstance     创建类的实例
+class_copyIvarList     拷贝类的实例变量列表
+class_copyMethodList     拷贝类的方法列表
+class_copyProtocolList     拷贝类遵循的协议列表
+class_copyPropertyList     拷贝类的属性列表
+
+// 3.object_xxx系列函数   对象的角度,如实例变量
+函数名称     函数作用
+object_copy     对象copy(ARC无效)
+object_dispose     对象释放(ARC无效)
+object_getClassName     获取对象的类名
+object_getClass     获取对象的Class
+object_setClass     设置对象的Class
+object_getIvar     获取对象中实例变量的值
+object_setIvar     设置对象中实例变量的值
+object_getInstanceVariable     获取对象中实例变量的值 (ARC中无效,使用object_getIvar)
+object_setInstanceVariable     设置对象中实例变量的值 (ARC中无效,使用object_setIvar)
+
+// 4.method_xxx系列函数   方法内部,如方法的参数及返回值类型和方法的实现
+函数名称     函数作用
+method_getName     获取方法名
+method_getImplementation     获取方法的实现
+method_getTypeEncoding     获取方法的类型编码
+method_getNumberOfArguments     获取方法的参数个数
+method_copyReturnType     拷贝方法的返回类型
+method_getReturnType     获取方法的返回类型
+method_copyArgumentType     拷贝方法的参数类型
+method_getArgumentType     获取方法的参数类型
+method_getDescription     获取方法的描述
+method_setImplementation     设置方法的实现
+method_exchangeImplementations     替换方法的实现
+
+// 5.property_xxx系列函数   属性*内部,如属性的特性等
+函数名称     函数作用
+property_getName     获取属性名
+property_getAttributes     获取属性的特性列表
+property_copyAttributeList     拷贝属性的特性列表
+property_copyAttributeValue     拷贝属性中某特性的值
+
+// 6.protocol_xxx系列函数 协议相关
+函数名称     函数作用
+protocol_conformsToProtocol     判断一个协议是否遵循另一个协议
+protocol_isEqual     判断两个协议是否一致
+protocol_getName     获取协议名称
+protocol_copyPropertyList     拷贝协议的属性列表
+protocol_copyProtocolList     拷贝某协议所遵循的协议列表
+protocol_copyMethodDescriptionList     拷贝协议的方法列表
+protocol_addProtocol     为一个协议遵循另一协议
+protocol_addProperty     为协议添加属性
+protocol_getProperty     获取协议中的某个属性
+protocol_addMethodDescription     为协议添加方法描述
+protocol_getMethodDescription     获取协议中某方法的描述
+
+// 7.ivar_xxx 系列函数  实例变量相关
+函数名称     函数作用
+ivar_getName     获取Ivar名称
+ivar_getTypeEncoding     获取类型编码
+ivar_getOffset     获取偏移量
+
+// 8.sel_xxx系列函数   方法编号相关
+函数名称     函数作用
+sel_getName     获取名称
+sel_getUid     注册方法
+sel_registerName     注册方法名
+sel_isEqual     判断方法是否相等
+
+// 9.imp_xxx系列函数   方法实现相关
+函数名称     函数作用
+imp_implementationWithBlock     通过代码块创建IMP
+imp_getBlock     获取函数指针中的代码块
+imp_removeBlock     移除IMP中的代码块
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果想继续探究Runtime底层原理，下篇是<a href="[https://www.jianshu.com/p/1ddd15e47343](https://www.jianshu.com/p/1ddd15e47343">Runtime源码分析</a><br>)，包括动态方法解析和消息转发。<br>该文章为记录本人的学习路程，希望能够帮助大家！！！</p>
 
                 
             </div>
@@ -549,7 +635,7 @@ prompt_context() {
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://jbwblog.com/2021/02/02/itunes/">https://jbwblog.com/2021/02/02/itunes/</a>
+                    <a href="https://jbwblog.com/2019/04/05/runtime-jian-jie/">https://jbwblog.com/2019/04/05/runtime-jian-jie/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -587,8 +673,8 @@ prompt_context() {
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Mac%E9%85%8D%E7%BD%AE/">
-                                    <span class="chip bg-color">Mac配置</span>
+                                <a href="/tags/Runtime/">
+                                    <span class="chip bg-color">Runtime</span>
                                 </a>
                             
                         </div>
@@ -764,67 +850,6 @@ prompt_context() {
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/02/02/runtime-fan-hui-bian/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="Runloop底层原理--源码分析">
-                        
-                        <span class="card-title">Runloop底层原理--源码分析</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-02-02
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="post-category">
-                                    底层原理
-                                </a>
-                            
-                            <a href="/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="post-category">
-                                    源码分析
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/Runtime/">
-                        <span class="chip bg-color">Runtime</span>
-                    </a>
-                    
-                    <a href="/tags/%E5%8F%8D%E6%B1%87%E7%BC%96/">
-                        <span class="chip bg-color">反汇编</span>
-                    </a>
-                    
-                    <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
-                        <span class="chip bg-color">源码分析</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
                 <a href="/2019/04/12/imp-yuan-ma-fen-xi/">
                     <div class="card-image">
                         
@@ -841,9 +866,9 @@ prompt_context() {
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-04-12
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2019-04-12
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -865,6 +890,55 @@ prompt_context() {
                     
                     <a href="/tags/Runtime/">
                         <span class="chip bg-color">Runtime</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2019/03/05/mac-pei-zhi/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh">
+                        
+                        <span class="card-title">Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-03-05
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E8%BD%AF%E4%BB%B6/" class="post-category">
+                                    软件
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Mac%E9%85%8D%E7%BD%AE/">
+                        <span class="chip bg-color">Mac配置</span>
                     </a>
                     
                 </div>

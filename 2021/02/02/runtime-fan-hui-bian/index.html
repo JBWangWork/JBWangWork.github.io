@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh, OC, Swift">
+    <meta name="keywords" content="Runloop底层原理--源码分析, OC, Swift">
     <meta name="description" content="iOS开发技术分享">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh | Vincent&#39;s blogs</title>
+    <title>Runloop底层原理--源码分析 | Vincent&#39;s blogs</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -301,12 +301,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/6.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh</h1>
+                    <h1 class="description center-align post-title">Runloop底层原理--源码分析</h1>
                 </div>
             </div>
         </div>
@@ -422,8 +422,16 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Mac%E9%85%8D%E7%BD%AE/">
-                                <span class="chip bg-color">Mac配置</span>
+                            <a href="/tags/Runtime/">
+                                <span class="chip bg-color">Runtime</span>
+                            </a>
+                        
+                            <a href="/tags/%E5%8F%8D%E6%B1%87%E7%BC%96/">
+                                <span class="chip bg-color">反汇编</span>
+                            </a>
+                        
+                            <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+                                <span class="chip bg-color">源码分析</span>
                             </a>
                         
                     </div>
@@ -434,8 +442,12 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E8%BD%AF%E4%BB%B6/" class="post-category">
-                                软件
+                            <a href="/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="post-category">
+                                底层原理
+                            </a>
+                        
+                            <a href="/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="post-category">
+                                源码分析
                             </a>
                         
                     </div>
@@ -476,53 +488,108 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://upload-images.jianshu.io/upload_images/5741330-d655dfa497bbcfd7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="电脑配置"></p>
-<p>哎，一年换了个21-inch iMac，两个27-inch iMac，加上重做系统就更不说了，每次都要下载各种软件，各种配置。。。故记录这篇文章以免自己以后老了记不住，希望可以帮到更多人吧！</p>
-<h4 id="效率神器Alfred、Go2shell"><a href="#效率神器Alfred、Go2shell" class="headerlink" title="效率神器Alfred、Go2shell"></a>效率神器Alfred、Go2shell</h4><p>首先，拿到新电脑，需要下载很多软件，第一时间把<code>Alfred</code>和<code>Go2shell</code>安装好，这里有<a href="xclient.info">各种破解软件免费下载平台</a>，里面安装教程很详细，默认<code>alt + 空格</code>打开Alfred，Go2shell就是可以快速打开当前路径的终端，用起来还是很方便的。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-8400d17b9f794546.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Go2shell"></p>
-<h4 id="终端配置"><a href="#终端配置" class="headerlink" title="终端配置"></a>终端配置</h4><p>接下来根据个人喜好配置终端，之前也一直在用苹果自带的终端，但是自从接触了iTerm2后就无法自拔了。</p>
-<ul>
-<li><p>安装iTerm2<br>先去官网下载iTerm2，<a href="http s://www.iterm2.com/downloads.html">iTerm2下载地址：</a><a target="_blank" rel="noopener" href="https://www.iterm2.com/downloads.html">https://www.iterm2.com/downloads.html</a></p>
-</li>
-<li><p>配置iTerm2<br>目前iTerm2 最常用的主题是<code>Solarized Dark theme</code>，下载地址：<a target="_blank" rel="noopener" href="http://ethanschoonover.com/solarized">http://ethanschoonover.com/solarized</a>，下载好的压缩文件解压后，打开 iTerm2的<code>Preferences</code>配置界面，可以按<code>Command + ,</code>键打开 ，然后<code>Profiles -&gt; Colors -&gt; Color Presets -&gt; Import</code></p>
-</li>
-</ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-889dc79aadf6e185.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="添加主题文件"></p>
-<p>选择刚才解压的solarized-&gt;iterm2-colors-solarized-&gt;Solarized Dark.itermcolors文件，导入成功，最后选择 Solarized Dark 主题。</p>
-<h4 id="配置Oh-My-Zsh"><a href="#配置Oh-My-Zsh" class="headerlink" title="配置Oh My Zsh"></a>配置Oh My Zsh</h4><p>一款用于管理zsh配置，可以提供超级多而强大的插件和漂亮的主题。可以去GitHub下载<a target="_blank" rel="noopener" href="https://github.com/robbyrussell/oh-my-zsh">Oh My Zsh</a></p>
-<ul>
-<li>安装Oh My Zsh<pre class="line-numbers language-none"><code class="language-none">// 使用 crul 安装：
-$ sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-或者<pre class="line-numbers language-none"><code class="language-none">// 使用wget：
-$ sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-安装成功后</li>
-</ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-3fe231151c615c15.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="配置Oh My Zsh"></p>
-<ul>
-<li>卸载Oh My Zsh<pre class="line-numbers language-none"><code class="language-none">// 卸载oh-my-zsh命令：
-$ uninstall_oh_my_zsh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
-<li>设置当前用户的默认Shell为Zsh<pre class="line-numbers language-none"><code class="language-none">$ chsh -s /bin/zsh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-接下来，将主题配置修改为ZSH_THEME=”agnoster”<pre class="line-numbers language-none"><code class="language-none">$ vim ~/.zshrc<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-到目前为止，不出意外的话，iTerm2外观应该是这样的</li>
-</ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-92007dc6e28a9a86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="iTerm2外观"></p>
-<p>界面显示乱码原因是没有安装<code>Meslo</code>字体，字体下载地址：<a target="_blank" rel="noopener" href="https://github.com/powerline/fonts/blob/master/Meslo%20Slashed/Meslo%20LG%20M%20Regular%20for%20Powerline.ttf">Meslo LG M Regular for Powerline.ttf</a>，下载后安装接下来还是打开 iTerm2的Preferences 配置界面，可以按<code>Command + ,</code>键打开 ，然后<code>Profiles -&gt; Text -&gt; Font -&gt; Chanage Font</code></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-ffed44579f071798.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="配置Meslo字体"><br>成功后的截图<br><img src="https://upload-images.jianshu.io/upload_images/5741330-e95f6971f45f9469.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="iTerm2+Oh My Zsh"></p>
-<p>也可以修改合适的字体大小。</p>
-<h4 id="自动填充"><a href="#自动填充" class="headerlink" title="自动填充"></a>自动填充</h4><p>这个功能是非常实用的，可以方便我们快速的敲命令。</p>
-<p>配置步骤，先克隆<code>zsh-autosuggestions</code>项目，到指定目录：<br></p><pre class="line-numbers language-none"><code class="language-none">$ git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>然后编辑<code>vim ~/.zshrc</code>文件，找到<code>plugins</code>配置，增加<code>zsh-autosuggestions</code>插件。如果配置不生效增加zsh-syntax-highlighting插件试试。<p></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-275b4a55100f9dac.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="自动填充"></p>
-<h4 id="隐藏用户名和主机名"><a href="#隐藏用户名和主机名" class="headerlink" title="隐藏用户名和主机名"></a>隐藏用户名和主机名</h4><p>进入Oh My Zsh主题文件列表<br></p><pre class="line-numbers language-none"><code class="language-none">$ cd ~/.oh-my-zsh/themes<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>进入已选的主题，并找到<code>prompt_context</code>，然后进行修改<br><pre class="line-numbers language-none"><code class="language-none">### Prompt components
-# Each component will draw itself, and hide itself if no information needs to be shown
-
-# Context: user@hostname (who am I and where am I)
-prompt_context() {
-  if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    # prompt_segment black default "%(!.%{%F{yellow}%}.)%n@%m"
-    prompt_segment black default "Vincent" // Vincent是写死的名字 可以根据个人爱好随意设置
-  fi
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br><img src="https://upload-images.jianshu.io/upload_images/5741330-3c6300f5a99d9272.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="隐藏用户名和主机名"><p></p>
-<p>还有一些插件和功能网上很多，暂不做更多介绍。</p>
-<p>该文章为记录本人的电脑配置，希望能够帮助大家！！！</p>
+                <p><img src="https://upload-images.jianshu.io/upload_images/5741330-0353c6ce7788cf39.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="反汇编分析消息转发"></p>
+<blockquote>
+<p>消息转发：发送一个消息，也就是sel查找imp，当没有找到imp，接下来进入动态方法解析，如果开发者并没有处理，会进入消息转发。</p>
+<h4 id="消息转发"><a href="#消息转发" class="headerlink" title="消息转发"></a>消息转发</h4><p>前几篇文章介绍了<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/1ddd15e47343">Runtime底层原理</a>和<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a7db9f0c82d6">动态方法解析总结</a></p>
+</blockquote>
+<p>，我们知道如果前面的动态方法解析也没有解决问题的话，那么就会进入消息转发<code>_objc_msgForward_impcache</code>方法，会有快速消息转发和慢速消息转发。<br><code>_objc_msgForward_impcache</code>方法会从C转换到汇编部分<code>__objc_msgForward_impcache</code>进行快速消息转发，执行闭源<code>__objc_msgForward</code>。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-3eb7d8eb18b221b2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="汇编部分__objc_msgForward"></p>
+<p>如果我们的方法没有查找到会报错<code>_forwarding_prep_0</code><br><img src="https://upload-images.jianshu.io/upload_images/5741330-9ef2ef6fcc43679a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="崩溃信息"></p>
+<p>但是我们在源代码中找不到该方法，除了前面文章—<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/1ddd15e47343">Runtime底层原理—动态方法解析、消息转发源码分析</a>提到的方法外，我们可以用反汇编分析消息转发。</p>
+<p>首先进入<code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/System/Library/Frameworks/CoreFoundation.framework</code>中，找到可执行文件<code>CoreFoundation</code>，将该文件拖入hopper中，找到<code>CFInitialze</code>可以看到了<code>___forwarding_prep_0___</code><br><img src="https://upload-images.jianshu.io/upload_images/5741330-0b90c8c5ea93efc0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="forwarding_prep_0"></p>
+<p>进入<code>___forwarding_prep_0___</code>内部，<br><img src="https://upload-images.jianshu.io/upload_images/5741330-05fba25f458f9938.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="____forwarding___"></p>
+<p>从崩溃堆栈信息中看到有执行forwarding，进入forwarding内部，里面判断了_objc_msgSend_stret、_objc_msgSend、taggedpointer之后有个<code>forwardingTargetForSelector:</code>，判断<code>forwardingTargetForSelector:</code>没有实现，没有实现跳转到loc_126fc7，<br><img src="https://upload-images.jianshu.io/upload_images/5741330-0a615756710dd4d5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="forwardingTargetForSelector"></p>
+<p>进入loc_126fc7，判断僵尸对象之后执行方法签名<code>methodSignatureForSelector:</code>，如果有值，获取Name、是否有效的位移等，之后会响应<code>_forwardStackInvocation:</code>，</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-828729004c8eb7f0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="_forwardStackInvocation"></p>
+<p>如果没有响应<code>_forwardStackInvocation:</code>，则会响应<code>forwardInvocation:</code>，给rdi发送rax消息，rdi就是NSInvocation，rax就是sel<code>forwardInvocation:</code>，<strong>这就是消息转发的流程</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-025bfb972fbb00fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="selforwardInvocation"></p>
+<p>对<code>_objc_msgForward</code>部分进行反汇编成OC代码：<br></p><pre class="line-numbers language-none"><code class="language-none">
+int __forwarding__(void *frameStackPointer, int isStret) {
+    id receiver = *(id *)frameStackPointer;
+    SEL sel = *(SEL *)(frameStackPointer + 8);
+    const char *selName = sel_getName(sel);
+    Class receiverClass = object_getClass(receiver);
+    
+    // 调用 forwardingTargetForSelector:
+    if (class_respondsToSelector(receiverClass, @selector(forwardingTargetForSelector:))) {
+        id forwardingTarget = [receiver forwardingTargetForSelector:sel];
+        if (forwardingTarget &amp;&amp; forwarding != receiver) {
+            if (isStret == 1) {
+                int ret;
+                objc_msgSend_stret(&amp;ret,forwardingTarget, sel, ...);
+                return ret;
+            }
+            return objc_msgSend(forwardingTarget, sel, ...);
+        }
+    }
+    
+    // 僵尸对象
+    const char *className = class_getName(receiverClass);
+    const char *zombiePrefix = "_NSZombie_";
+    size_t prefixLen = strlen(zombiePrefix); // 0xa
+    if (strncmp(className, zombiePrefix, prefixLen) == 0) {
+        CFLog(kCFLogLevelError,
+              @"*** -[%s %s]: message sent to deallocated instance %p",
+              className + prefixLen,
+              selName,
+              receiver);
+        &lt;breakpoint-interrupt&gt;
+    }
+    
+    // 调用 methodSignatureForSelector 获取方法签名后再调用 forwardInvocation
+    if (class_respondsToSelector(receiverClass, @selector(methodSignatureForSelector:))) {
+        NSMethodSignature *methodSignature = [receiver methodSignatureForSelector:sel];
+        if (methodSignature) {
+            BOOL signatureIsStret = [methodSignature _frameDescriptor]-&gt;returnArgInfo.flags.isStruct;
+            if (signatureIsStret != isStret) {
+                CFLog(kCFLogLevelWarning ,
+                      @"*** NSForwarding: warning: method signature and compiler disagree on struct-return-edness of '%s'.  Signature thinks it does%s return a struct, and compiler thinks it does%s.",
+                      selName,
+                      signatureIsStret ? "" : not,
+                      isStret ? "" : not);
+            }
+            if (class_respondsToSelector(receiverClass, @selector(forwardInvocation:))) {
+                NSInvocation *invocation = [NSInvocation _invocationWithMethodSignature:methodSignature frame:frameStackPointer];
+                
+                [receiver forwardInvocation:invocation];
+                
+                void *returnValue = NULL;
+                [invocation getReturnValue:&amp;value];
+                return returnValue;
+            } else {
+                CFLog(kCFLogLevelWarning ,
+                      @"*** NSForwarding: warning: object %p of class '%s' does not implement forwardInvocation: -- dropping message",
+                      receiver,
+                      className);
+                return 0;
+            }
+        }
+    }
+    
+    SEL *registeredSel = sel_getUid(selName);
+    
+    // selector 是否已经在 Runtime 注册过
+    if (sel != registeredSel) {
+        CFLog(kCFLogLevelWarning ,
+              @"*** NSForwarding: warning: selector (%p) for message '%s' does not match selector known to Objective C runtime (%p)-- abort",
+              sel,
+              selName,
+              registeredSel);
+    } // doesNotRecognizeSelector
+    else if (class_respondsToSelector(receiverClass,@selector(doesNotRecognizeSelector:))) {
+        [receiver doesNotRecognizeSelector:sel];
+    }
+    else {
+        CFLog(kCFLogLevelWarning ,
+              @"*** NSForwarding: warning: object %p of class '%s' does not implement doesNotRecognizeSelector: -- abort",
+              receiver,
+              className);
+    }
+    
+    // The point of no return.
+    kill(getpid(), 9);
+}
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>该文章为记录本人的学习路程，希望能够帮助大家！！！<p></p>
 
                 
             </div>
@@ -549,7 +616,7 @@ prompt_context() {
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://jbwblog.com/2021/02/02/itunes/">https://jbwblog.com/2021/02/02/itunes/</a>
+                    <a href="https://jbwblog.com/2021/02/02/runtime-fan-hui-bian/">https://jbwblog.com/2021/02/02/runtime-fan-hui-bian/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -587,8 +654,16 @@ prompt_context() {
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Mac%E9%85%8D%E7%BD%AE/">
-                                    <span class="chip bg-color">Mac配置</span>
+                                <a href="/tags/Runtime/">
+                                    <span class="chip bg-color">Runtime</span>
+                                </a>
+                            
+                                <a href="/tags/%E5%8F%8D%E6%B1%87%E7%BC%96/">
+                                    <span class="chip bg-color">反汇编</span>
+                                </a>
+                            
+                                <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+                                    <span class="chip bg-color">源码分析</span>
                                 </a>
                             
                         </div>
@@ -760,9 +835,10 @@ prompt_context() {
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2021/02/02/runtime-fan-hui-bian/">
                     <div class="card-image">
@@ -780,9 +856,9 @@ prompt_context() {
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-02-02
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-02
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -799,6 +875,7 @@ prompt_context() {
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -825,13 +902,13 @@ prompt_context() {
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/04/12/imp-yuan-ma-fen-xi/">
+                <a href="/2021/02/02/itunes/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="Runtime底层原理--IMP查找流程、动态方法解析、消息转发源码分析">
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh">
                         
-                        <span class="card-title">Runtime底层原理--IMP查找流程、动态方法解析、消息转发源码分析</span>
+                        <span class="card-title">Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -842,18 +919,14 @@ prompt_context() {
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-04-12
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-02
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="post-category">
-                                    底层原理
-                                </a>
-                            
-                            <a href="/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="post-category">
-                                    源码分析
+                            <a href="/categories/%E8%BD%AF%E4%BB%B6/" class="post-category">
+                                    软件
                                 </a>
                             
                             
@@ -863,8 +936,8 @@ prompt_context() {
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Runtime/">
-                        <span class="chip bg-color">Runtime</span>
+                    <a href="/tags/Mac%E9%85%8D%E7%BD%AE/">
+                        <span class="chip bg-color">Mac配置</span>
                     </a>
                     
                 </div>
