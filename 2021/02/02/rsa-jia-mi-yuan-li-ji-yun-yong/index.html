@@ -439,6 +439,19 @@
                 </div>
                 <div class="col s5 right-align">
                     
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
+                                算法
+                            </a>
+                        
+                            <a href="/categories/%E7%AE%97%E6%B3%95/%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/" class="post-category">
+                                加密原理
+                            </a>
+                        
+                    </div>
+                    
                 </div>
             </div>
 
@@ -457,7 +470,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    12 分
+                    11 分
                 </div>
                 
 
@@ -475,12 +488,12 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><a target="_blank" rel="noopener" href="https://upload-images.jianshu.io/upload_images/5741330-93cce269c2e5af3f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">https://upload-images.jianshu.io/upload_images/5741330-93cce269c2e5af3f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240</a><br><img src="https://upload-images.jianshu.io/upload_images/5741330-93cce269c2e5af3f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="RSA加密原理及运用"></p>
+                <p><img src="https://s.im5i.com/2021/02/02/kIFKH.png" alt="RSA加密原理及运用"></p>
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%AF%86%E7%A0%81">密码</a>学是在编码与破译的斗争实践中逐步发展起来的,并随着先进科学技术的应用，已成为一门综合性的尖端技术科学。</p>
 </blockquote>
 <h4 id="密码学发展史"><a href="#密码学发展史" class="headerlink" title="密码学发展史"></a>密码学发展史</h4><p>在说RSA加密算法之前， 先说下密码学的发展史。其实密码学的诞生，就是为了运用在战场，在公元前，战争之中出现了秘密书信。在中国历史上最早的加密算法的记载出自于周朝兵书《六韬.龙韬》中的《阴符》和《阴书》。在遥远的西方，在希罗多德（Herodotus）的《历史》中记载了公元前五世纪，希腊城邦和波斯帝国的战争中，广泛使用了移位法进行加密处理战争通讯信息。</p>
-<p>相传凯撒大帝为了防止敌人窃取信息，就使用加密的方式传递信息。那么当时的加密方式非常的简单，就是对二十几个罗马字母建立一张对照表，将明文对应成为密文。那么这种方式其实持续了很久。甚至在二战时期，日本的电报加密就是采用的这种原始加密方式。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-5ee8c4ebef3e7b23.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="凯撒密码对照表"></p>
+<p>相传凯撒大帝为了防止敌人窃取信息，就使用加密的方式传递信息。那么当时的加密方式非常的简单，就是对二十几个罗马字母建立一张对照表，将明文对应成为密文。那么这种方式其实持续了很久。甚至在二战时期，日本的电报加密就是采用的这种原始加密方式。<br><img src="https://s.im5i.com/2021/02/02/kIVPa.webp" alt="凯撒密码对照表"></p>
 <p>早期的密码学一直没有什么改进，几乎都是根据经验慢慢发展的。直到20世纪中叶，由香农发表的《秘密体制的通信理论》一文，标志着加密算法的重心转移往应用数学上的转移。于是，逐渐衍生出了当今重要的三类加密算法：非对称加密、对称加密以及哈希算法（HASH严格说不是加密算法，但由于其不可逆性，已成为加密算法中的一个重要构成部分）。</p>
 <p>1976年以前，所有的加密方法都是同一种模式：加密和解密使用同样规则（简称”密钥”），这被称为<a target="_blank" rel="noopener" href="http://zh.wikipedia.org/zh-cn/%E5%AF%B9%E7%AD%89%E5%8A%A0%E5%AF%86">“对称加密算法”</a>，使用相同的密钥，两次连续的对等加密运算后会恢复原始文字，也有很大的安全隐患。</p>
 <p>1976年，两位美国计算机学家Whitfield Diffie 和 Martin Hellman，提出了一种崭新构思，可以在不直接传递密钥的情况下，完成解密。这被称为<a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange">“Diffie-Hellman密钥交换算法”</a>。也正是因为这个算法的产生，人类终于可以实现非对称加密了：A给B发送信息</p>
@@ -504,53 +517,53 @@
 <li>计算7的欧拉函数，和7互质的 <strong>1</strong>、<strong>2</strong>、<strong>3</strong>、<strong>4</strong>、<strong>5</strong>、<strong>6</strong>、7<br>φ(7) = 6<br>如果n是质数，则 φ(n)=n-1 。因为质数与小于它的每一个数，都构成互质关系。比如5与1、2、3、4都构成互质关系。</li>
 <li>计算56的欧拉函数<br>φ(56) = φ(8) <em> φ(7) = 4 </em> 6 = 24<br>如果n可以分解成两个互质的整数之积，即 n = p <em> k ，则φ(n) = φ(p </em> k) = φ(p1)*φ(p2)</li>
 </ul>
-<p><strong>欧拉定理</strong>：如果两个正整数m和n互质，那么m的φ(n)次方减去1，可以被n整除。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-aac5d632d5294ef8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="欧拉定理.png"></p>
-<p><strong>费马小定理</strong>：欧拉定理的特殊情况，如果两个正整数m和n互质，而且n为质数！那么φ(n)结果就是n-1。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-4145a3b04b0b1f4f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="费马小定理.png"></p>
-<h5 id="模反元素"><a href="#模反元素" class="headerlink" title="模反元素"></a>模反元素</h5><p>还剩下最后一个概念，<strong>模反元素</strong>：如果两个正整数e和x互质，那么一定可以找到整数d，使得 ed-1 被x整除，或者说ed被x除的余数是1。<br>那么d就是e相对于x的模反元素。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-911313c2150bbbf7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="d是模反元素"></p>
+<p><strong>欧拉定理</strong>：如果两个正整数m和n互质，那么m的φ(n)次方减去1，可以被n整除。<br><img src="https://s.im5i.com/2021/02/02/kIyhQ.webp" alt="欧拉定理"></p>
+<p><strong>费马小定理</strong>：欧拉定理的特殊情况，如果两个正整数m和n互质，而且n为质数！那么φ(n)结果就是n-1。<br><img src="https://s.im5i.com/2021/02/02/kI6Jq.webp" alt="费马小定理"></p>
+<h5 id="模反元素"><a href="#模反元素" class="headerlink" title="模反元素"></a>模反元素</h5><p>还剩下最后一个概念，<strong>模反元素</strong>：如果两个正整数e和x互质，那么一定可以找到整数d，使得 ed-1 被x整除，或者说ed被x除的余数是1。<br>那么d就是e相对于x的模反元素。<br><img src="https://s.im5i.com/2021/02/02/kIR2h.webp" alt="d是模反元素"></p>
 </blockquote>
 <h5 id="等式转换"><a href="#等式转换" class="headerlink" title="等式转换"></a>等式转换</h5><ol>
-<li><p>根据欧拉定理<br><img src="https://upload-images.jianshu.io/upload_images/5741330-5af05cb7a189c0ed.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="等式转换1"></p>
+<li><p>根据欧拉定理<br><img src="https://s.im5i.com/2021/02/02/kIwtX.webp" alt="等式转换1"></p>
 </li>
-<li><p>由于1^k ≡ 1，等号左右两边都来个k次方<br><img src="https://upload-images.jianshu.io/upload_images/5741330-ad1f177f9269a81c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="等式转换"></p>
+<li><p>由于1^k ≡ 1，等号左右两边都来个k次方<br><img src="https://s.im5i.com/2021/02/02/kIoYf.webp" alt="等式转换2"></p>
 </li>
-<li><p>由于1* m ≡ m，等号左右两边都乘上m<br><img src="https://upload-images.jianshu.io/upload_images/5741330-a1d3a636cd0c4d3f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="等式转换3.png"></p>
+<li><p>由于1* m ≡ m，等号左右两边都乘上m<br><img src="https://s.im5i.com/2021/02/02/kItVM.webp" alt="等式转换3"></p>
 </li>
 </ol>
-<p>根据模反元素，因为e*d 一定是x的倍数加1。所以如下：<br><img src="https://upload-images.jianshu.io/upload_images/5741330-63a22fee3418c300.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="等式转换"></p>
-<p>通过多次的等式转换。终于可以将这两个等式进行合并了！如下：<br><img src="https://upload-images.jianshu.io/upload_images/5741330-461b1074f409a257.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="最终等式转换"></p>
+<p>根据模反元素，因为e*d 一定是x的倍数加1。所以如下：<br><img src="https://s.im5i.com/2021/02/02/kIvO3.webp" alt="等式转换"></p>
+<p>通过多次的等式转换。终于可以将这两个等式进行合并了！如下：<br><img src="https://s.im5i.com/2021/02/02/kIBD7.webp" alt="最终等式转换"></p>
 <p>这个等式成立有一个前提！就是关于模反元素的，就是当整数e和φ(n)互质！一定有一个整数d是e相对于φ(n)的模反元素。<br>我们可以测试一下。<br>m取值为4<br>n取值为15<br>φ(n)取值为8<br>e 如果取值为3<br>d 可以为 11、19…(模反元素很明显不止一个，其实就是解二元一次方程)<br>如果你测试了，那么你可以改变m的值试一下，其实这个等式不需要m和n 互质。只要m小于n 等式依然成立。<br>这里需要注意的是，我们可以看做 m 通过一系列运算得到结果仍然是 m。这一系列运算中，分别出现了多个参数n、φ(n)、e还有d。</p>
 <p>m 的 e乘上d 次方为<strong>加密运算</strong>，得到结果 c<br>c 模以 n  为<strong>解密运算</strong>，得到结果 m<br>这似乎可以用于加密和解密。但这样，加密的结果会非常大。明文数据将非常小（虽然RSA用于加密的数据也很小，但是没这么大悬殊），真正的RSA要更加强大，那么RSA是怎么演变来的呢？？<br>早期很多数学家也停留在了这一步！直到1967年迪菲赫尔曼密钥交换打破了僵局！</p>
-<h5 id="迪菲赫尔曼密钥交换"><a href="#迪菲赫尔曼密钥交换" class="headerlink" title="迪菲赫尔曼密钥交换"></a>迪菲赫尔曼密钥交换</h5><p>这个密钥交换当时轰动了整个数学界！而且对人类密码学的发展非常重要，因为这个伟大的算法能够拆分刚才的等式。当非对称加密算法没有出现以前，人类都是用的对称加密。所以密钥的传递，就必须要非常小心。<br>迪菲赫尔曼密钥交换 就是解决了密钥传递的保密性，我们来看一下<br><img src="https://upload-images.jianshu.io/upload_images/5741330-40ed49e5422fbb70.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="迪菲赫尔曼密钥交换"><br>假设一个传递密钥的场景。算法就是用3 的次方去模以17。 三个角色</p>
+<h5 id="迪菲赫尔曼密钥交换"><a href="#迪菲赫尔曼密钥交换" class="headerlink" title="迪菲赫尔曼密钥交换"></a>迪菲赫尔曼密钥交换</h5><p>这个密钥交换当时轰动了整个数学界！而且对人类密码学的发展非常重要，因为这个伟大的算法能够拆分刚才的等式。当非对称加密算法没有出现以前，人类都是用的对称加密。所以密钥的传递，就必须要非常小心。<br>迪菲赫尔曼密钥交换 就是解决了密钥传递的保密性，我们来看一下<br><img src="https://s.im5i.com/2021/02/02/kIukp.webp" alt="迪菲赫尔曼密钥交换"><br>假设一个传递密钥的场景。算法就是用3 的次方去模以17。 三个角色</p>
 <ul>
 <li>服务器 随机数 15<br>这个15只有服务器才知道。通过算法得到结果 6 因为 3的15次方 mod 17 = 6 。然后将结果 6 公开发送出去，拿到客户端的 12 ，然后用12^15 mod 17 得到结果10(10就是交换得到的密钥)</li>
 <li>客户端 随机数13<br>客户端用3 的 13次方 mod 17 = 12 然后将得到的结果12公布出去。<br>拿到服务器的 6 ，然后用6^13 mod 17 得到结果10(10就是交换得到的密钥)</li>
 <li>第三者<br>第三者只能拿到6 和 12 ，因为没有私密数据13、15，所以它没法得到结果10。</li>
 </ul>
-<p>为什么 6的13次方会和12的15次方得到一样的结果呢?因为这就是规律，我们可以用小一点的数字测试一下3^3 mod 17 = 10和10 ^ 2 mod 17 ； 3 ^ 2 mod 17 = 9和9^3 mod 17结果都是15。迪菲赫尔曼密钥交换最核心的地方就在于这个规律<br><img src="https://upload-images.jianshu.io/upload_images/5741330-b839319bdbffbffb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="迪菲赫尔曼密钥交换转换"></p>
-<h5 id="RSA的诞生"><a href="#RSA的诞生" class="headerlink" title="RSA的诞生"></a>RSA的诞生</h5><p><img src="https://upload-images.jianshu.io/upload_images/5741330-56953f7fe5a720ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="RSA原理"></p>
+<p>为什么 6的13次方会和12的15次方得到一样的结果呢?因为这就是规律，我们可以用小一点的数字测试一下3^3 mod 17 = 10和10 ^ 2 mod 17 ； 3 ^ 2 mod 17 = 9和9^3 mod 17结果都是15。迪菲赫尔曼密钥交换最核心的地方就在于这个规律<br><img src="https://s.im5i.com/2021/02/02/kI4AG.webp" alt="迪菲赫尔曼密钥交换转换"></p>
+<h5 id="RSA的诞生"><a href="#RSA的诞生" class="headerlink" title="RSA的诞生"></a>RSA的诞生</h5><p><img src="https://s.im5i.com/2021/02/02/kIIEY.webp" alt="RSA原理"></p>
 <blockquote>
 <p>现在我们知道了m^e % n = c是加密，c^d % n = m是解密，m就是原始数据，c是密文，公钥是n和e，私钥是n和d，所以只有n和e是公开的。加密时我们也要知道φ(n)的值，最简单的方式是用两个质数之积得到，别人想破解RSA也要知道φ(n)的值，只能对n进行因数分解，那么我们不想m被破解，n的值就要非常大，就是我们之前说的，长度一般为1024个二进制位，这样就很安全了。但是据说量子计算机(用于科研，尚未普及)可以破解，理论上量子计算机的运行速度无穷快，大家可以了解一下。</p>
 </blockquote>
 <p>以上就是RSA的数学原理</p>
-<h5 id="检验RSA加密算法"><a href="#检验RSA加密算法" class="headerlink" title="检验RSA加密算法"></a>检验RSA加密算法</h5><p>我们用终端命令演示下这个加密、解密过程。<br>假设m = 12(随便取值，只要比n小就OK)，n = 15(还是随机取一个值)，φ(n) = 8，e = 3(只要和φ(n)互质就可以)，d = 19（3d - 1 = 8，d也可以为3,11等等，也就是d = (8k + 1)/3 ）<br>终端分别以m=12，7输入结果<br><img src="https://upload-images.jianshu.io/upload_images/5741330-a531cc45689396d4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="终端演示"></p>
+<h5 id="检验RSA加密算法"><a href="#检验RSA加密算法" class="headerlink" title="检验RSA加密算法"></a>检验RSA加密算法</h5><p>我们用终端命令演示下这个加密、解密过程。<br>假设m = 12(随便取值，只要比n小就OK)，n = 15(还是随机取一个值)，φ(n) = 8，e = 3(只要和φ(n)互质就可以)，d = 19（3d - 1 = 8，d也可以为3,11等等，也就是d = (8k + 1)/3 ）<br>终端分别以m=12，7输入结果<br><img src="https://s.im5i.com/2021/02/02/kIX2w.webp" alt="终端演示"></p>
 <h5 id="OpenSSL进行RSA的命令运行"><a href="#OpenSSL进行RSA的命令运行" class="headerlink" title="OpenSSL进行RSA的命令运行"></a>OpenSSL进行RSA的命令运行</h5><p>Mac可以直接使用OpenSSL，首先进入相应文件夹</p>
 <ul>
 <li>生成公私钥<pre class="line-numbers language-none"><code class="language-none">// 生成RSA私钥，文件名为private.pem，长度为1024bit
 openssl genrsa -out private.pem 1024<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <pre class="line-numbers language-none"><code class="language-none">// 从私钥中提取公钥
 openssl rsa -in private.pem -pubout -out publick.pem<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<img src="https://upload-images.jianshu.io/upload_images/5741330-c18635adb620fa5e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="生成私钥"></li>
+<img src="https://s.im5i.com/2021/02/02/kImvF.webp" alt="生成私钥"></li>
 </ul>
 <pre class="line-numbers language-none"><code class="language-none">// 查看刚刚生成好的私钥
 cat private.pem<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <pre class="line-numbers language-none"><code class="language-none">// 查看刚刚生成好的公钥
 cat publick.pem<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-f9021727e38ee91e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="查看公私钥"></p>
+<p><img src="https://s.im5i.com/2021/02/02/kIPgd.webp" alt="查看公私钥"></p>
 <p>我们可以看到base64编码，明显私钥二进制很大，公钥就小了很多。<br>这时候我们的文件夹内已经多了刚刚生成好的公私钥文件了</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-16eb45ed60a97f1f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="公私钥文件"></p>
+<p><img src="https://s.im5i.com/2021/02/02/kXDVK.webp" alt="公私钥文件"></p>
 <pre class="line-numbers language-none"><code class="language-none">// 将私钥转换为明文
 openssl rsa -in private.pem -text -out private.txt<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-3ce0504c0e8ca2d2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="96111F25-0954-4854-9B36-75413A439AFD.png"></p>
+<p><img src="https://s.im5i.com/2021/02/02/kXUQC.webp" alt="P1、P2信息"></p>
 <p>里面就是P1、P2还有KEY等信息。</p>
 <ul>
 <li>对文件进行加密、解密<pre class="line-numbers language-none"><code class="language-none">// 编辑文件message内容为hello Vincent!!!
@@ -582,7 +595,7 @@ $ cat dec.bin
  hello Vincent!!!<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h5 id="RSA用途及特点"><a href="#RSA用途及特点" class="headerlink" title="RSA用途及特点"></a>RSA用途及特点</h5>到这里，大家都知道RSA相对比较安全，但是通过数学算法来加密和解密，效率比较低，所以一般RSA的主战场是加密比较小的数据，比如对大数据进行对称加密，再用RSA给对称加密的KEY进行加密，或者加密Hash值，也就是数字签名。</li>
 </ul>
-<p>关于RSA数字签名后面再慢慢阐述。该文章为记录本人的学习路程，希望能够帮助大家，也欢迎大家点赞留言交流！！！<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/ad3d1dea63af">https://www.jianshu.com/p/ad3d1dea63af</a></p>
+<p>关于RSA数字签名后面再慢慢阐述。该文章为记录本人的学习路程，希望能够帮助大家，也欢迎大家一起交流！！！</p>
 
                 
             </div>
@@ -828,37 +841,47 @@ $ cat dec.bin
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2021/02/02/rsa111/">
+                <a href="/2021/02/02/rsa-jia-mi-yuan-li-ji-yun-yong/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="RSA111">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="RSA加密原理及运用">
                         
-                        <span class="card-title">RSA111</span>
+                        <span class="card-title">RSA加密原理及运用</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
+                            在对大数据进行对称加密后，再用RSA给对称加密的KEY进行加密，或者加密Hash值，也就是数字签名
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-02-02
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-02
+                            </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            Vincent
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
+                                    算法
+                                </a>
+                            
+                            <a href="/categories/%E7%AE%97%E6%B3%95/%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/" class="post-category">
+                                    加密原理
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1143,35 +1166,19 @@ $ cat dec.bin
             
             <span id="year">2017</span>
             <a href="/about" target="_blank">Vincent</a>
-            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
-            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">6.5k</span>&nbsp;字
+                class="white-color">3.2k</span>&nbsp;字
             
             
-            
-            
-            
-            
-            <span id="busuanzi_container_site_pv">
-                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
-                    class="white-color"></span>&nbsp;次
-            </span>
-            
-            
-            <span id="busuanzi_container_site_uv">
-                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
-                    class="white-color"></span>&nbsp;人
-            </span>
             
             <br>
             
             <br>
             
         </div>
-        <div class="col s12 m4 l4 social-link social-statis">
+        <div class="col s12 m4 l4 social-link ">
     <a href="https://github.com/JBWangWork" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
         <i class="fab fa-github"></i>
     </a>
@@ -1349,8 +1356,6 @@ $(function () {
     
     <script src="/libs/others/clicklove.js" async="async"></script>
     
-    
-    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
     
 
     
