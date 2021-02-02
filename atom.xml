@@ -3,11 +3,11 @@
   <title>Vincent&#39;s blogs</title>
   
   <subtitle>iOS开发</subtitle>
-  <link href="http://example.com/atom.xml" rel="self"/>
+  <link href="https://jbwblog.com/atom.xml" rel="self"/>
   
-  <link href="http://example.com/"/>
+  <link href="https://jbwblog.com/"/>
   <updated>2021-02-02T03:16:39.185Z</updated>
-  <id>http://example.com/</id>
+  <id>https://jbwblog.com/</id>
   
   <author>
     <name>Vincent</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>test</title>
-    <link href="http://example.com/2021/02/02/test/"/>
-    <id>http://example.com/2021/02/02/test/</id>
+    <link href="https://jbwblog.com/2021/02/02/test/"/>
+    <id>https://jbwblog.com/2021/02/02/test/</id>
     <published>2021-02-02T02:36:44.000Z</published>
     <updated>2021-02-02T03:16:39.185Z</updated>
     
@@ -39,21 +39,21 @@
     
     
     
-    <category term="testF" scheme="http://example.com/categories/testF/"/>
+    <category term="testF" scheme="https://jbwblog.com/categories/testF/"/>
     
-    <category term="testF1" scheme="http://example.com/categories/testF/testF1/"/>
+    <category term="testF1" scheme="https://jbwblog.com/categories/testF/testF1/"/>
     
     
-    <category term="test" scheme="http://example.com/tags/test/"/>
+    <category term="test" scheme="https://jbwblog.com/tags/test/"/>
     
-    <category term="test1" scheme="http://example.com/tags/test1/"/>
+    <category term="test1" scheme="https://jbwblog.com/tags/test1/"/>
     
   </entry>
   
   <entry>
     <title>Hello World</title>
-    <link href="http://example.com/2021/02/02/hello-world/"/>
-    <id>http://example.com/2021/02/02/hello-world/</id>
+    <link href="https://jbwblog.com/2021/02/02/hello-world/"/>
+    <id>https://jbwblog.com/2021/02/02/hello-world/</id>
     <published>2021-02-02T01:59:13.425Z</published>
     <updated>2021-02-02T01:59:13.425Z</updated>
     
