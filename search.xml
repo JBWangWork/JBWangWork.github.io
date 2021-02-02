@@ -14,23 +14,4 @@
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 ]]></content>
   </entry>
-  <entry>
-    <title>test</title>
-    <url>/2021/02/02/test/</url>
-    <content><![CDATA[<p>asdf</p>
-<p>asdf<br>asdf<br>asd<br>f</p>
-<p>asdf<br>asdf</p>
-<p>dfadf</p>
-<p>ad</p>
-<p>asda</p>
-]]></content>
-      <categories>
-        <category>testF</category>
-        <category>testF1</category>
-      </categories>
-      <tags>
-        <tag>test</tag>
-        <tag>test1</tag>
-      </tags>
-  </entry>
 </search>
