@@ -1,8 +1,399 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>RSA加密原理及运用</title>
-    <url>/2021/02/02/rsa-jia-mi-yuan-li-ji-yun-yong/</url>
+    <title>对称加密算法原理--OpenSSL演示、iOS代码运用及CCCrypt安全隐患</title>
+    <url>/2019/01/13/cccrypt/</url>
+    <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-6fba0bae30b20faa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="对称加密算法原理"></p>
+<p>之前介绍了非对称加密算法，这篇文章介绍一下在非对称加密算法出现之前的对称加密算法，常见的对称加密算法、终端演示OpenSSL和iOS代码运用以及CCCrypt的安全隐患等。</p>
+<blockquote>
+<p>对称加密算法：明文通过密钥加密得到密文，密文再通过这个密钥解密得到明文。所以在业务逻辑上相对没有非对称加密RSA的安全性高。</p>
+</blockquote>
+<h4 id="常见的对称加密算法"><a href="#常见的对称加密算法" class="headerlink" title="常见的对称加密算法"></a>常见的对称加密算法</h4><ul>
+<li>DES<br>数据加密标准，但由于强度不高，暴力破解难度不是很高，所以用的很少。</li>
+<li>3DES<br>使用3个密钥，对数据进行三次加密，强度增强。虽然强度相对DES有所提高，但是对称加密算法密钥的保存就很难，3DES的3个密钥更麻烦，所以3DES也没有被广泛使用。</li>
+<li>AES<br>高级密码标准，加密强度非常高，被广泛使用，美国安全局和苹果钥匙串访问都是用了AES加密算法。</li>
+</ul>
+<h4 id="常用的两种加密模式"><a href="#常用的两种加密模式" class="headerlink" title="常用的两种加密模式"></a>常用的两种加密模式</h4><ul>
+<li>ECB（Electronic Code Book）：电子密码本模式（每一块数据独立加密）<br>最基本的加密模式，也就是通常理解的加密，相同的明文将永远加密成相同的密文，无初始向量，容易受到密码本重放攻击，一般情况下很少用。</li>
+<li>CBC（Cipher Block Chaining）：密码分组链接模式（使用一个密钥和一个初始化向量[IV]对数据执行加密。每一块数据加密都依赖上一块数据，有效的保证数据的完整性）<br>明文被加密前要与前面的密文进行异或运算后再加密，因此只要选择不同的初始向量，相同的密文加密后会形成不同的密文，这是目前应用最广泛的模式。CBC加密后的密文是上下文相关的，但明文的错误不会传递到后续分组，但如果一个分组丢失，后面的分组将全部作废(同步错误)。CBC可以有效的保证密文的完整性，如果一个数据块在传递时丢失或改变，后面的数据将无法正常解密。</li>
+</ul>
+<p>当然了，除了对称加密和非对称加密外，我们肯定还听说过Hash</p>
+<h4 id="Hash概述"><a href="#Hash概述" class="headerlink" title="Hash概述"></a>Hash概述</h4><blockquote>
+<p>Hash：一般翻译做“散列”，也有直接音译为“哈希”的，就是把任意长度的输入通过散列算法变换成固定长度的输出，该输出就是散列值。这种转换是一种压缩映射，也就是，散列值的空间通常远小于输入的空间，不同的输入可能会散列成相同的输出，所以不可能从散列值来确定唯一的输入值。简单的说就是一种将任意长度的消息压缩到某一固定长度的消息摘要的函数</p>
+</blockquote>
+<p>之前介绍了RSA加密算法，在RSA算法之后也衍生出很多加密算法，典型的算法就有HASH函数（也称之为散列函数，严格意义上不算是加密算法，只不过是和加密一起用），还有在RSA出现之前的对称加密算法，这些算法都是公开的。</p>
+<h4 id="Hash特点"><a href="#Hash特点" class="headerlink" title="Hash特点"></a>Hash特点</h4><p>算法是公开的<br>相同的数据加密结果不变<br>不同的数据加密结果定长（MD5得到的结果默认是128位二进制，一般用16进制的32个字符来标识）<br>不可逆<br>信息摘要，信息“指纹”，用来做数据识别的</p>
+<h4 id="HASH用途"><a href="#HASH用途" class="headerlink" title="HASH用途"></a>HASH用途</h4><p>密码加密：服务器不需要知道用户真实密码，只需要匹配HASH值<br>搜索引擎<br>版权<br>数字签名</p>
+<h4 id="OpenSSL演示ECB和CBC的区别"><a href="#OpenSSL演示ECB和CBC的区别" class="headerlink" title="OpenSSL演示ECB和CBC的区别"></a>OpenSSL演示ECB和CBC的区别</h4><ul>
+<li><p>OpenSSL演示ECB模式加密</p>
+<pre class="line-numbers language-none"><code class="language-none">// 先创建一个待加密的message.txt文件，编辑内容
+$ vi message.txt
+$ cat message.txt
+  Hello vincent!!!
+// enc -des-ecb是对称加密算法DES的ECB模式，-K是密钥，616263就是ASCII码“abc”，-nosalt不加盐（OpenSSL默认会加盐），输出msg.bin
+$ openssl enc -des-ecb -K 616263 -nosalt -in message.txt -out msg.bin<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这时在文件夹内会多出一个加密过后的二进制文件msg.bin，修改message.txt文件的内容，再次进行加密</p>
+<pre class="line-numbers language-none"><code class="language-none">// 先修改message.txt的内容，vincent-&gt;Vincent
+$ vi message.txt
+$ cat message.txt
+  Hello Vincent!!!
+// 再次对message.txt进行同样的方式加密，输出msg1.bin
+$ openssl enc -des-ecb -K 616263 -nosalt -in message.txt -out msg1.bin
+// 查看下msg.bin和msg1.bin有什么不同
+$ xxd msg.bin
+00000000: 6d87 4097 d383 0bda a5bc d168 de16 688d  m.@........h..h.
+00000010: b8db 0794 f9ed eca9
+$ xxd msg1.bin
+00000000: 20e2 8361 50a7 16a0 a5bc d168 de16 688d   ..aP......h..h.
+00000010: b8db 0794 f9ed eca9<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>我们会发现，修改message.txt内容后ECB模式加密的结果只是修改部分不同，前后加密结果不变</p>
+</li>
+<li><p>OpenSSL演示CBC模式加密</p>
+<pre class="line-numbers language-none"><code class="language-none">// 先编辑message.txt的内容
+$ vi message.txt
+$ cat message.txt
+  Hello vincent!!!
+// 再次对message.txt进行CBC方式加密，相对ECB模式除了修改-des-cbc，还会多一个iv参数，iv是初始化向量，输出msg2.bin
+$ openssl enc -des-cbc -iv 0102030405060708 -K 616263 -nosalt -in message.txt -out msg2.bin
+// 再次编辑message.txt的内容，vincent-&gt;Vincent
+$ vi message.txt
+$ cat message.txt
+  Hello Vincent!!!
+// 对修改后的文件加密，输出msg3.bin
+$ openssl enc -des-cbc -iv 0102030405060708 -K 616263 -nosalt -in message.txt -out msg3.bin
+// 查看下msg2.bin和msg3.bin有什么不同
+$ xxd msg2.bin
+00000000: d647 a33b 0389 dea5 3c81 02c9 ec05 44dd  .G.;....&lt;.....D.
+00000010: 467c a581 ab1a 415a
+$ xxd msg3.bin
+00000000: 9882 c1b6 3186 b465 b3be d08a 5ad5 2fd1  ....1..e....Z./.
+00000010: 6032 add7 bdb2 07da                      `2......<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>经多次测试发现，修改message.txt内容后CBC模式加密的结果是修改部分不同以及后面的加密结果也会变化</p>
+</li>
+<li>终端测试指令<blockquote>
+<p>  加密过程：先加密，再base64编码<br>   解密过程：先base64解码，再解密</p>
+<pre class="line-numbers language-none"><code class="language-none">//  DES(ECB)加密
+$ echo -n hello | openssl enc -des-ecb -K 616263 -nosalt | base64
+ 
+// DES(CBC)加密
+$ echo -n hello | openssl enc -des-cbc -iv 0102030405060708 -K 616263 -nosalt | base64
+
+//  AES(ECB)加密 128位
+$ echo -n hello | openssl enc -aes-128-ecb -K 616263 -nosalt | base64
+ 
+ //  AES(CBC)加密
+$ echo -n hello | openssl enc -aes-128-cbc -iv 0102030405060708 -K 616263 -nosalt | base64
+ 
+//  DES(ECB)解密  base64 -D进行解码成二进制 -d解密
+$ echo -n HQr0Oij2kbo= | base64 -D | openssl enc -des-ecb -K 616263 -nosalt -d
+
+//  DES(CBC)解密
+$ echo -n alvrvb3Gz88= | base64 -D | openssl enc -des-cbc -iv 0102030405060708 -K 616263 -nosalt -d
+
+//  AES(ECB)解密
+$ echo -n d1QG4T2tivoi0Kiu3NEmZQ== | base64 -D | openssl enc -aes-128-ecb -K 616263 -nosalt -d
+
+//  AES(CBC)解密
+$ echo -n u3W/N816uzFpcg6pZ+kbdg== | base64 -D | openssl enc -aes-128-cbc -iv 0102030405060708 -K 616263 -nosalt -d<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="对称加密算法代码演示"><a href="#对称加密算法代码演示" class="headerlink" title="对称加密算法代码演示"></a>对称加密算法代码演示</h4><pre class="line-numbers language-none"><code class="language-none">// AES加密、ECB模式对“hello vincent!!!”进行加密
+    NSString *ECBEncryptStr = [[EncryptionTools sharedEncryptionTools] encryptString:@"hello vincent!!!" keyString:@"abc" iv:nil];
+    NSLog(@"%@", ECBEncryptStr);
+    // 解密
+    NSString *ECBDecrypt = [[EncryptionTools sharedEncryptionTools] decryptString:ECBEncryptStr keyString:@"abc" iv:nil];
+    NSLog(@"%@", ECBDecrypt);
+    
+    // 一个数组，和前面一样有8个数据
+    uint8_t iv[8] = {1, 2, 3, 4, 5, 6, 7, 8};
+    // 把数组包装才二进制NSdata 把数组的指针和长度传进去
+    NSData *ivData = [NSData dataWithBytes:iv length:sizeof(iv)];
+    // AES加密、CBC模式
+    NSString *CBCEncryptStr = [[EncryptionTools sharedEncryptionTools] encryptString:@"hello vincent!!!" keyString:@"abc" iv:ivData];
+    NSLog(@"%@", CBCEncryptStr);
+    // 解密
+    NSString *CBCDecrypt = [[EncryptionTools sharedEncryptionTools] decryptString:CBCEncryptStr keyString:@"abc" iv:ivData];
+    NSLog(@"%@", CBCDecrypt);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>打印结果：</p>
+<pre class="line-numbers language-none"><code class="language-none">LzWe4b6VMKHECZTg5GEoDvOJyUo3lvcCucS987KliFw=
+hello vincent!!!
+Vo04z90TAfQX07onyrvCie1SnRpsbHKMkYnaNhcEPP0=
+hello vincent!!!<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>虽然将加密和解密封装成了两个方法，但是苹果内部加密和解密都是用的一个函数。先看下其中封装的一个方法内部实现</p>
+<pre class="line-numbers language-none"><code class="language-none">// 加密字符串并返回base64编码字符串
+- (NSString *)encryptString:(NSString *)string keyString:(NSString *)keyString iv:(NSData *)iv {
+    
+    // 设置秘钥 将keyString转成二进制
+    NSData *keyData = [keyString dataUsingEncoding:NSUTF8StringEncoding];
+    uint8_t cKey[self.keySize];
+    bzero(cKey, sizeof(cKey));
+    [keyData getBytes:cKey length:self.keySize];
+    
+    // 设置iv
+    uint8_t cIv[self.blockSize];
+    bzero(cIv, self.blockSize);
+    int option = 0;
+    if (iv) {
+        [iv getBytes:cIv length:self.blockSize];
+        option = kCCOptionPKCS7Padding; // CBC加密
+    } else {
+        option = kCCOptionPKCS7Padding | kCCOptionECBMode;  // ECB加密
+    }
+    
+    // 设置输出缓冲区 将原始数据转成二进制，并根据所使用的加密方式设置缓冲区
+    NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
+    size_t bufferSize = [data length] + self.blockSize;
+    void *buffer = malloc(bufferSize);
+    
+    // 开始加密
+    size_t encryptedSize = 0;
+    //加密解密都是它 -- CCCrypt
+    CCCryptorStatus cryptStatus = CCCrypt(kCCEncrypt,
+                                          self.algorithm,
+                                          option,
+                                          cKey,
+                                          self.keySize,
+                                          cIv,
+                                          [data bytes],
+                                          [data length],
+                                          buffer,
+                                          bufferSize,
+                                          &amp;encryptedSize);
+    
+    NSData *result = nil;
+    if (cryptStatus == kCCSuccess) {
+        result = [NSData dataWithBytesNoCopy:buffer length:encryptedSize];
+    } else {
+        free(buffer);
+        NSLog(@"[错误] 加密失败|状态编码: %d", cryptStatus);
+    }
+    
+    return [result base64EncodedStringWithOptions:0];
+}
+
+// 解密字符串
+- (NSString *)decryptString:(NSString *)string keyString:(NSString *)keyString iv:(NSData *)iv {
+    
+    // 设置秘钥
+    NSData *keyData = [keyString dataUsingEncoding:NSUTF8StringEncoding];
+    uint8_t cKey[self.keySize];
+    bzero(cKey, sizeof(cKey));
+    [keyData getBytes:cKey length:self.keySize];
+    
+    // 设置iv
+    uint8_t cIv[self.blockSize];
+    bzero(cIv, self.blockSize);
+    int option = 0;
+    if (iv) {
+        [iv getBytes:cIv length:self.blockSize];
+        option = kCCOptionPKCS7Padding;
+    } else {
+        option = kCCOptionPKCS7Padding | kCCOptionECBMode;
+    }
+    
+    // 设置输出缓冲区
+    NSData *data = [[NSData alloc] initWithBase64EncodedString:string options:0];
+    size_t bufferSize = [data length] + self.blockSize;
+    void *buffer = malloc(bufferSize);
+    
+    // 开始解密
+    size_t decryptedSize = 0;
+    CCCryptorStatus cryptStatus = CCCrypt(kCCDecrypt,
+                                          self.algorithm,
+                                          option,
+                                          cKey,
+                                          self.keySize,
+                                          cIv,
+                                          [data bytes],
+                                          [data length],
+                                          buffer,
+                                          bufferSize,
+                                          &amp;decryptedSize);
+    
+    NSData *result = nil;
+    if (cryptStatus == kCCSuccess) {
+        result = [NSData dataWithBytesNoCopy:buffer length:decryptedSize];
+    } else {
+        free(buffer);
+        NSLog(@"[错误] 解密失败|状态编码: %d", cryptStatus);
+    }
+    
+    return [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>代码已加入相应的注释，就不解释代码了。我们会发现苹果内部加密和解密都是用<code>CCCryptorStatus CCCrypt(
+  CCOperation op, 
+  CCAlgorithm alg, 
+  CCOptions options, 
+  const void *key,
+  size_t keyLength,
+  const void *iv, 
+  const void *dataIn, 
+  size_t dataInLength,
+  void *dataOut, 
+  size_t dataOutAvailable,
+  size_t *dataOutMoved)</code>，这个函数是对称加密算法的核心函数。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-55512cbb2b8544e0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="CCCrypt函数"></p>
+</blockquote>
+</li>
+</ul>
+<p>WTF!!!11个参数，这么多，这都是干嘛的？</p>
+<blockquote>
+<p>参数意义<br>op：kCCEncrypt(加密)/ kCCDecrypt(解密)<br>alg：加密算法 kCCAlgorithmAES、kCCAlgorithmDES、kCCAlgorithmBlowfish等等<br>options：加密方式 kCCOptionPKCS7Padding（CBC方式）/kCCOptionECBMode（ECB方式）<br>key：加密密钥<br>keyLength：密钥长度<br>iv：初始化向量 ECB不需要指定（CBC多了这个参数就相当于加盐，加密强度更高了）<br>dataIn：加密的数据<br>dataInLength：加密数据的长度<br>dataOut：缓冲区（地址），存放密文<br>dataOutAvailable：缓冲区的大小<br>dataOutMoved：加密结果的大小</p>
+</blockquote>
+<p>搞清楚每个参数的意义也就明白了，苹果这样设计还是挺人性化的。对称加密和解密所用的参数密钥都是一样的，所以加密和解密都是用同一个函数。苹果的加密算法也都在CommonCrypto.h这个库里面，这个库并不在macho中，是在系统中，所以我们大多数会认为这个加密会很安全，但是事实上并不是这样。</p>
+<h4 id="CCCrypt函数安全隐患"><a href="#CCCrypt函数安全隐患" class="headerlink" title="CCCrypt函数安全隐患"></a>CCCrypt函数安全隐患</h4><p>现在我们已经使用CCCrypt对数据进行加密和解密了，接下来看下我们用CCCrypt加密的数据是否真的安全。下面的内容涉及到逆向开发，可能有点跑偏，如果感兴趣的小伙伴也可以进一步研究一下。<br>我们加密数据就是为了防止中间人攻击，假设如果别人拿到我们的APP，别人肯定不会知道我们的源码，也不知道在数据核心加密的地方是不是用的CCCrypt，这时别人会进行符号断点，当然这个只要是没有去符号，或者系统的都是可以拦截到的。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-b73c172a7ca12ed7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="符号断点"></p>
+<h5 id="前方高能！！！"><a href="#前方高能！！！" class="headerlink" title="前方高能！！！"></a>前方高能！！！</h5><p>下了断点后，我们继续运行刚才的demo，程序果断进入断点，接下来要读寄存器了！！！</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-76d1819cc5f6e894.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="WeChat112460611fd045da8d8d9a181882dc6d.png"></p>
+<p>刚刚说过，CCCrypt第7个参数是我们加密的数据，所以在寄存器中X6（从X0开始）就是我们的加密数据，我们在lldb中读取X6的地址值，也就是指针，拿到X6的地址值是0x00000001c403ee00，再p (char *)0x00000001c403ee00查看X6的值，回车！！！我们刚刚加密的数据显示出来了，我们原以为很安全的手段就这样被别人拿到了！所以我们有很多核心的加密算法不能直接用。</p>
+<p>那怎么防御呢？先想到去符号，前面也说了，这个库是系统的，所以没办法去符号，当然自己实现或者三方库，比如支付宝就是直接用的OpenSSL，可以去符号来避免被直接破解。最好的方式是加密之前不能直接使用关键数据，我们可以自己对关键数据处理一下比如异或，方法肯定不止一个，如果各位有什么好的解决办法欢迎交流。</p>
+<p>后面可能会介绍下怎么隐藏函数调用，怎样保护核心数据，当然逆向大神还是很多的，这也仅仅是让逆向变的更难而已。该文章为记录本人的学习路程，希望能够帮助大家！！！</p>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>加密原理</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>对称加密原理</tag>
+        <tag>OpenSSL</tag>
+        <tag>CCCrypt安全隐患</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>了解Base64编码解码</title>
+    <url>/2019/01/05/base64/</url>
+    <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-161cc8afdcaec6f5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="了解Base64编码解码"></p>
+<blockquote>
+<p>我们经常说Base64，那Base64到底是什么呢？<br><a href="https://zh.wikipedia.org/zh-hans/Base64"><strong>Base64</strong></a>是一种基于64个可打印字符来表示<a href="https://zh.wikipedia.org/wiki/%E4%BA%8C%E8%BF%9B%E5%88%B6" title="二进制">二进制数据</a>的表示方法，常用于在通常处理文本<a href="https://zh.wikipedia.org/wiki/%E6%95%B0%E6%8D%AE" title="数据">数据</a>的场合，表示、传输、存储一些二进制数据，会将不便于查看的二进制数据用Base64进行表示。所以Bsea64经常用于密码学中，因为密码学通常用二进制进行加密，加密的结果用Base64编码来表示并传输。</p>
+</blockquote>
+<p>我们想了解Base64，其实看下面的Base64索引表就可以了。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-f9b1a93c393d27f8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Base64索引表"></p>
+<p>在Base64中的可打印字符包括<a href="https://zh.wikipedia.org/wiki/%E6%8B%89%E4%B8%81%E5%AD%97%E6%AF%8D" title="拉丁字母">字母</a><code>A-Z</code>、<code>a-z</code>、<a href="https://zh.wikipedia.org/wiki/%E6%95%B0%E5%AD%97" title="数字">数字</a><code>0-9</code>共有62个字符，加上<code>+</code>、<code>/</code>共64个字符，实际上还有一个字符<code>=</code>来作为后缀。比如：编码Man<br><img src="https://upload-images.jianshu.io/upload_images/5741330-578423235d58ea16.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="编码Man"></p>
+<p>当Base64对一个二进制数据进行编码时，每6个<a href="https://zh.wikipedia.org/wiki/%E4%BD%8D%E5%85%83" title="位元">位元</a>为一个单元，对应某个可打印字符。3个<a href="https://zh.wikipedia.org/wiki/%E5%AD%97%E8%8A%82" title="字节">字节</a>有24个位元，对应于4个Base64单元，即3个字节可由4个可打印字符来表示，所以最少要24个比特位。如果不足24位，就在后面补0，后面补的0就会用<code>=</code>来表示，所以<code>=</code>也只会在最后面。</p>
+<h4 id="终端演示Base64编码"><a href="#终端演示Base64编码" class="headerlink" title="终端演示Base64编码"></a>终端演示Base64编码</h4><pre class="line-numbers language-none"><code class="language-none">// 通过Base64将111图片进行编码，生成111.txt文件
+$ base64 111.png -o 111.txt
+// 对111.txt文件解码，生成222.png
+$ base64 111.txt -o 222.png -D<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-a811b9c976ba1fb5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Base64编码"></p>
+<p>左侧的图片是原始文件，通过Base64编码后输出右侧111.txt文件，再对111.txt文件解码还原。</p>
+<h4 id="代码演示Base64编码"><a href="#代码演示Base64编码" class="headerlink" title="代码演示Base64编码"></a>代码演示Base64编码</h4><p>Base64也是在iOS7以后出现的，接下来用代码简单操作一下<br></p><pre class="line-numbers language-none"><code class="language-none">//
+//  ViewController.m
+//  Base64
+//
+//  Created by Vincent on 2019/1/14.
+//  Copyright © 2019 Vincent. All rights reserved.
+//
+
+#import "ViewController.h"
+
+@interface ViewController ()
+
+@end
+
+@implementation ViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (NSString *)getBase64Encode:(NSString *)encodeStr {
+    // 将传进来的string转成NSData，再进行Base64编码
+    NSData *data = [encodeStr dataUsingEncoding:NSUTF8StringEncoding];
+    return [data base64EncodedStringWithOptions:0];
+}
+
+- (NSString *)getBase64Decode:(NSString *)decodeStr {
+     // 由于传过来的是Base64编码字符串，则不需要先转二进制再解码，可以直接通过NSData初始化方法解码
+    NSData *data = [[NSData alloc] initWithBase64EncodedString:decodeStr options:0];
+    // 将data转成string
+    return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    
+}
+
+- (void)touchesBegan:(NSSet&lt;UITouch *&gt; *)touches withEvent:(UIEvent *)event {
+    NSLog(@"----编码:%@", [self getBase64Encode:@"abc"]);
+    NSLog(@"####解码:%@", [self getBase64Decode:[self getBase64Encode:@"abc"]]);
+}
+
+@end
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<ul>
+<li>打印结果<pre class="line-numbers language-none"><code class="language-none">----编码:YWJj
+####解码:abc<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>终端验证<pre class="line-numbers language-none"><code class="language-none">// 通过Base64将abc进行编码
+$  echo -n abc | base64
+YWJj<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+验证通过！！！但是通过Base64编码，我们会发现编码结果会变大1/3。<br>该文章为记录本人的学习路程，希望能够帮助大家！！！</li>
+</ul>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>加密原理</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>OpenSSL</tag>
+        <tag>非对称加密原理</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh</title>
+    <url>/2019/03/05/mac-pei-zhi/</url>
+    <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-d655dfa497bbcfd7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="电脑配置"></p>
+<p>哎，一年换了个21-inch iMac，两个27-inch iMac，加上重做系统就更不说了，每次都要下载各种软件，各种配置。。。故记录这篇文章以免自己以后老了记不住，希望可以帮到更多人吧！</p>
+<h4 id="效率神器Alfred、Go2shell"><a href="#效率神器Alfred、Go2shell" class="headerlink" title="效率神器Alfred、Go2shell"></a>效率神器Alfred、Go2shell</h4><p>首先，拿到新电脑，需要下载很多软件，第一时间把<code>Alfred</code>和<code>Go2shell</code>安装好，这里有<a href="xclient.info">各种破解软件免费下载平台</a>，里面安装教程很详细，默认<code>alt + 空格</code>打开Alfred，Go2shell就是可以快速打开当前路径的终端，用起来还是很方便的。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-8400d17b9f794546.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Go2shell"></p>
+<h4 id="终端配置"><a href="#终端配置" class="headerlink" title="终端配置"></a>终端配置</h4><p>接下来根据个人喜好配置终端，之前也一直在用苹果自带的终端，但是自从接触了iTerm2后就无法自拔了。</p>
+<ul>
+<li><p>安装iTerm2<br>先去官网下载iTerm2，<a href="http s://www.iterm2.com/downloads.html">iTerm2下载地址：</a><a href="https://www.iterm2.com/downloads.html">https://www.iterm2.com/downloads.html</a></p>
+</li>
+<li><p>配置iTerm2<br>目前iTerm2 最常用的主题是<code>Solarized Dark theme</code>，下载地址：<a href="http://ethanschoonover.com/solarized">http://ethanschoonover.com/solarized</a>，下载好的压缩文件解压后，打开 iTerm2的<code>Preferences</code>配置界面，可以按<code>Command + ,</code>键打开 ，然后<code>Profiles -&gt; Colors -&gt; Color Presets -&gt; Import</code></p>
+</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-889dc79aadf6e185.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="添加主题文件"></p>
+<p>选择刚才解压的solarized-&gt;iterm2-colors-solarized-&gt;Solarized Dark.itermcolors文件，导入成功，最后选择 Solarized Dark 主题。</p>
+<h4 id="配置Oh-My-Zsh"><a href="#配置Oh-My-Zsh" class="headerlink" title="配置Oh My Zsh"></a>配置Oh My Zsh</h4><p>一款用于管理zsh配置，可以提供超级多而强大的插件和漂亮的主题。可以去GitHub下载<a href="https://github.com/robbyrussell/oh-my-zsh">Oh My Zsh</a></p>
+<ul>
+<li>安装Oh My Zsh<pre class="line-numbers language-none"><code class="language-none">// 使用 crul 安装：
+$ sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+或者<pre class="line-numbers language-none"><code class="language-none">// 使用wget：
+$ sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+安装成功后</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-3fe231151c615c15.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="配置Oh My Zsh"></p>
+<ul>
+<li>卸载Oh My Zsh<pre class="line-numbers language-none"><code class="language-none">// 卸载oh-my-zsh命令：
+$ uninstall_oh_my_zsh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>设置当前用户的默认Shell为Zsh<pre class="line-numbers language-none"><code class="language-none">$ chsh -s /bin/zsh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+接下来，将主题配置修改为ZSH_THEME=”agnoster”<pre class="line-numbers language-none"><code class="language-none">$ vim ~/.zshrc<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+到目前为止，不出意外的话，iTerm2外观应该是这样的</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-92007dc6e28a9a86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="iTerm2外观"></p>
+<p>界面显示乱码原因是没有安装<code>Meslo</code>字体，字体下载地址：<a href="https://github.com/powerline/fonts/blob/master/Meslo%20Slashed/Meslo%20LG%20M%20Regular%20for%20Powerline.ttf">Meslo LG M Regular for Powerline.ttf</a>，下载后安装接下来还是打开 iTerm2的Preferences 配置界面，可以按<code>Command + ,</code>键打开 ，然后<code>Profiles -&gt; Text -&gt; Font -&gt; Chanage Font</code></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-ffed44579f071798.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="配置Meslo字体"><br>成功后的截图<br><img src="https://upload-images.jianshu.io/upload_images/5741330-e95f6971f45f9469.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="iTerm2+Oh My Zsh"></p>
+<p>也可以修改合适的字体大小。</p>
+<h4 id="自动填充"><a href="#自动填充" class="headerlink" title="自动填充"></a>自动填充</h4><p>这个功能是非常实用的，可以方便我们快速的敲命令。</p>
+<p>配置步骤，先克隆<code>zsh-autosuggestions</code>项目，到指定目录：<br></p><pre class="line-numbers language-none"><code class="language-none">$ git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>然后编辑<code>vim ~/.zshrc</code>文件，找到<code>plugins</code>配置，增加<code>zsh-autosuggestions</code>插件。如果配置不生效增加zsh-syntax-highlighting插件试试。<p></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-275b4a55100f9dac.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="自动填充"></p>
+<h4 id="隐藏用户名和主机名"><a href="#隐藏用户名和主机名" class="headerlink" title="隐藏用户名和主机名"></a>隐藏用户名和主机名</h4><p>进入Oh My Zsh主题文件列表<br></p><pre class="line-numbers language-none"><code class="language-none">$ cd ~/.oh-my-zsh/themes<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>进入已选的主题，并找到<code>prompt_context</code>，然后进行修改<br><pre class="line-numbers language-none"><code class="language-none">### Prompt components
+# Each component will draw itself, and hide itself if no information needs to be shown
+
+# Context: user@hostname (who am I and where am I)
+prompt_context() {
+  if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
+    # prompt_segment black default "%(!.%{%F{yellow}%}.)%n@%m"
+    prompt_segment black default "Vincent" // Vincent是写死的名字 可以根据个人爱好随意设置
+  fi
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br><img src="https://upload-images.jianshu.io/upload_images/5741330-3c6300f5a99d9272.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="隐藏用户名和主机名"><p></p>
+<p>还有一些插件和功能网上很多，暂不做更多介绍。</p>
+<p>该文章为记录本人的电脑配置，希望能够帮助大家！！！</p>
+]]></content>
+      <categories>
+        <category>软件</category>
+      </categories>
+      <tags>
+        <tag>Mac配置</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>非对称加密算法--RSA加密原理及运用</title>
+    <url>/2018/12/02/rsa-jia-mi-yuan-li-ji-yun-yong/</url>
     <content><![CDATA[<p><img src="https://s.im5i.com/2021/02/02/kIFKH.png" alt="RSA加密原理及运用"></p>
 <blockquote>
 <p><a href="https://baike.baidu.com/item/%E5%AF%86%E7%A0%81">密码</a>学是在编码与破译的斗争实践中逐步发展起来的,并随着先进科学技术的应用，已成为一门综合性的尖端技术科学。</p>
@@ -110,7 +501,7 @@ $ cat dec.bin
  hello Vincent!!!<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h5 id="RSA用途及特点"><a href="#RSA用途及特点" class="headerlink" title="RSA用途及特点"></a>RSA用途及特点</h5>到这里，大家都知道RSA相对比较安全，但是通过数学算法来加密和解密，效率比较低，所以一般RSA的主战场是加密比较小的数据，比如对大数据进行对称加密，再用RSA给对称加密的KEY进行加密，或者加密Hash值，也就是数字签名。</li>
 </ul>
-<p>关于RSA数字签名后面再慢慢阐述。该文章为记录本人的学习路程，希望能够帮助大家，也欢迎大家一起交流！！！</p>
+<p>关于RSA数字签名后面再慢慢阐述。该文章为记录本人的学习路程，希望能够帮助大家！！！</p>
 ]]></content>
       <categories>
         <category>算法</category>
@@ -118,8 +509,8 @@ $ cat dec.bin
       </categories>
       <tags>
         <tag>算法</tag>
-        <tag>非对称加密原理</tag>
         <tag>OpenSSL</tag>
+        <tag>非对称加密原理</tag>
       </tags>
   </entry>
   <entry>
@@ -135,5 +526,255 @@ $ cat dec.bin
 <h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo deploy<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh</title>
+    <url>/2021/02/02/itunes/</url>
+    <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-d655dfa497bbcfd7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="电脑配置"></p>
+<p>哎，一年换了个21-inch iMac，两个27-inch iMac，加上重做系统就更不说了，每次都要下载各种软件，各种配置。。。故记录这篇文章以免自己以后老了记不住，希望可以帮到更多人吧！</p>
+<h4 id="效率神器Alfred、Go2shell"><a href="#效率神器Alfred、Go2shell" class="headerlink" title="效率神器Alfred、Go2shell"></a>效率神器Alfred、Go2shell</h4><p>首先，拿到新电脑，需要下载很多软件，第一时间把<code>Alfred</code>和<code>Go2shell</code>安装好，这里有<a href="xclient.info">各种破解软件免费下载平台</a>，里面安装教程很详细，默认<code>alt + 空格</code>打开Alfred，Go2shell就是可以快速打开当前路径的终端，用起来还是很方便的。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-8400d17b9f794546.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Go2shell"></p>
+<h4 id="终端配置"><a href="#终端配置" class="headerlink" title="终端配置"></a>终端配置</h4><p>接下来根据个人喜好配置终端，之前也一直在用苹果自带的终端，但是自从接触了iTerm2后就无法自拔了。</p>
+<ul>
+<li><p>安装iTerm2<br>先去官网下载iTerm2，<a href="http s://www.iterm2.com/downloads.html">iTerm2下载地址：</a><a href="https://www.iterm2.com/downloads.html">https://www.iterm2.com/downloads.html</a></p>
+</li>
+<li><p>配置iTerm2<br>目前iTerm2 最常用的主题是<code>Solarized Dark theme</code>，下载地址：<a href="http://ethanschoonover.com/solarized">http://ethanschoonover.com/solarized</a>，下载好的压缩文件解压后，打开 iTerm2的<code>Preferences</code>配置界面，可以按<code>Command + ,</code>键打开 ，然后<code>Profiles -&gt; Colors -&gt; Color Presets -&gt; Import</code></p>
+</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-889dc79aadf6e185.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="添加主题文件"></p>
+<p>选择刚才解压的solarized-&gt;iterm2-colors-solarized-&gt;Solarized Dark.itermcolors文件，导入成功，最后选择 Solarized Dark 主题。</p>
+<h4 id="配置Oh-My-Zsh"><a href="#配置Oh-My-Zsh" class="headerlink" title="配置Oh My Zsh"></a>配置Oh My Zsh</h4><p>一款用于管理zsh配置，可以提供超级多而强大的插件和漂亮的主题。可以去GitHub下载<a href="https://github.com/robbyrussell/oh-my-zsh">Oh My Zsh</a></p>
+<ul>
+<li>安装Oh My Zsh<pre class="line-numbers language-none"><code class="language-none">// 使用 crul 安装：
+$ sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+或者<pre class="line-numbers language-none"><code class="language-none">// 使用wget：
+$ sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+安装成功后</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-3fe231151c615c15.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="配置Oh My Zsh"></p>
+<ul>
+<li>卸载Oh My Zsh<pre class="line-numbers language-none"><code class="language-none">// 卸载oh-my-zsh命令：
+$ uninstall_oh_my_zsh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>设置当前用户的默认Shell为Zsh<pre class="line-numbers language-none"><code class="language-none">$ chsh -s /bin/zsh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+接下来，将主题配置修改为ZSH_THEME=”agnoster”<pre class="line-numbers language-none"><code class="language-none">$ vim ~/.zshrc<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+到目前为止，不出意外的话，iTerm2外观应该是这样的</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-92007dc6e28a9a86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="iTerm2外观"></p>
+<p>界面显示乱码原因是没有安装<code>Meslo</code>字体，字体下载地址：<a href="https://github.com/powerline/fonts/blob/master/Meslo%20Slashed/Meslo%20LG%20M%20Regular%20for%20Powerline.ttf">Meslo LG M Regular for Powerline.ttf</a>，下载后安装接下来还是打开 iTerm2的Preferences 配置界面，可以按<code>Command + ,</code>键打开 ，然后<code>Profiles -&gt; Text -&gt; Font -&gt; Chanage Font</code></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-ffed44579f071798.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="配置Meslo字体"><br>成功后的截图<br><img src="https://upload-images.jianshu.io/upload_images/5741330-e95f6971f45f9469.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="iTerm2+Oh My Zsh"></p>
+<p>也可以修改合适的字体大小。</p>
+<h4 id="自动填充"><a href="#自动填充" class="headerlink" title="自动填充"></a>自动填充</h4><p>这个功能是非常实用的，可以方便我们快速的敲命令。</p>
+<p>配置步骤，先克隆<code>zsh-autosuggestions</code>项目，到指定目录：<br></p><pre class="line-numbers language-none"><code class="language-none">$ git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>然后编辑<code>vim ~/.zshrc</code>文件，找到<code>plugins</code>配置，增加<code>zsh-autosuggestions</code>插件。如果配置不生效增加zsh-syntax-highlighting插件试试。<p></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-275b4a55100f9dac.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="自动填充"></p>
+<h4 id="隐藏用户名和主机名"><a href="#隐藏用户名和主机名" class="headerlink" title="隐藏用户名和主机名"></a>隐藏用户名和主机名</h4><p>进入Oh My Zsh主题文件列表<br></p><pre class="line-numbers language-none"><code class="language-none">$ cd ~/.oh-my-zsh/themes<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>进入已选的主题，并找到<code>prompt_context</code>，然后进行修改<br><pre class="line-numbers language-none"><code class="language-none">### Prompt components
+# Each component will draw itself, and hide itself if no information needs to be shown
+
+# Context: user@hostname (who am I and where am I)
+prompt_context() {
+  if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
+    # prompt_segment black default "%(!.%{%F{yellow}%}.)%n@%m"
+    prompt_segment black default "Vincent" // Vincent是写死的名字 可以根据个人爱好随意设置
+  fi
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br><img src="https://upload-images.jianshu.io/upload_images/5741330-3c6300f5a99d9272.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="隐藏用户名和主机名"><p></p>
+<p>还有一些插件和功能网上很多，暂不做更多介绍。</p>
+<p>该文章为记录本人的电脑配置，希望能够帮助大家！！！</p>
+]]></content>
+      <categories>
+        <category>软件</category>
+      </categories>
+      <tags>
+        <tag>Mac配置</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>本地进行证书签名</title>
+    <url>/2019/01/17/ben-di-qian-ming/</url>
+    <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-fb33597ad95d93e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="本地进行证书签名"></p>
+<blockquote>
+<p>之前说过<a href="https://www.jianshu.com/p/ad3d1dea63af">生成公私钥.pem文件</a>，实际上，我们在工作中一般不会用到.pem文件，我们完全可以在钥匙串中证书助理直接从证书颁发机构中申请证书，当然本地也可以。</p>
+</blockquote>
+<ul>
+<li>终端生成证书<br>首先生成.csr请求证书文件，之后用这个.csr文件去证书颁发机构请求证书。<pre class="line-numbers language-none"><code class="language-none">// 通过private.pem，new一个rsacert.csr文件
+$ openssl req -new -key private.pem -out rsacert.csr
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+// 输入一些信息，地址、公司和邮箱等
+Country Name (2 letter code) []:cn
+State or Province Name (full name) []:shanghai
+Locality Name (eg, city) []:shanghai
+Organization Name (eg, company) []:personal
+Organizational Unit Name (eg, section) []:personal
+Common Name (eg, fully qualified host name) []:personal.com
+Email Address []:76521244@qq.com
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+// 可以直接回车，不设置密码
+A challenge password []:<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+这样，终端就生成好了一个.csr文件了，接下来继续用终端申请证书</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">// x509标准格式，-req签名，-days 3650 时间，也就是10年，用刚刚生成的csr文件和private.pem私钥进行签名，输出rsacert.crt证书
+$ openssl x509 -req -days 3650 -in rsacert.csr -signkey private.pem -out rsacert.crt
+Signature ok
+subject=/C=cn/ST=shanghai/L=shanghai/O=personal/OU=personal/CN=personal.com/emailAddress=76521244@qq.com
+Getting Private key<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>证书生成好后，显示证书的信息，下面是生成好的两个文件</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-7da3590dde1c108c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="证书文件"></p>
+<p>这个证书大概一年5000大洋，刚刚的一个操作5W就出去了，哈哈哈。。。那这个证书可以用来干嘛呢</p>
+<ul>
+<li>用途<br>比如HTTPS协议，这个协议需要认证这个证书，我们把证书放在服务器，别人去接受。<br>当我们查看这个证书时，会发现这个证书还是Base64编码，所以开发的时候还是不能直接用，需要将其内容提取出来<pre class="line-numbers language-none"><code class="language-none">$ openssl x509 -outform der -in rsacert.crt -out rsacert.der<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+通过命令，生成一个rsacert.der文件，这个文件主要包含了公钥和一些信息，再通过这个.der文件生成可以直接用的P12文件，也就是对应这个公钥的私钥。</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">$ openssl pkcs12 -export -out p.p12 -inkey private.pem -in rsacert.crt
+Enter Export Password:
+Verifying - Enter Export Password:<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>用刚刚生成crt的private.pem和.crt文件提取出P12文件，提取过程中需要设置密码，输入两次相同的密码回车后，一个对应的P12文件已经生成了。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-a3c20781e11c6bd0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="证书文件"><br>有了它俩就可以进行加密和解密了，我们iOS开发就是用的这两个文件。当然这两个文件不需要都拿到，只用.der就OK，这里只是为了演示。</p>
+]]></content>
+      <categories>
+        <category>签名</category>
+        <category>加密原理</category>
+      </categories>
+      <tags>
+        <tag>OpenSSL</tag>
+        <tag>非对称加密原理</tag>
+        <tag>签名</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>iOS应用签名原理--数字签名？代码签名？双层代码签名？</title>
+    <url>/2019/03/02/ying-yong-qian-ming/</url>
+    <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-3d5330cfad68a1dc.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="应用签名"></p>
+<h4 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h4><blockquote>
+<p>数字签名（又称<a href="https://baike.baidu.com/item/%E5%85%AC%E9%92%A5">公钥</a>数字签名、<a href="https://baike.baidu.com/item/%E7%94%B5%E5%AD%90%E7%AD%BE%E7%AB%A0/4076522">电子签章</a>等）是一种类似写在纸上的普通的物理签名，但是使用了公钥加密领域的技术实现，用于鉴别数字信息的方法。一套数字签名通常定义两种互补的运算，一个用于签名，另一个用于验证。<br>数字签名，就是只有信息的发送者才能产生的别人无法伪造的一段数字串，这段数字串同时也是对信息的发送者发送信息真实性的一个有效证明。</p>
+</blockquote>
+<p><a href="https://baike.baidu.com/item/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%E6%8A%80%E6%9C%AF">数字签名技术</a>是将摘要信息用发送者的私钥加密，与<a href="https://baike.baidu.com/item/%E5%8E%9F%E6%96%87">原文</a>一起传送给接收者。接收者只有用发送者的公钥才能解密被加密的摘要信息，然后用<a href="https://baike.baidu.com/item/HASH%E5%87%BD%E6%95%B0">Hash函数</a>对收到的<a href="https://baike.baidu.com/item/%E5%8E%9F%E6%96%87">原文</a>产生一个摘要信息，与解密的摘要信息对比。如果相同，则说明收到的信息是完整的，在传输过程中没有被修改，否则说明信息被修改过，因此数字签名能够验证信息的完整性。</p>
+<p>举个例子：移动客户端向服务器发送数据</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-643b048c3213f611.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="客户端发送数据"></p>
+<p>如果不做任何处理，可能会遭到中间人的窃取攻击，后果如何严重就不说了。那么我们如何防止中间人拦截，或者检查数据是否被篡改呢？<br>直接用RSA（<a href="www.jianshu.com/p/ad3d1dea63af">RSA加密原理</a>）进行加密应该是不满足我们的需求，RSA只适合对小数据进行加密，我们知道验证数据的完整性可以用Hash（<a href="www.jianshu.com/p/a6fca79eb89c">Hash概述</a>）来验证，可以对数据进行Hash，把Hash值和原始数据一起打包发送给服务器，服务器将原始数据进行Hash，得到的hash值和客户端发送的Hash值做对比，如果一致则保证数据有效性。但是这样会有安全隐患，如果中间人篡改了客户端发送的数据，当然也可以修改客户端发送的Hash值，所以这样操作不可行。</p>
+<p>这时我们可以用RSA来对hash值进行保护，此时客户端发送原始数据，和经RSA加密后的该数据的hash值。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-2570cf7be94ba279.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数字签名"></p>
+<p>服务器对RSA加密的数据进行解密，得到原始数据的hash值，接下来对原始数据进行通过同样的Hash算法，将得到的Hash值和解密后的Hash值做对比，如果一致则保证数据有效性，整个过程中，如果解密的Hash值和原始的Hash值不一致，或者无法解密RSA的数据，说明数据被篡改了。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-091add7525e628eb.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.jpg"></p>
+<p>现在我们解决了服务端收到客户端发送数据的有效性，此时我们称，对原始数据Hash值进行RSA加密后的数据，是原始数据的数字签名。简单解释数字签名也就是对原始数据的Hash值进行非对称加密。</p>
+<h4 id="代码签名"><a href="#代码签名" class="headerlink" title="代码签名"></a>代码签名</h4><blockquote>
+<p>代码签名是对可执行文件或脚本进行数字签名，用来标识软件来源以及软件开发者的真实身份，确认软件在签名后未被修改或损坏的措施。和数字签名原来一样，只不过签名的数据是代码而已。</p>
+</blockquote>
+<p>苹果也是通过代码签名来保证每一个安装到iOS上的APP都是经过苹果官方允许的，防止盗版软件、病毒入侵、静默安装等。如果想要实现验证，最简单的方式就是通过苹果官方生成非对称加密的一对公私钥，在iOS系统中内置一个与服务器对应的公钥，私钥由苹果后台来保存，我们传APP到App Store时，苹果后来用私钥对APP数据进行签名，iOS系统下载这个APP后，用公钥验证这个签名，如果签名正确则这个APP肯定是由苹果后台认证的，并且没有被修改或损坏。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-3f81b4ef5db3f1b2.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="代码签名"></p>
+<p>整个过程很简单，这样就保证了苹果安装的每一个APP都是经过苹果官方允许的。对于大部分普通用户而言，这样一个数字签名就解决了安全隐患问题，但是实际上iOS设备安装APP并不是只有App Store这一个渠道，比如对于我们iOSer来说，我们在开发APP时还在真机调试，当然苹果还开放了企业内部分发的渠道，这时就无法通过简单的代码签名来满足这些需求了。</p>
+<p>苹果为了实现这些需求，iOS签名的复杂度也就开始增加了，这样双层代码签名就出现了。前提，我们都知道描述文件，但是描述文件具体是干嘛的呢</p>
+<h4 id="描述文件"><a href="#描述文件" class="headerlink" title="描述文件"></a>描述文件</h4><blockquote>
+<p>在真机调试时候，都会有一个描述文件，描述文件就是在developer.apple.com创建的，在Xcode中填入AppID后会代办创建，Xcode运行时会打包进APP中。为了系统安全，苹果除了控制APP滥用问题还控制了推送、iCloud、调试器等附加这些权限，苹果把这些权限开关统一称为Entitlements（授权文件）。并将这个文件放在了一个叫做Provisioning Profile（描述文件）文件中，描述文件里面就包括权限、证书等配置相关文件。</p>
+</blockquote>
+<p>通常，描述文件会保存在~/Library/MobileDevice/Provisioning Profiles/这个文件中，可以在终端用 security cms -D -i  + [名称]命令查看描述文件里面的信息，我们会发现，描述文件是一个plist文件，下面是个人描述文件信息演示，并对一些信息做出了注释，部分关键内容被隐藏，Base64（<a href="www.jianshu.com/p/26f2ed1ed1f6">了解Base64编码解码</a>）内容被删减<br></p><pre class="line-numbers language-none"><code class="language-none">$ security cms -D -i 294b2de0-a877-4f33-9825-9a8***.mobileprovision 
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+	&lt;key&gt;AppIDName&lt;/key&gt;
+	&lt;string&gt;com *** &lt;/string&gt;
+	&lt;key&gt;ApplicationIdentifierPrefix&lt;/key&gt;
+	&lt;array&gt;
+	&lt;string&gt;***GCDB&lt;/string&gt;
+	&lt;/array&gt;
+	&lt;key&gt;CreationDate&lt;/key&gt;
+	&lt;date&gt;2019-03-06T08:54:06Z&lt;/date&gt;
+	&lt;key&gt;Platform&lt;/key&gt;
+	&lt;array&gt;
+		&lt;string&gt;iOS&lt;/string&gt;
+	&lt;/array&gt;
+    &lt;key&gt;IsXcodeManaged&lt;/key&gt;
+	&lt;true/&gt;
+	&lt;key&gt;DeveloperCertificates&lt;/key&gt;
+	&lt;array&gt;
+		&lt;data&gt;***vcNAQELBQAwgZYxCzAJBgNVBAYTAlVTMRMwEQYDVQQKDApBcHBsZSBJbmMuMSwwKgYDVQQLDCNBcHBsZSBXb3JsZHdpZGUgRGV2ZWxvcGVyIFJlbGF0aW9uczFEMEIGA1UEAww7QXBwbGUgV29ybGR3aWRlIERldmVsb3BlciBSZWxhdGlvbnMgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkwHhcNMTgwNzEwMDIzNsb3BtZW50IENvLixMdGQuMQswCQYDVQQGEwJVUzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAO4xNm+/SXHwULul2Am4b+2/a919AfaDSy6Jw+nC3599RNhUlY+/PNTudcsBUsSw53+flAh6dVVGO77lebM1GaveXMLr65l9aZe2a6ewR0QOpSkvoBZBXlRA14WpyfdMbU7VlWutKiFHsuxA4KSQyoagY8GJ3tB5vSlxRtfix0TKtOCMx9v1iYdCztmhmtt5J6GZn8jKszkPgKxMNvm4MD9N/pr7/Z0gX06oywYb3DpS7uQKdffsLZyj05H0HvSg6V4nHZw5HNIf8qd1VjOiI7NGcvsOwltfGmiOhmxQjaESwalgX7vWg7ij8fh9ke1on8veQgptIxutKjLWG9JnJ2LPOeP7w3PJC03Yl89qJ6F0VAyA1+ck1ieimrG0yXkd9z/YWMd/puDoW7SmEQ/WdKyQkyld0iSnkQ90511uOAp0/yDgaaouyUDZlcIjL2/4JzdEJEiRkZEdmw63uYe4dwXSyTyLlA+ntka2QlKEiJmy8oyPTqjEuqcWWQmnFYWiEBqPaeEXlXT9uuGjqn9aN3MaTgD8QFIyOhonc6ReQHtx8apXGEzhVNAQXCLuKSB04JiCbL3YE2XT42QlygBL+7ROxC00pAIltrPkFfuoyBbpnj9pWQ==&lt;/data&gt;
+		&lt;data&gt;***GVyIFJlbGF0aW9uczFEMEIGA1UEAww7QXBwbGUgV29ybGR3aWRlIERldmVsb3BlciBSZWxhdGlvbnMgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkwHhcNMTgwNTI1MTMxMjA4WhcNMTkwNTI1MTMxMjA4WjCBrjEaMBgGCgmSJomT8ixkAQEMCjVFVE45NEpBNlUxMTAvBgNVBAMMKGlQaG9uZSBEZXZlbG9wZXI6IFhpbiBDaGVuZyAoNEU4Mk5RVzZDMikxEzARBgNVBAsMClpFV0pNSEdDREIxOzA5BgNVBAoMMlNoYW5naGFpIFJpc2VuIEVsZWN0cmljIFBvd2VyIERldmVsb3BtZW50IENvMDYGCCsGAQUFBwIBFipodHRwOi8dEU39NyqZsQBCA/P1txkkx9sI7JsMcMnjwa/N5QCg+gJLvMEh1ZvQ/rroTtyvDxFuuMrQkiZeeBGs8qBO2Jre6ma32mMo5kSjc9w9AtnFwlQHrW3+HPwwqlThRrMeNvbLZAvZhoENb04HE26sH4k1tk8CrNvutsjl+K3GGnuvWCnZy/dT57wrGAMrlkQZRWXomSxr9y+F4ArsMj+4UsA==&lt;/data&gt;
+		&lt;data&gt;***sZHdpZGUgRGV2ZWxvcGVyIFJlbGF0aW9uczFEMEIGA1UEAww7QXBwbGUgV29ybGR3aWRlIERldmVsb3BlciBSZWxhdGlvbnMgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkwHhcNMTgwNTEzMDQ1OTQ0WhcNMTkwNTEzMDQ1OTQ0WjCBrjEaMBgGCgmSJomT8ixkAQEMCjVFVE45NEpBNlUxMTAvBgNVBAMMKGlQaG9uZSBEZXZlbG9wZXI6IFhpbiBDaGVuZyAoNEU4Mk5RVzZDMikxEzARBgNVBAsMClpFV0pNSEdDREIxOzA5BgNVBAoMMlNoYW5naGFpIFJpc2VuIEVsZWN0cmljIFBByYWN0aWNlIHN0YXRlbWVudHMuMDYGCCsGAQUFBwIBFipodHRwOi8vd3d3LmFwcGxlLmNvbS9jZXJ0aWZpY2F0ZWF1dGhvcml0eS8wFgYDVR0lAQH/BAwwCgYIKwYBBQUHAwMwHQYzizUHwwrgDSFxwfGfc71fr4hz3PmN6o7XqtGcNO4Af49JdDMZv6VQ5mr/plPBSDdun0D5ZfNDr9cXopDCzy+XPZB/H1ARmy1MT4vuKvdsGuUKBvJX/HinDi38G6AuwZ0alfPY9xqJ7WB7K14kaVdaaqOHMThOA7b7b1Stu+MjAKYJ6aUkrf9vvDbDAkQFi8lfh4L3Vya9MoXEpDpCNxQrUJhc6sy2eMf1NT5Q==&lt;/data&gt;
+		&lt;data&gt;***zA5BgNVBAoMMlNoYW5naGFpIFJpc2VuIEVsZWN0cmljIFBvd2VyIERldmVsb3BtZW50IENvLixMdGQuMQswCQYDVQQGEwJVUzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKIWs9nQdTq3yqKLYVmjrGrgh6MhaWlkZb5MeHWKwGfky3/n/FaXmrLNxFFFWeFihdg4zmFjSjRl8ccvPF3afdZU2qW4Co1aKu459CnPhknFNbFtcrs0V1T6u6p3RJn6togsWn1z33IakruJPYtwY7k4S5jb20vb2NzcDAzLXd3ZHIwMTCCAR0GA1UdIASCARQwggEQMIIBDAYJKoZIhvdjZAUBMIH+MIHDBggrBgEFBQcCAjCBtgyBs1JlbGlhbmNlIG9uIHRoaXMgY2VydGlmaWNhdGUgYnkgYW55IHBhcnR5IGFzc3VtZXMgYWNjZXB0YW5jZSBvZiB0aGUgdGVAFqGwKrYTc+8/GyszOm3u4/mn5s5b58ORnITE+A9bNtDGv6Qz46ev3ZMCrQZFwye//Tk+BI7ms4++jkj/pcmUCULtZw178cTRBpMT4P7tzgH5mRP/BpcSd/rv8994UXYPYdpXa4epFhchlCvu8dT8sQ38fFeahyd85nS30c4RxyW32bzKnzzRSedr/j4Y1qIIvzKdWPcnwkA5RYH8naxYfzEXL2321tdwfR5skvApeP/S2oX9WC+18XBk8Yy693rJoqrKdwkOzQSVGcA==&lt;/data&gt;
+		&lt;data&gt;***3NjZOMlBGS00xMzAxBgNVBAMMKmlQaG9uZSBEZXZlbG9wZXI6IEhhb3lhbmcgWmh1IChLTU5VVTI4QlBaKTETMBEGA1UECwwKWkVXSk1IR0NEQjE7MDkGA1UECgwyU2hhbmdoYWkgUmlzZW4gRWxlY3RyaWMgUG93ZXIgRGV2ZWxvcG1lbnQgQ28uLEx0ZC4xCzAJBgNVBAYTAlVTMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA19bNzMNJ0uSYvwNygYH8b4GQY11UmNvbS9vY3NwMDMtd3dkcjAxMIIBHQYDVR0gBIIBFDCCARAwggEMBgkqhkiG92NkBQEwgf4wgcMGCY2QGAQIBAf8EAgUAMA0GCSqGSIb3DQEBCwUAA4IBAQCJw3MoEbhJNVyc1PFG6FtY7QZAy+gmqRz9YiwnFh3y5Qj5lnC2n0WdG8SrlZA+TKQgfwRZNEB6ZIfDZOJAFsqpBMAauC1V0CDzP8UWBDfluoVCU89Ns5juag8ffk/ulEQfEN1NakgiSwihy+QEmd2PWBTn4dfGVSV9mYRjPppFdM6kik1WLgMDZfLRmNzZ0MzMZMAPy8gdMmQiM7uBY1v+EnUXfyjKnK7Y28AB9c6oQHPoTGmVQxZjJgkejyOlBPWwVPbNvvzNRPuBaHI8muX2HzjsA9SJowEBXKICinqLSFZ8NDQVBrw2fgDs5MD5vaDHXtrz9t6Ahw6/7nUB240U&lt;/data&gt;
+		&lt;data&gt;***LDCNBcHBsZSBXb3JsZHdpZGUgRGV2ZWxvcGVyIFJlbGF0aW9uczFEMEIGA1UEAww7QXBwbGUgV29ybGR3aWRlIERldmVsb3BlciBSZWxhdGlvbnMgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkwHhcNMTgwOTI1MDIxMzA4WhcNMTkwOTI1MDIxMzA4WjCBrzEaMBgGCgmSJomT8ixkAQEMCjIzVDNTWlo0WjQxMjAwBgNVBAMMKWlQaG9uZSBEZXZlbG9wZXI6IOS9s+a7qCDnjosgKDN1UdDgQWBBT7im/bw3RlTv0soM/RVB2mmh9e4zAOBgNVHQ8BAf8EBAMCB4AwEwYKKoZIhvdjZAYBAgEB/wQCBQAwDQYJKoZIhvcNAQELBQADggEBACErmsYfmt/qn5yj86poEkDsDWhznabHVn1CJprtzyHbXNcbKJE1pY99ACzSUVW9iGaxXJ9m5dWmZsd+2gxOBthFDq4mSpU50OHQgg9AjjugvsQ+OH1r1qgqcJMPdLN4stJtkAC9Mb/rt3AYA5eEdHOXbhrsE3TXWmWfJzYS9PFyarGcJ9xFAWg76jTtFA6nlzYtl/YyMDS6Z075oMzKG/pRfCI13P4AqRKdx/DBtz4x0Wv59LVMVrXa4bfePLKMBJrBFdiiyCy4k4BIx4weG/Y/8OsEkmWkN0fDWmi4MZjy3I+FCNkv9tUzI/vRvDEiNR7qo5rGRKnAi+X1QbdLYcU=&lt;/data&gt;
+		&lt;data&gt;***o0WjQxMjAwBgNVBAMMKWlQaG9uZSBEZXZlbG9wZXI6IOS9s+a7qCDnjosgKDNYTDJNRFdWOUcpMRMwEQYDVQQLDApaRVdKTUhHQ0RCMTswOQYDVQQKDDJTaGFuZ2hhaSBSaXNlbiBFbGVjdHJpYyBQb3dlciBEZXZlbG9wbWVudCBDby4sTHRkLjELMAkGA1UEBhMCVVMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC35nKt/AoSiANJn9e9H96rol/85zSEAjAAMB8GA1UdIwQYMBaAFIgnFwmpthhgi+zruvZHWcVSVKO3MD8GCCsGAQUFBwEBBDMwMTAvBggr1UdJQEB/wQMMAoGCCsGAQUFBwMDMB0GA1UdDgQWBBSIeBiIaX4EyW39H2laObRLnSyWVjAOBgNVHQ8BAf8EBAMCB4AwEwYKKoZIhvdjZAYBAgEB/wQCyETSZ/FOr8EBZBVLmMGXz03x6f2Hpd7QsmoJJM5+6hHu4qgstgXNg0RRsa0B4jScKTMlRxmdZuLjm3plaX+P+yo0ylAnvGWm1sx9mxPTgrDbUg7Rg0n1bhrBtkX47+r8SUz4+E6dHnqZ7x48hZlhv6SFkj4PQ/apeAvITvnLeq7bj586gkpwS30bjmrsqSO8aEnysvyxq6Xx3+seH9Uihmjb7XdnV25mKfbf5ms6sm+HrN6ifrDb0LePX8YAsSH4=&lt;/data&gt;
+	&lt;/array&gt;
+
+
+	&lt;key&gt;Entitlements&lt;/key&gt;      // 权限
+	&lt;dict&gt;
+		&lt;key&gt;keychain-access-groups&lt;/key&gt;
+		&lt;array&gt;
+			&lt;string&gt; *** .*&lt;/string&gt;		
+		&lt;/array&gt;
+		&lt;key&gt;get-task-allow&lt;/key&gt;    // APP是否允许调试
+		&lt;true/&gt;
+		&lt;key&gt;application-identifier&lt;/key&gt;    // appID
+		&lt;string&gt; *** &lt;/string&gt;
+		&lt;key&gt;com.apple.developer.associated-domains&lt;/key&gt;
+		&lt;string&gt;*&lt;/string&gt;
+		&lt;key&gt;com.apple.developer.team-identifier&lt;/key&gt;
+		&lt;string&gt; *** &lt;/string&gt;
+		&lt;key&gt;aps-environment&lt;/key&gt;
+		&lt;string&gt;development&lt;/string&gt;
+
+	&lt;/dict&gt;
+	&lt;key&gt;ExpirationDate&lt;/key&gt;    // 过期时间
+	&lt;date&gt;2020-03-05T08:54:06Z&lt;/date&gt;
+	&lt;key&gt;Name&lt;/key&gt;
+	&lt;string&gt;iOS Team Provisioning Profile: *** &lt;/string&gt;
+	&lt;key&gt;ProvisionedDevices&lt;/key&gt;    // 设备列表
+	&lt;array&gt;
+		&lt;string&gt;476c21e91700a0605a11a***3de7705a&lt;/string&gt;
+		&lt;string&gt;98a1263783fb5538ec292f0***9d05690ffb&lt;/string&gt;
+		&lt;string&gt;bc9144d7496e5337e1f***cb653dc42e&lt;/string&gt;
+		&lt;string&gt;254fbcad0126f989b8980***d1dd8169b6ca&lt;/string&gt;
+		&lt;string&gt;349f7aeb300473cc30c28***025d&lt;/string&gt;
+	&lt;/array&gt;
+	&lt;key&gt;TeamIdentifier&lt;/key&gt;
+	&lt;array&gt;
+		&lt;string&gt; *** &lt;/string&gt;
+	&lt;/array&gt;
+	&lt;key&gt;TeamName&lt;/key&gt;
+	&lt;string&gt; *** Co.,Ltd.&lt;/string&gt;
+	&lt;key&gt;TimeToLive&lt;/key&gt;
+	&lt;integer&gt;365&lt;/integer&gt;
+	&lt;key&gt;UUID&lt;/key&gt;    // 描述文件的UUID
+	&lt;string&gt; *** &lt;/string&gt;
+	&lt;key&gt;Version&lt;/key&gt;
+	&lt;integer&gt;1&lt;/integer&gt;
+&lt;/dict&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h4 id="双层代码签名"><a href="#双层代码签名" class="headerlink" title="双层代码签名"></a>双层代码签名</h4><ul>
+<li>请求证书<br>开发过程中，首先Mac电脑（比如Xcode）会自动生成一对公私钥</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-6ec3926ede28d14e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="公私钥"></p>
+<p>图中的证书就是公钥M，专用密钥就是私钥M（也就是我们导出的P12文件）</p>
+<p>用一个CSR文件（就是在钥匙串访问中，证书助理，从证书颁发机构中获取的）向苹果申请一个证书，这个CSR文件主要包含了一个公钥文件，还有一些信息，比如邮箱、名字、签名信息、Hash值等等，苹果收到请求后，会用私钥A将公钥M进行签名，以供苹果设备进行验证（用公钥A进行验证）。苹果服务器将公钥M和签名信息打包成证书，并把appID、证书、设备IDs、权限文件等放入描述文件一并返回给Mac电脑，以备Mac电脑用这个描述文件中的证书到iOS设备去验证。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-0df7c92d9f6b22ce.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="请求证书"></p>
+<ul>
+<li>生成IPA文件，发送到iOS设备上<br>iOS设备上的APP其实都是文件夹，最重要的是可执行文件MachO和framework，APP签名也就是对它俩进行签名，通过Mac电脑的私钥M对文件进行签名，把这个签名和从苹果申请的描述文件一并放入到APP中。当安装APP时，iOS设备用公钥A来解析描述文件中的证书进行验证证书的有效性，通过之后将证书中的公钥M拿出来，再去验证APP签名的有效性，这样就可以验证当前APP是否是苹果官方允许的。</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-92f2a337c5fac6e7.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="双层代码签名"></p>
+<p>在开发阶段，我们需要频繁的改动程序跑真机，苹果不需要关心这些，所以iOS设备没有对APP的更改进行验证，只是验证证书（公钥M是不是合法的，APP签名的有效性）。这样解决了安装问题，但是如果这样的话，可以在任何一部iOS设备上安装APP，苹果防止开发者滥用，又加了两个限制：</p>
+<ol>
+<li>要在苹果后台注册过的设备才可以安装</li>
+<li>签名只能针对具体的某一个APP进行签名</li>
+</ol>
+<h4 id="关于APP签名"><a href="#关于APP签名" class="headerlink" title="关于APP签名"></a>关于APP签名</h4><blockquote>
+<p>在开发中，编译一个APP后，用本地的私钥M对APP进行签名，同时把从苹果服务器得到的Provisioning Profile文件打包进APP中，文件名为embedded.mobileprovision，把APP安装到iOS设备后，系统进行验证。</p>
+</blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-212efe0fca5a83df.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="查看资源文件签名"></p>
+<p>查看APP的包内容，里面会有_CodeSignature文件夹（里面的就是资源文件的签名），还有个可执行文件，可以用MachO查看，里面的Code signature就是应用签名。</p>
+<p>该文章为记录本人的学习路程，希望能够帮助大家！！！</p>
+]]></content>
+      <categories>
+        <category>签名</category>
+        <category>加密原理</category>
+      </categories>
+      <tags>
+        <tag>非对称加密原理</tag>
+        <tag>数字签名</tag>
+        <tag>代码签名</tag>
+        <tag>双层代码签名</tag>
+      </tags>
   </entry>
 </search>

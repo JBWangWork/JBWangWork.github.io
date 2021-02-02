@@ -6,7 +6,7 @@
   <link href="https://jbwblog.com/atom.xml" rel="self"/>
   
   <link href="https://jbwblog.com/"/>
-  <updated>2021-02-02T09:42:35.042Z</updated>
+  <updated>2021-02-02T11:58:03.149Z</updated>
   <id>https://jbwblog.com/</id>
   
   <author>
@@ -17,35 +17,27 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>RSA加密原理及运用</title>
-    <link href="https://jbwblog.com/2021/02/02/rsa-jia-mi-yuan-li-ji-yun-yong/"/>
-    <id>https://jbwblog.com/2021/02/02/rsa-jia-mi-yuan-li-ji-yun-yong/</id>
-    <published>2021-02-02T07:50:24.000Z</published>
-    <updated>2021-02-02T09:42:35.042Z</updated>
+    <title>Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh</title>
+    <link href="https://jbwblog.com/2021/02/02/itunes/"/>
+    <id>https://jbwblog.com/2021/02/02/itunes/</id>
+    <published>2021-02-02T11:53:51.000Z</published>
+    <updated>2021-02-02T11:58:03.149Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;p&gt;&lt;img src=&quot;https://s.im5i.com/2021/02/02/kIFKH.png&quot; alt=&quot;RSA加密原理及运用&quot;&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a</summary>
+    <summary type="html">&lt;p&gt;&lt;img</summary>
         
       
     
     
     
-    <category term="算法" scheme="https://jbwblog.com/categories/%E7%AE%97%E6%B3%95/"/>
-    
-    <category term="加密原理" scheme="https://jbwblog.com/categories/%E7%AE%97%E6%B3%95/%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/"/>
+    <category term="软件" scheme="https://jbwblog.com/categories/%E8%BD%AF%E4%BB%B6/"/>
     
     
-    <category term="算法" scheme="https://jbwblog.com/tags/%E7%AE%97%E6%B3%95/"/>
-    
-    <category term="非对称加密原理" scheme="https://jbwblog.com/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/"/>
-    
-    <category term="OpenSSL" scheme="https://jbwblog.com/tags/OpenSSL/"/>
+    <category term="Mac配置" scheme="https://jbwblog.com/tags/Mac%E9%85%8D%E7%BD%AE/"/>
     
   </entry>
   
@@ -67,6 +59,192 @@
     
     
     
+    
+  </entry>
+  
+  <entry>
+    <title>Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh</title>
+    <link href="https://jbwblog.com/2019/03/05/mac-pei-zhi/"/>
+    <id>https://jbwblog.com/2019/03/05/mac-pei-zhi/</id>
+    <published>2019-03-05T04:44:39.000Z</published>
+    <updated>2021-02-02T11:54:15.523Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="软件" scheme="https://jbwblog.com/categories/%E8%BD%AF%E4%BB%B6/"/>
+    
+    
+    <category term="Mac配置" scheme="https://jbwblog.com/tags/Mac%E9%85%8D%E7%BD%AE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>iOS应用签名原理--数字签名？代码签名？双层代码签名？</title>
+    <link href="https://jbwblog.com/2019/03/02/ying-yong-qian-ming/"/>
+    <id>https://jbwblog.com/2019/03/02/ying-yong-qian-ming/</id>
+    <published>2019-03-02T10:03:28.000Z</published>
+    <updated>2021-02-02T11:08:28.902Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="签名" scheme="https://jbwblog.com/categories/%E7%AD%BE%E5%90%8D/"/>
+    
+    <category term="加密原理" scheme="https://jbwblog.com/categories/%E7%AD%BE%E5%90%8D/%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/"/>
+    
+    
+    <category term="非对称加密原理" scheme="https://jbwblog.com/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="数字签名" scheme="https://jbwblog.com/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/"/>
+    
+    <category term="代码签名" scheme="https://jbwblog.com/tags/%E4%BB%A3%E7%A0%81%E7%AD%BE%E5%90%8D/"/>
+    
+    <category term="双层代码签名" scheme="https://jbwblog.com/tags/%E5%8F%8C%E5%B1%82%E4%BB%A3%E7%A0%81%E7%AD%BE%E5%90%8D/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>本地进行证书签名</title>
+    <link href="https://jbwblog.com/2019/01/17/ben-di-qian-ming/"/>
+    <id>https://jbwblog.com/2019/01/17/ben-di-qian-ming/</id>
+    <published>2019-01-17T09:28:52.000Z</published>
+    <updated>2021-02-02T11:03:12.967Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="签名" scheme="https://jbwblog.com/categories/%E7%AD%BE%E5%90%8D/"/>
+    
+    <category term="加密原理" scheme="https://jbwblog.com/categories/%E7%AD%BE%E5%90%8D/%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/"/>
+    
+    
+    <category term="OpenSSL" scheme="https://jbwblog.com/tags/OpenSSL/"/>
+    
+    <category term="非对称加密原理" scheme="https://jbwblog.com/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="签名" scheme="https://jbwblog.com/tags/%E7%AD%BE%E5%90%8D/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>对称加密算法原理--OpenSSL演示、iOS代码运用及CCCrypt安全隐患</title>
+    <link href="https://jbwblog.com/2019/01/13/cccrypt/"/>
+    <id>https://jbwblog.com/2019/01/13/cccrypt/</id>
+    <published>2019-01-13T07:32:28.000Z</published>
+    <updated>2021-02-02T11:01:48.620Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="算法" scheme="https://jbwblog.com/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="加密原理" scheme="https://jbwblog.com/categories/%E7%AE%97%E6%B3%95/%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/"/>
+    
+    
+    <category term="算法" scheme="https://jbwblog.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="对称加密原理" scheme="https://jbwblog.com/tags/%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="OpenSSL" scheme="https://jbwblog.com/tags/OpenSSL/"/>
+    
+    <category term="CCCrypt安全隐患" scheme="https://jbwblog.com/tags/CCCrypt%E5%AE%89%E5%85%A8%E9%9A%90%E6%82%A3/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>了解Base64编码解码</title>
+    <link href="https://jbwblog.com/2019/01/05/base64/"/>
+    <id>https://jbwblog.com/2019/01/05/base64/</id>
+    <published>2019-01-05T10:29:21.000Z</published>
+    <updated>2021-02-02T10:51:06.362Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="算法" scheme="https://jbwblog.com/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="加密原理" scheme="https://jbwblog.com/categories/%E7%AE%97%E6%B3%95/%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/"/>
+    
+    
+    <category term="算法" scheme="https://jbwblog.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="OpenSSL" scheme="https://jbwblog.com/tags/OpenSSL/"/>
+    
+    <category term="非对称加密原理" scheme="https://jbwblog.com/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>非对称加密算法--RSA加密原理及运用</title>
+    <link href="https://jbwblog.com/2018/12/02/rsa-jia-mi-yuan-li-ji-yun-yong/"/>
+    <id>https://jbwblog.com/2018/12/02/rsa-jia-mi-yuan-li-ji-yun-yong/</id>
+    <published>2018-12-02T07:50:24.000Z</published>
+    <updated>2021-02-02T10:50:16.509Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img src=&quot;https://s.im5i.com/2021/02/02/kIFKH.png&quot; alt=&quot;RSA加密原理及运用&quot;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="算法" scheme="https://jbwblog.com/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="加密原理" scheme="https://jbwblog.com/categories/%E7%AE%97%E6%B3%95/%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/"/>
+    
+    
+    <category term="算法" scheme="https://jbwblog.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="OpenSSL" scheme="https://jbwblog.com/tags/OpenSSL/"/>
+    
+    <category term="非对称加密原理" scheme="https://jbwblog.com/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/"/>
     
   </entry>
   

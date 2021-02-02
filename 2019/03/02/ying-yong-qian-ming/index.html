@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="RSA加密原理及运用, OC, Swift">
+    <meta name="keywords" content="iOS应用签名原理--数字签名？代码签名？双层代码签名？, OC, Swift">
     <meta name="description" content="iOS开发技术分享">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>RSA加密原理及运用 | Vincent&#39;s blogs</title>
+    <title>iOS应用签名原理--数字签名？代码签名？双层代码签名？ | Vincent&#39;s blogs</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -301,12 +301,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">RSA加密原理及运用</h1>
+                    <h1 class="description center-align post-title">iOS应用签名原理--数字签名？代码签名？双层代码签名？</h1>
                 </div>
             </div>
         </div>
@@ -422,16 +422,20 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E7%AE%97%E6%B3%95/">
-                                <span class="chip bg-color">算法</span>
-                            </a>
-                        
                             <a href="/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/">
                                 <span class="chip bg-color">非对称加密原理</span>
                             </a>
                         
-                            <a href="/tags/OpenSSL/">
-                                <span class="chip bg-color">OpenSSL</span>
+                            <a href="/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/">
+                                <span class="chip bg-color">数字签名</span>
+                            </a>
+                        
+                            <a href="/tags/%E4%BB%A3%E7%A0%81%E7%AD%BE%E5%90%8D/">
+                                <span class="chip bg-color">代码签名</span>
+                            </a>
+                        
+                            <a href="/tags/%E5%8F%8C%E5%B1%82%E4%BB%A3%E7%A0%81%E7%AD%BE%E5%90%8D/">
+                                <span class="chip bg-color">双层代码签名</span>
                             </a>
                         
                     </div>
@@ -442,11 +446,11 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
-                                算法
+                            <a href="/categories/%E7%AD%BE%E5%90%8D/" class="post-category">
+                                签名
                             </a>
                         
-                            <a href="/categories/%E7%AE%97%E6%B3%95/%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/" class="post-category">
+                            <a href="/categories/%E7%AD%BE%E5%90%8D/%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/" class="post-category">
                                 加密原理
                             </a>
                         
@@ -459,7 +463,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-02-02
+                    2019-03-02
                 </div>
                 
 
@@ -488,114 +492,124 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://s.im5i.com/2021/02/02/kIFKH.png" alt="RSA加密原理及运用"></p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%AF%86%E7%A0%81">密码</a>学是在编码与破译的斗争实践中逐步发展起来的,并随着先进科学技术的应用，已成为一门综合性的尖端技术科学。</p>
+                <p><img src="https://upload-images.jianshu.io/upload_images/5741330-3d5330cfad68a1dc.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="应用签名"></p>
+<h4 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h4><blockquote>
+<p>数字签名（又称<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%85%AC%E9%92%A5">公钥</a>数字签名、<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%94%B5%E5%AD%90%E7%AD%BE%E7%AB%A0/4076522">电子签章</a>等）是一种类似写在纸上的普通的物理签名，但是使用了公钥加密领域的技术实现，用于鉴别数字信息的方法。一套数字签名通常定义两种互补的运算，一个用于签名，另一个用于验证。<br>数字签名，就是只有信息的发送者才能产生的别人无法伪造的一段数字串，这段数字串同时也是对信息的发送者发送信息真实性的一个有效证明。</p>
 </blockquote>
-<h4 id="密码学发展史"><a href="#密码学发展史" class="headerlink" title="密码学发展史"></a>密码学发展史</h4><p>在说RSA加密算法之前， 先说下密码学的发展史。其实密码学的诞生，就是为了运用在战场，在公元前，战争之中出现了秘密书信。在中国历史上最早的加密算法的记载出自于周朝兵书《六韬.龙韬》中的《阴符》和《阴书》。在遥远的西方，在希罗多德（Herodotus）的《历史》中记载了公元前五世纪，希腊城邦和波斯帝国的战争中，广泛使用了移位法进行加密处理战争通讯信息。</p>
-<p>相传凯撒大帝为了防止敌人窃取信息，就使用加密的方式传递信息。那么当时的加密方式非常的简单，就是对二十几个罗马字母建立一张对照表，将明文对应成为密文。那么这种方式其实持续了很久。甚至在二战时期，日本的电报加密就是采用的这种原始加密方式。<br><img src="https://s.im5i.com/2021/02/02/kIVPa.webp" alt="凯撒密码对照表"></p>
-<p>早期的密码学一直没有什么改进，几乎都是根据经验慢慢发展的。直到20世纪中叶，由香农发表的《秘密体制的通信理论》一文，标志着加密算法的重心转移往应用数学上的转移。于是，逐渐衍生出了当今重要的三类加密算法：非对称加密、对称加密以及哈希算法（HASH严格说不是加密算法，但由于其不可逆性，已成为加密算法中的一个重要构成部分）。</p>
-<p>1976年以前，所有的加密方法都是同一种模式：加密和解密使用同样规则（简称”密钥”），这被称为<a target="_blank" rel="noopener" href="http://zh.wikipedia.org/zh-cn/%E5%AF%B9%E7%AD%89%E5%8A%A0%E5%AF%86">“对称加密算法”</a>，使用相同的密钥，两次连续的对等加密运算后会恢复原始文字，也有很大的安全隐患。</p>
-<p>1976年，两位美国计算机学家Whitfield Diffie 和 Martin Hellman，提出了一种崭新构思，可以在不直接传递密钥的情况下，完成解密。这被称为<a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange">“Diffie-Hellman密钥交换算法”</a>。也正是因为这个算法的产生，人类终于可以实现非对称加密了：A给B发送信息</p>
-<blockquote>
+<p><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%E6%8A%80%E6%9C%AF">数字签名技术</a>是将摘要信息用发送者的私钥加密，与<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%8E%9F%E6%96%87">原文</a>一起传送给接收者。接收者只有用发送者的公钥才能解密被加密的摘要信息，然后用<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/HASH%E5%87%BD%E6%95%B0">Hash函数</a>对收到的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%8E%9F%E6%96%87">原文</a>产生一个摘要信息，与解密的摘要信息对比。如果相同，则说明收到的信息是完整的，在传输过程中没有被修改，否则说明信息被修改过，因此数字签名能够验证信息的完整性。</p>
+<p>举个例子：移动客户端向服务器发送数据</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-643b048c3213f611.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="客户端发送数据"></p>
+<p>如果不做任何处理，可能会遭到中间人的窃取攻击，后果如何严重就不说了。那么我们如何防止中间人拦截，或者检查数据是否被篡改呢？<br>直接用RSA（<a href="www.jianshu.com/p/ad3d1dea63af">RSA加密原理</a>）进行加密应该是不满足我们的需求，RSA只适合对小数据进行加密，我们知道验证数据的完整性可以用Hash（<a href="www.jianshu.com/p/a6fca79eb89c">Hash概述</a>）来验证，可以对数据进行Hash，把Hash值和原始数据一起打包发送给服务器，服务器将原始数据进行Hash，得到的hash值和客户端发送的Hash值做对比，如果一致则保证数据有效性。但是这样会有安全隐患，如果中间人篡改了客户端发送的数据，当然也可以修改客户端发送的Hash值，所以这样操作不可行。</p>
+<p>这时我们可以用RSA来对hash值进行保护，此时客户端发送原始数据，和经RSA加密后的该数据的hash值。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-2570cf7be94ba279.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="数字签名"></p>
+<p>服务器对RSA加密的数据进行解密，得到原始数据的hash值，接下来对原始数据进行通过同样的Hash算法，将得到的Hash值和解密后的Hash值做对比，如果一致则保证数据有效性，整个过程中，如果解密的Hash值和原始的Hash值不一致，或者无法解密RSA的数据，说明数据被篡改了。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-091add7525e628eb.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.jpg"></p>
+<p>现在我们解决了服务端收到客户端发送数据的有效性，此时我们称，对原始数据Hash值进行RSA加密后的数据，是原始数据的数字签名。简单解释数字签名也就是对原始数据的Hash值进行非对称加密。</p>
+<h4 id="代码签名"><a href="#代码签名" class="headerlink" title="代码签名"></a>代码签名</h4><blockquote>
+<p>代码签名是对可执行文件或脚本进行数字签名，用来标识软件来源以及软件开发者的真实身份，确认软件在签名后未被修改或损坏的措施。和数字签名原来一样，只不过签名的数据是代码而已。</p>
+</blockquote>
+<p>苹果也是通过代码签名来保证每一个安装到iOS上的APP都是经过苹果官方允许的，防止盗版软件、病毒入侵、静默安装等。如果想要实现验证，最简单的方式就是通过苹果官方生成非对称加密的一对公私钥，在iOS系统中内置一个与服务器对应的公钥，私钥由苹果后台来保存，我们传APP到App Store时，苹果后来用私钥对APP数据进行签名，iOS系统下载这个APP后，用公钥验证这个签名，如果签名正确则这个APP肯定是由苹果后台认证的，并且没有被修改或损坏。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-3f81b4ef5db3f1b2.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="代码签名"></p>
+<p>整个过程很简单，这样就保证了苹果安装的每一个APP都是经过苹果官方允许的。对于大部分普通用户而言，这样一个数字签名就解决了安全隐患问题，但是实际上iOS设备安装APP并不是只有App Store这一个渠道，比如对于我们iOSer来说，我们在开发APP时还在真机调试，当然苹果还开放了企业内部分发的渠道，这时就无法通过简单的代码签名来满足这些需求了。</p>
+<p>苹果为了实现这些需求，iOS签名的复杂度也就开始增加了，这样双层代码签名就出现了。前提，我们都知道描述文件，但是描述文件具体是干嘛的呢</p>
+<h4 id="描述文件"><a href="#描述文件" class="headerlink" title="描述文件"></a>描述文件</h4><blockquote>
+<p>在真机调试时候，都会有一个描述文件，描述文件就是在developer.apple.com创建的，在Xcode中填入AppID后会代办创建，Xcode运行时会打包进APP中。为了系统安全，苹果除了控制APP滥用问题还控制了推送、iCloud、调试器等附加这些权限，苹果把这些权限开关统一称为Entitlements（授权文件）。并将这个文件放在了一个叫做Provisioning Profile（描述文件）文件中，描述文件里面就包括权限、证书等配置相关文件。</p>
+</blockquote>
+<p>通常，描述文件会保存在~/Library/MobileDevice/Provisioning Profiles/这个文件中，可以在终端用 security cms -D -i  + [名称]命令查看描述文件里面的信息，我们会发现，描述文件是一个plist文件，下面是个人描述文件信息演示，并对一些信息做出了注释，部分关键内容被隐藏，Base64（<a href="www.jianshu.com/p/26f2ed1ed1f6">了解Base64编码解码</a>）内容被删减<br></p><pre class="line-numbers language-none"><code class="language-none">$ security cms -D -i 294b2de0-a877-4f33-9825-9a8***.mobileprovision 
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+	&lt;key&gt;AppIDName&lt;/key&gt;
+	&lt;string&gt;com *** &lt;/string&gt;
+	&lt;key&gt;ApplicationIdentifierPrefix&lt;/key&gt;
+	&lt;array&gt;
+	&lt;string&gt;***GCDB&lt;/string&gt;
+	&lt;/array&gt;
+	&lt;key&gt;CreationDate&lt;/key&gt;
+	&lt;date&gt;2019-03-06T08:54:06Z&lt;/date&gt;
+	&lt;key&gt;Platform&lt;/key&gt;
+	&lt;array&gt;
+		&lt;string&gt;iOS&lt;/string&gt;
+	&lt;/array&gt;
+    &lt;key&gt;IsXcodeManaged&lt;/key&gt;
+	&lt;true/&gt;
+	&lt;key&gt;DeveloperCertificates&lt;/key&gt;
+	&lt;array&gt;
+		&lt;data&gt;***vcNAQELBQAwgZYxCzAJBgNVBAYTAlVTMRMwEQYDVQQKDApBcHBsZSBJbmMuMSwwKgYDVQQLDCNBcHBsZSBXb3JsZHdpZGUgRGV2ZWxvcGVyIFJlbGF0aW9uczFEMEIGA1UEAww7QXBwbGUgV29ybGR3aWRlIERldmVsb3BlciBSZWxhdGlvbnMgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkwHhcNMTgwNzEwMDIzNsb3BtZW50IENvLixMdGQuMQswCQYDVQQGEwJVUzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAO4xNm+/SXHwULul2Am4b+2/a919AfaDSy6Jw+nC3599RNhUlY+/PNTudcsBUsSw53+flAh6dVVGO77lebM1GaveXMLr65l9aZe2a6ewR0QOpSkvoBZBXlRA14WpyfdMbU7VlWutKiFHsuxA4KSQyoagY8GJ3tB5vSlxRtfix0TKtOCMx9v1iYdCztmhmtt5J6GZn8jKszkPgKxMNvm4MD9N/pr7/Z0gX06oywYb3DpS7uQKdffsLZyj05H0HvSg6V4nHZw5HNIf8qd1VjOiI7NGcvsOwltfGmiOhmxQjaESwalgX7vWg7ij8fh9ke1on8veQgptIxutKjLWG9JnJ2LPOeP7w3PJC03Yl89qJ6F0VAyA1+ck1ieimrG0yXkd9z/YWMd/puDoW7SmEQ/WdKyQkyld0iSnkQ90511uOAp0/yDgaaouyUDZlcIjL2/4JzdEJEiRkZEdmw63uYe4dwXSyTyLlA+ntka2QlKEiJmy8oyPTqjEuqcWWQmnFYWiEBqPaeEXlXT9uuGjqn9aN3MaTgD8QFIyOhonc6ReQHtx8apXGEzhVNAQXCLuKSB04JiCbL3YE2XT42QlygBL+7ROxC00pAIltrPkFfuoyBbpnj9pWQ==&lt;/data&gt;
+		&lt;data&gt;***GVyIFJlbGF0aW9uczFEMEIGA1UEAww7QXBwbGUgV29ybGR3aWRlIERldmVsb3BlciBSZWxhdGlvbnMgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkwHhcNMTgwNTI1MTMxMjA4WhcNMTkwNTI1MTMxMjA4WjCBrjEaMBgGCgmSJomT8ixkAQEMCjVFVE45NEpBNlUxMTAvBgNVBAMMKGlQaG9uZSBEZXZlbG9wZXI6IFhpbiBDaGVuZyAoNEU4Mk5RVzZDMikxEzARBgNVBAsMClpFV0pNSEdDREIxOzA5BgNVBAoMMlNoYW5naGFpIFJpc2VuIEVsZWN0cmljIFBvd2VyIERldmVsb3BtZW50IENvMDYGCCsGAQUFBwIBFipodHRwOi8dEU39NyqZsQBCA/P1txkkx9sI7JsMcMnjwa/N5QCg+gJLvMEh1ZvQ/rroTtyvDxFuuMrQkiZeeBGs8qBO2Jre6ma32mMo5kSjc9w9AtnFwlQHrW3+HPwwqlThRrMeNvbLZAvZhoENb04HE26sH4k1tk8CrNvutsjl+K3GGnuvWCnZy/dT57wrGAMrlkQZRWXomSxr9y+F4ArsMj+4UsA==&lt;/data&gt;
+		&lt;data&gt;***sZHdpZGUgRGV2ZWxvcGVyIFJlbGF0aW9uczFEMEIGA1UEAww7QXBwbGUgV29ybGR3aWRlIERldmVsb3BlciBSZWxhdGlvbnMgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkwHhcNMTgwNTEzMDQ1OTQ0WhcNMTkwNTEzMDQ1OTQ0WjCBrjEaMBgGCgmSJomT8ixkAQEMCjVFVE45NEpBNlUxMTAvBgNVBAMMKGlQaG9uZSBEZXZlbG9wZXI6IFhpbiBDaGVuZyAoNEU4Mk5RVzZDMikxEzARBgNVBAsMClpFV0pNSEdDREIxOzA5BgNVBAoMMlNoYW5naGFpIFJpc2VuIEVsZWN0cmljIFBByYWN0aWNlIHN0YXRlbWVudHMuMDYGCCsGAQUFBwIBFipodHRwOi8vd3d3LmFwcGxlLmNvbS9jZXJ0aWZpY2F0ZWF1dGhvcml0eS8wFgYDVR0lAQH/BAwwCgYIKwYBBQUHAwMwHQYzizUHwwrgDSFxwfGfc71fr4hz3PmN6o7XqtGcNO4Af49JdDMZv6VQ5mr/plPBSDdun0D5ZfNDr9cXopDCzy+XPZB/H1ARmy1MT4vuKvdsGuUKBvJX/HinDi38G6AuwZ0alfPY9xqJ7WB7K14kaVdaaqOHMThOA7b7b1Stu+MjAKYJ6aUkrf9vvDbDAkQFi8lfh4L3Vya9MoXEpDpCNxQrUJhc6sy2eMf1NT5Q==&lt;/data&gt;
+		&lt;data&gt;***zA5BgNVBAoMMlNoYW5naGFpIFJpc2VuIEVsZWN0cmljIFBvd2VyIERldmVsb3BtZW50IENvLixMdGQuMQswCQYDVQQGEwJVUzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKIWs9nQdTq3yqKLYVmjrGrgh6MhaWlkZb5MeHWKwGfky3/n/FaXmrLNxFFFWeFihdg4zmFjSjRl8ccvPF3afdZU2qW4Co1aKu459CnPhknFNbFtcrs0V1T6u6p3RJn6togsWn1z33IakruJPYtwY7k4S5jb20vb2NzcDAzLXd3ZHIwMTCCAR0GA1UdIASCARQwggEQMIIBDAYJKoZIhvdjZAUBMIH+MIHDBggrBgEFBQcCAjCBtgyBs1JlbGlhbmNlIG9uIHRoaXMgY2VydGlmaWNhdGUgYnkgYW55IHBhcnR5IGFzc3VtZXMgYWNjZXB0YW5jZSBvZiB0aGUgdGVAFqGwKrYTc+8/GyszOm3u4/mn5s5b58ORnITE+A9bNtDGv6Qz46ev3ZMCrQZFwye//Tk+BI7ms4++jkj/pcmUCULtZw178cTRBpMT4P7tzgH5mRP/BpcSd/rv8994UXYPYdpXa4epFhchlCvu8dT8sQ38fFeahyd85nS30c4RxyW32bzKnzzRSedr/j4Y1qIIvzKdWPcnwkA5RYH8naxYfzEXL2321tdwfR5skvApeP/S2oX9WC+18XBk8Yy693rJoqrKdwkOzQSVGcA==&lt;/data&gt;
+		&lt;data&gt;***3NjZOMlBGS00xMzAxBgNVBAMMKmlQaG9uZSBEZXZlbG9wZXI6IEhhb3lhbmcgWmh1IChLTU5VVTI4QlBaKTETMBEGA1UECwwKWkVXSk1IR0NEQjE7MDkGA1UECgwyU2hhbmdoYWkgUmlzZW4gRWxlY3RyaWMgUG93ZXIgRGV2ZWxvcG1lbnQgQ28uLEx0ZC4xCzAJBgNVBAYTAlVTMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA19bNzMNJ0uSYvwNygYH8b4GQY11UmNvbS9vY3NwMDMtd3dkcjAxMIIBHQYDVR0gBIIBFDCCARAwggEMBgkqhkiG92NkBQEwgf4wgcMGCY2QGAQIBAf8EAgUAMA0GCSqGSIb3DQEBCwUAA4IBAQCJw3MoEbhJNVyc1PFG6FtY7QZAy+gmqRz9YiwnFh3y5Qj5lnC2n0WdG8SrlZA+TKQgfwRZNEB6ZIfDZOJAFsqpBMAauC1V0CDzP8UWBDfluoVCU89Ns5juag8ffk/ulEQfEN1NakgiSwihy+QEmd2PWBTn4dfGVSV9mYRjPppFdM6kik1WLgMDZfLRmNzZ0MzMZMAPy8gdMmQiM7uBY1v+EnUXfyjKnK7Y28AB9c6oQHPoTGmVQxZjJgkejyOlBPWwVPbNvvzNRPuBaHI8muX2HzjsA9SJowEBXKICinqLSFZ8NDQVBrw2fgDs5MD5vaDHXtrz9t6Ahw6/7nUB240U&lt;/data&gt;
+		&lt;data&gt;***LDCNBcHBsZSBXb3JsZHdpZGUgRGV2ZWxvcGVyIFJlbGF0aW9uczFEMEIGA1UEAww7QXBwbGUgV29ybGR3aWRlIERldmVsb3BlciBSZWxhdGlvbnMgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkwHhcNMTgwOTI1MDIxMzA4WhcNMTkwOTI1MDIxMzA4WjCBrzEaMBgGCgmSJomT8ixkAQEMCjIzVDNTWlo0WjQxMjAwBgNVBAMMKWlQaG9uZSBEZXZlbG9wZXI6IOS9s+a7qCDnjosgKDN1UdDgQWBBT7im/bw3RlTv0soM/RVB2mmh9e4zAOBgNVHQ8BAf8EBAMCB4AwEwYKKoZIhvdjZAYBAgEB/wQCBQAwDQYJKoZIhvcNAQELBQADggEBACErmsYfmt/qn5yj86poEkDsDWhznabHVn1CJprtzyHbXNcbKJE1pY99ACzSUVW9iGaxXJ9m5dWmZsd+2gxOBthFDq4mSpU50OHQgg9AjjugvsQ+OH1r1qgqcJMPdLN4stJtkAC9Mb/rt3AYA5eEdHOXbhrsE3TXWmWfJzYS9PFyarGcJ9xFAWg76jTtFA6nlzYtl/YyMDS6Z075oMzKG/pRfCI13P4AqRKdx/DBtz4x0Wv59LVMVrXa4bfePLKMBJrBFdiiyCy4k4BIx4weG/Y/8OsEkmWkN0fDWmi4MZjy3I+FCNkv9tUzI/vRvDEiNR7qo5rGRKnAi+X1QbdLYcU=&lt;/data&gt;
+		&lt;data&gt;***o0WjQxMjAwBgNVBAMMKWlQaG9uZSBEZXZlbG9wZXI6IOS9s+a7qCDnjosgKDNYTDJNRFdWOUcpMRMwEQYDVQQLDApaRVdKTUhHQ0RCMTswOQYDVQQKDDJTaGFuZ2hhaSBSaXNlbiBFbGVjdHJpYyBQb3dlciBEZXZlbG9wbWVudCBDby4sTHRkLjELMAkGA1UEBhMCVVMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC35nKt/AoSiANJn9e9H96rol/85zSEAjAAMB8GA1UdIwQYMBaAFIgnFwmpthhgi+zruvZHWcVSVKO3MD8GCCsGAQUFBwEBBDMwMTAvBggr1UdJQEB/wQMMAoGCCsGAQUFBwMDMB0GA1UdDgQWBBSIeBiIaX4EyW39H2laObRLnSyWVjAOBgNVHQ8BAf8EBAMCB4AwEwYKKoZIhvdjZAYBAgEB/wQCyETSZ/FOr8EBZBVLmMGXz03x6f2Hpd7QsmoJJM5+6hHu4qgstgXNg0RRsa0B4jScKTMlRxmdZuLjm3plaX+P+yo0ylAnvGWm1sx9mxPTgrDbUg7Rg0n1bhrBtkX47+r8SUz4+E6dHnqZ7x48hZlhv6SFkj4PQ/apeAvITvnLeq7bj586gkpwS30bjmrsqSO8aEnysvyxq6Xx3+seH9Uihmjb7XdnV25mKfbf5ms6sm+HrN6ifrDb0LePX8YAsSH4=&lt;/data&gt;
+	&lt;/array&gt;
+
+
+	&lt;key&gt;Entitlements&lt;/key&gt;      // 权限
+	&lt;dict&gt;
+		&lt;key&gt;keychain-access-groups&lt;/key&gt;
+		&lt;array&gt;
+			&lt;string&gt; *** .*&lt;/string&gt;		
+		&lt;/array&gt;
+		&lt;key&gt;get-task-allow&lt;/key&gt;    // APP是否允许调试
+		&lt;true/&gt;
+		&lt;key&gt;application-identifier&lt;/key&gt;    // appID
+		&lt;string&gt; *** &lt;/string&gt;
+		&lt;key&gt;com.apple.developer.associated-domains&lt;/key&gt;
+		&lt;string&gt;*&lt;/string&gt;
+		&lt;key&gt;com.apple.developer.team-identifier&lt;/key&gt;
+		&lt;string&gt; *** &lt;/string&gt;
+		&lt;key&gt;aps-environment&lt;/key&gt;
+		&lt;string&gt;development&lt;/string&gt;
+
+	&lt;/dict&gt;
+	&lt;key&gt;ExpirationDate&lt;/key&gt;    // 过期时间
+	&lt;date&gt;2020-03-05T08:54:06Z&lt;/date&gt;
+	&lt;key&gt;Name&lt;/key&gt;
+	&lt;string&gt;iOS Team Provisioning Profile: *** &lt;/string&gt;
+	&lt;key&gt;ProvisionedDevices&lt;/key&gt;    // 设备列表
+	&lt;array&gt;
+		&lt;string&gt;476c21e91700a0605a11a***3de7705a&lt;/string&gt;
+		&lt;string&gt;98a1263783fb5538ec292f0***9d05690ffb&lt;/string&gt;
+		&lt;string&gt;bc9144d7496e5337e1f***cb653dc42e&lt;/string&gt;
+		&lt;string&gt;254fbcad0126f989b8980***d1dd8169b6ca&lt;/string&gt;
+		&lt;string&gt;349f7aeb300473cc30c28***025d&lt;/string&gt;
+	&lt;/array&gt;
+	&lt;key&gt;TeamIdentifier&lt;/key&gt;
+	&lt;array&gt;
+		&lt;string&gt; *** &lt;/string&gt;
+	&lt;/array&gt;
+	&lt;key&gt;TeamName&lt;/key&gt;
+	&lt;string&gt; *** Co.,Ltd.&lt;/string&gt;
+	&lt;key&gt;TimeToLive&lt;/key&gt;
+	&lt;integer&gt;365&lt;/integer&gt;
+	&lt;key&gt;UUID&lt;/key&gt;    // 描述文件的UUID
+	&lt;string&gt; *** &lt;/string&gt;
+	&lt;key&gt;Version&lt;/key&gt;
+	&lt;integer&gt;1&lt;/integer&gt;
+&lt;/dict&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h4 id="双层代码签名"><a href="#双层代码签名" class="headerlink" title="双层代码签名"></a>双层代码签名</h4><ul>
+<li>请求证书<br>开发过程中，首先Mac电脑（比如Xcode）会自动生成一对公私钥</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-6ec3926ede28d14e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="公私钥"></p>
+<p>图中的证书就是公钥M，专用密钥就是私钥M（也就是我们导出的P12文件）</p>
+<p>用一个CSR文件（就是在钥匙串访问中，证书助理，从证书颁发机构中获取的）向苹果申请一个证书，这个CSR文件主要包含了一个公钥文件，还有一些信息，比如邮箱、名字、签名信息、Hash值等等，苹果收到请求后，会用私钥A将公钥M进行签名，以供苹果设备进行验证（用公钥A进行验证）。苹果服务器将公钥M和签名信息打包成证书，并把appID、证书、设备IDs、权限文件等放入描述文件一并返回给Mac电脑，以备Mac电脑用这个描述文件中的证书到iOS设备去验证。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-0df7c92d9f6b22ce.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="请求证书"></p>
+<ul>
+<li>生成IPA文件，发送到iOS设备上<br>iOS设备上的APP其实都是文件夹，最重要的是可执行文件MachO和framework，APP签名也就是对它俩进行签名，通过Mac电脑的私钥M对文件进行签名，把这个签名和从苹果申请的描述文件一并放入到APP中。当安装APP时，iOS设备用公钥A来解析描述文件中的证书进行验证证书的有效性，通过之后将证书中的公钥M拿出来，再去验证APP签名的有效性，这样就可以验证当前APP是否是苹果官方允许的。</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-92f2a337c5fac6e7.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="双层代码签名"></p>
+<p>在开发阶段，我们需要频繁的改动程序跑真机，苹果不需要关心这些，所以iOS设备没有对APP的更改进行验证，只是验证证书（公钥M是不是合法的，APP签名的有效性）。这样解决了安装问题，但是如果这样的话，可以在任何一部iOS设备上安装APP，苹果防止开发者滥用，又加了两个限制：</p>
 <ol>
-<li>B要先生成两把密钥（公钥和私钥）。公钥是公开的，任何人都可以获得，私钥则是保密的。</li>
-<li>A获取B的公钥，然后用它对信息加密。</li>
-<li>B得到加密后的信息，用私钥解密。<br>理论上如果公钥加密的信息只有私钥解得开，那么只要私钥不泄漏，通信就是安全的。</li>
+<li>要在苹果后台注册过的设备才可以安装</li>
+<li>签名只能针对具体的某一个APP进行签名</li>
 </ol>
+<h4 id="关于APP签名"><a href="#关于APP签名" class="headerlink" title="关于APP签名"></a>关于APP签名</h4><blockquote>
+<p>在开发中，编译一个APP后，用本地的私钥M对APP进行签名，同时把从苹果服务器得到的Provisioning Profile文件打包进APP中，文件名为embedded.mobileprovision，把APP安装到iOS设备后，系统进行验证。</p>
 </blockquote>
-<p>1977年，三位数学家Rivest、Shamir 和 Adleman 设计了一种算法，可以实现非对称加密。这种算法用他们三个人的名字命名，叫做<a target="_blank" rel="noopener" href="http://zh.wikipedia.org/zh-cn/RSA%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95">RSA算法</a>。从那时直到现在，RSA算法一直是最广为使用的”非对称加密算法”。毫不夸张地说，只要有计算机网络的地方，就有RSA算法。这种算法非常可靠，密钥越长，它就越难破解。根据已经披露的文献，目前被破解的最长RSA密钥是232个十进制位，也就是768个二进制位，因此可以认为，1024位的RSA密钥基本安全，2048位的密钥极其安全，当然量子计算机除外。</p>
-<h4 id="RSA算法的原理"><a href="#RSA算法的原理" class="headerlink" title="RSA算法的原理"></a>RSA算法的原理</h4><p>下面进入正题，解释RSA算法的原理，其实RSA算法并不难，只需要一点<a target="_blank" rel="noopener" href="http://jeremykun.com/2011/07/30/number-theory-a-primer/">数论知识</a>就可以理解。</p>
-<blockquote>
-<ol>
-<li><strong>素数</strong>：又称<strong>质数</strong>，指在一个大于1的<a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=http%3A%2F%2Fbaike.baidu.com%2Fview%2F19911.htm">自然数</a>中，除了1和此<a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=http%3A%2F%2Fbaike.baidu.com%2Fview%2F71484.htm">整数</a>自身外，不能被其他自然数<a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=http%3A%2F%2Fbaike.baidu.com%2Fview%2F135932.htm">整除</a>的数。</li>
-<li><strong>互质</strong>，又称<strong>互素</strong>。若N个整数的<a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=http%3A%2F%2Fzh.wikipedia.org%2Fwiki%2F%25E6%259C%2580%25E5%25A4%25A7%25E5%2585%25AC%25E5%259B%25A0%25E6%2595%25B8">最大公因子</a>是1，则称这N个整数互质。</li>
-<li><strong>模运算</strong>即<strong>求余运算</strong>。“模”是“Mod”的音译。和模运算紧密相关的一个概念是“同余”。数学上，当两个整数除以同一个<strong>正</strong>整数，若得相同<a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=https%3A%2F%2Fzh.wikipedia.org%2Fwiki%2F%25E4%25BD%2599%25E6%2595%25B0">余数</a>，则二整数<strong>同余</strong>。<h5 id="欧拉函数"><a href="#欧拉函数" class="headerlink" title="欧拉函数"></a>欧拉函数</h5>任意给定正整数n，请问在小于等于n的正整数之中，有多少个与n构成互质关系？（比如，在1到8之中，有多少个数与8构成互质关系？）计算这个值的方法就叫做<a target="_blank" rel="noopener" href="http://zh.wikipedia.org/wiki/%E6%AC%A7%E6%8B%89%E5%87%BD%E6%95%B0">欧拉函数</a>，以φ(n)表示。</li>
-</ol>
-<ul>
-<li>计算8的欧拉函数，和8互质的 <strong>1</strong>、2、<strong>3</strong>、4、<strong>5</strong>、6、<strong>7</strong>、8<br>φ(8) = 4<br>如果n是质数的某一个次方，即 n = p^k (p为质数，k为大于等于1的整数)，则φ(n) = φ(p^k) = p^k - p^(k-1)。也就是φ(8) = φ(2^3) =2^3 - 2^2 = 8 -4 = 4</li>
-<li>计算7的欧拉函数，和7互质的 <strong>1</strong>、<strong>2</strong>、<strong>3</strong>、<strong>4</strong>、<strong>5</strong>、<strong>6</strong>、7<br>φ(7) = 6<br>如果n是质数，则 φ(n)=n-1 。因为质数与小于它的每一个数，都构成互质关系。比如5与1、2、3、4都构成互质关系。</li>
-<li>计算56的欧拉函数<br>φ(56) = φ(8) <em> φ(7) = 4 </em> 6 = 24<br>如果n可以分解成两个互质的整数之积，即 n = p <em> k ，则φ(n) = φ(p </em> k) = φ(p1)*φ(p2)</li>
-</ul>
-<p><strong>欧拉定理</strong>：如果两个正整数m和n互质，那么m的φ(n)次方减去1，可以被n整除。<br><img src="https://s.im5i.com/2021/02/02/kIyhQ.webp" alt="欧拉定理"></p>
-<p><strong>费马小定理</strong>：欧拉定理的特殊情况，如果两个正整数m和n互质，而且n为质数！那么φ(n)结果就是n-1。<br><img src="https://s.im5i.com/2021/02/02/kI6Jq.webp" alt="费马小定理"></p>
-<h5 id="模反元素"><a href="#模反元素" class="headerlink" title="模反元素"></a>模反元素</h5><p>还剩下最后一个概念，<strong>模反元素</strong>：如果两个正整数e和x互质，那么一定可以找到整数d，使得 ed-1 被x整除，或者说ed被x除的余数是1。<br>那么d就是e相对于x的模反元素。<br><img src="https://s.im5i.com/2021/02/02/kIR2h.webp" alt="d是模反元素"></p>
-</blockquote>
-<h5 id="等式转换"><a href="#等式转换" class="headerlink" title="等式转换"></a>等式转换</h5><ol>
-<li><p>根据欧拉定理<br><img src="https://s.im5i.com/2021/02/02/kIwtX.webp" alt="等式转换1"></p>
-</li>
-<li><p>由于1^k ≡ 1，等号左右两边都来个k次方<br><img src="https://s.im5i.com/2021/02/02/kIoYf.webp" alt="等式转换2"></p>
-</li>
-<li><p>由于1* m ≡ m，等号左右两边都乘上m<br><img src="https://s.im5i.com/2021/02/02/kItVM.webp" alt="等式转换3"></p>
-</li>
-</ol>
-<p>根据模反元素，因为e*d 一定是x的倍数加1。所以如下：<br><img src="https://s.im5i.com/2021/02/02/kIvO3.webp" alt="等式转换"></p>
-<p>通过多次的等式转换。终于可以将这两个等式进行合并了！如下：<br><img src="https://s.im5i.com/2021/02/02/kIBD7.webp" alt="最终等式转换"></p>
-<p>这个等式成立有一个前提！就是关于模反元素的，就是当整数e和φ(n)互质！一定有一个整数d是e相对于φ(n)的模反元素。<br>我们可以测试一下。<br>m取值为4<br>n取值为15<br>φ(n)取值为8<br>e 如果取值为3<br>d 可以为 11、19…(模反元素很明显不止一个，其实就是解二元一次方程)<br>如果你测试了，那么你可以改变m的值试一下，其实这个等式不需要m和n 互质。只要m小于n 等式依然成立。<br>这里需要注意的是，我们可以看做 m 通过一系列运算得到结果仍然是 m。这一系列运算中，分别出现了多个参数n、φ(n)、e还有d。</p>
-<p>m 的 e乘上d 次方为<strong>加密运算</strong>，得到结果 c<br>c 模以 n  为<strong>解密运算</strong>，得到结果 m<br>这似乎可以用于加密和解密。但这样，加密的结果会非常大。明文数据将非常小（虽然RSA用于加密的数据也很小，但是没这么大悬殊），真正的RSA要更加强大，那么RSA是怎么演变来的呢？？<br>早期很多数学家也停留在了这一步！直到1967年迪菲赫尔曼密钥交换打破了僵局！</p>
-<h5 id="迪菲赫尔曼密钥交换"><a href="#迪菲赫尔曼密钥交换" class="headerlink" title="迪菲赫尔曼密钥交换"></a>迪菲赫尔曼密钥交换</h5><p>这个密钥交换当时轰动了整个数学界！而且对人类密码学的发展非常重要，因为这个伟大的算法能够拆分刚才的等式。当非对称加密算法没有出现以前，人类都是用的对称加密。所以密钥的传递，就必须要非常小心。<br>迪菲赫尔曼密钥交换 就是解决了密钥传递的保密性，我们来看一下<br><img src="https://s.im5i.com/2021/02/02/kIukp.webp" alt="迪菲赫尔曼密钥交换"><br>假设一个传递密钥的场景。算法就是用3 的次方去模以17。 三个角色</p>
-<ul>
-<li>服务器 随机数 15<br>这个15只有服务器才知道。通过算法得到结果 6 因为 3的15次方 mod 17 = 6 。然后将结果 6 公开发送出去，拿到客户端的 12 ，然后用12^15 mod 17 得到结果10(10就是交换得到的密钥)</li>
-<li>客户端 随机数13<br>客户端用3 的 13次方 mod 17 = 12 然后将得到的结果12公布出去。<br>拿到服务器的 6 ，然后用6^13 mod 17 得到结果10(10就是交换得到的密钥)</li>
-<li>第三者<br>第三者只能拿到6 和 12 ，因为没有私密数据13、15，所以它没法得到结果10。</li>
-</ul>
-<p>为什么 6的13次方会和12的15次方得到一样的结果呢?因为这就是规律，我们可以用小一点的数字测试一下3^3 mod 17 = 10和10 ^ 2 mod 17 ； 3 ^ 2 mod 17 = 9和9^3 mod 17结果都是15。迪菲赫尔曼密钥交换最核心的地方就在于这个规律<br><img src="https://s.im5i.com/2021/02/02/kI4AG.webp" alt="迪菲赫尔曼密钥交换转换"></p>
-<h5 id="RSA的诞生"><a href="#RSA的诞生" class="headerlink" title="RSA的诞生"></a>RSA的诞生</h5><p><img src="https://s.im5i.com/2021/02/02/kIIEY.webp" alt="RSA原理"></p>
-<blockquote>
-<p>现在我们知道了m^e % n = c是加密，c^d % n = m是解密，m就是原始数据，c是密文，公钥是n和e，私钥是n和d，所以只有n和e是公开的。加密时我们也要知道φ(n)的值，最简单的方式是用两个质数之积得到，别人想破解RSA也要知道φ(n)的值，只能对n进行因数分解，那么我们不想m被破解，n的值就要非常大，就是我们之前说的，长度一般为1024个二进制位，这样就很安全了。但是据说量子计算机(用于科研，尚未普及)可以破解，理论上量子计算机的运行速度无穷快，大家可以了解一下。</p>
-</blockquote>
-<p>以上就是RSA的数学原理</p>
-<h5 id="检验RSA加密算法"><a href="#检验RSA加密算法" class="headerlink" title="检验RSA加密算法"></a>检验RSA加密算法</h5><p>我们用终端命令演示下这个加密、解密过程。<br>假设m = 12(随便取值，只要比n小就OK)，n = 15(还是随机取一个值)，φ(n) = 8，e = 3(只要和φ(n)互质就可以)，d = 19（3d - 1 = 8，d也可以为3,11等等，也就是d = (8k + 1)/3 ）<br>终端分别以m=12，7输入结果<br><img src="https://s.im5i.com/2021/02/02/kIX2w.webp" alt="终端演示"></p>
-<h5 id="OpenSSL进行RSA的命令运行"><a href="#OpenSSL进行RSA的命令运行" class="headerlink" title="OpenSSL进行RSA的命令运行"></a>OpenSSL进行RSA的命令运行</h5><p>Mac可以直接使用OpenSSL，首先进入相应文件夹</p>
-<ul>
-<li>生成公私钥<pre class="line-numbers language-none"><code class="language-none">// 生成RSA私钥，文件名为private.pem，长度为1024bit
-openssl genrsa -out private.pem 1024<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-none"><code class="language-none">// 从私钥中提取公钥
-openssl rsa -in private.pem -pubout -out publick.pem<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<img src="https://s.im5i.com/2021/02/02/kImvF.webp" alt="生成私钥"></li>
-</ul>
-<pre class="line-numbers language-none"><code class="language-none">// 查看刚刚生成好的私钥
-cat private.pem<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-none"><code class="language-none">// 查看刚刚生成好的公钥
-cat publick.pem<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p><img src="https://s.im5i.com/2021/02/02/kIPgd.webp" alt="查看公私钥"></p>
-<p>我们可以看到base64编码，明显私钥二进制很大，公钥就小了很多。<br>这时候我们的文件夹内已经多了刚刚生成好的公私钥文件了</p>
-<p><img src="https://s.im5i.com/2021/02/02/kXDVK.webp" alt="公私钥文件"></p>
-<pre class="line-numbers language-none"><code class="language-none">// 将私钥转换为明文
-openssl rsa -in private.pem -text -out private.txt<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p><img src="https://s.im5i.com/2021/02/02/kXUQC.webp" alt="P1、P2信息"></p>
-<p>里面就是P1、P2还有KEY等信息。</p>
-<ul>
-<li>对文件进行加密、解密<pre class="line-numbers language-none"><code class="language-none">// 编辑文件message内容为hello Vincent!!!
-// 刚刚的public.pem写成了publick.pem(哎。。。)
- $ vi message.txt
- $ cat message.txt
- hello Vincent!!!
-// 通过公钥加密数据时，使用encrypt对文件进行加密
- $ openssl rsautl -encrypt -in message.txt -inkey publick.pem -pubin -out enc.txt
-// 此时查看该文件内容为乱码
- $ cat enc.txt
-j��E]֌a��d�kUE�&amp;&lt;
-                 ��I*��V/��pL[���ˋ�O�+�-�M��K�ܱ�&amp;⪅ծO��2���o34�:�$���6��C�L��,b�'M�S�k�0���A��3%�[I���1�����ps"%
-// 通过私钥解密数据
- $ openssl rsautl -decrypt -in enc.txt -inkey private.pem -out dec.txt
-// 已成功解密，正确显示文件内容
- $ cat dec.txt
-  hello Vincent!!!<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-none"><code class="language-none">// 通过私钥加密数据时，要使用sign对文件进行重签名
-$ openssl rsautl -sign -in message.txt -inkey private.pem -out enc.bin
-// 此时查看该文件内容同样为乱码
-$ cat enc.bin
-{���Ew�3�1E��,8-OA2�Is�:���:�ԅ@MU����؜
-                                      �i1B���#��6���ׂm�D(�t#/���	�ہ�������ݬ&gt;(�&gt;�^@�C��3�ӸMQт�O%
-// 通过公钥解密数据
-$ openssl rsautl -verify -in enc.bin -inkey publick.pem -pubin -out dec.bin
-// 已成功解密，正确显示文件内容
-$ cat dec.bin
- hello Vincent!!!<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h5 id="RSA用途及特点"><a href="#RSA用途及特点" class="headerlink" title="RSA用途及特点"></a>RSA用途及特点</h5>到这里，大家都知道RSA相对比较安全，但是通过数学算法来加密和解密，效率比较低，所以一般RSA的主战场是加密比较小的数据，比如对大数据进行对称加密，再用RSA给对称加密的KEY进行加密，或者加密Hash值，也就是数字签名。</li>
-</ul>
-<p>关于RSA数字签名后面再慢慢阐述。该文章为记录本人的学习路程，希望能够帮助大家，也欢迎大家一起交流！！！</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-212efe0fca5a83df.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="查看资源文件签名"></p>
+<p>查看APP的包内容，里面会有_CodeSignature文件夹（里面的就是资源文件的签名），还有个可执行文件，可以用MachO查看，里面的Code signature就是应用签名。</p>
+<p>该文章为记录本人的学习路程，希望能够帮助大家！！！</p>
 
                 
             </div>
@@ -622,7 +636,7 @@ $ cat dec.bin
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://jbwblog.com/2021/02/02/rsa-jia-mi-yuan-li-ji-yun-yong/">https://jbwblog.com/2021/02/02/rsa-jia-mi-yuan-li-ji-yun-yong/</a>
+                    <a href="https://jbwblog.com/2019/03/02/ying-yong-qian-ming/">https://jbwblog.com/2019/03/02/ying-yong-qian-ming/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -660,16 +674,20 @@ $ cat dec.bin
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E7%AE%97%E6%B3%95/">
-                                    <span class="chip bg-color">算法</span>
-                                </a>
-                            
                                 <a href="/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/">
                                     <span class="chip bg-color">非对称加密原理</span>
                                 </a>
                             
-                                <a href="/tags/OpenSSL/">
-                                    <span class="chip bg-color">OpenSSL</span>
+                                <a href="/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/">
+                                    <span class="chip bg-color">数字签名</span>
+                                </a>
+                            
+                                <a href="/tags/%E4%BB%A3%E7%A0%81%E7%AD%BE%E5%90%8D/">
+                                    <span class="chip bg-color">代码签名</span>
+                                </a>
+                            
+                                <a href="/tags/%E5%8F%8C%E5%B1%82%E4%BB%A3%E7%A0%81%E7%AD%BE%E5%90%8D/">
+                                    <span class="chip bg-color">双层代码签名</span>
                                 </a>
                             
                         </div>
@@ -841,60 +859,46 @@ $ cat dec.bin
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/02/02/rsa-jia-mi-yuan-li-ji-yun-yong/">
+                <a href="/2019/03/05/mac-pei-zhi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="RSA加密原理及运用">
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh">
                         
-                        <span class="card-title">RSA加密原理及运用</span>
+                        <span class="card-title">Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            在对大数据进行对称加密后，再用RSA给对称加密的KEY进行加密，或者加密Hash值，也就是数字签名
+                            
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-02
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2019-03-05
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
-                                    算法
-                                </a>
-                            
-                            <a href="/categories/%E7%AE%97%E6%B3%95/%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/" class="post-category">
-                                    加密原理
+                            <a href="/categories/%E8%BD%AF%E4%BB%B6/" class="post-category">
+                                    软件
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E7%AE%97%E6%B3%95/">
-                        <span class="chip bg-color">算法</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/">
-                        <span class="chip bg-color">非对称加密原理</span>
-                    </a>
-                    
-                    <a href="/tags/OpenSSL/">
-                        <span class="chip bg-color">OpenSSL</span>
+                    <a href="/tags/Mac%E9%85%8D%E7%BD%AE/">
+                        <span class="chip bg-color">Mac配置</span>
                     </a>
                     
                 </div>
@@ -908,13 +912,13 @@ $ cat dec.bin
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/02/02/hello-world/">
+                <a href="/2019/01/17/ben-di-qian-ming/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="本地进行证书签名">
                         
-                        <span class="card-title">Hello World</span>
+                        <span class="card-title">本地进行证书签名</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -925,15 +929,39 @@ $ cat dec.bin
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-02
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-01-17
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            Vincent
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E7%AD%BE%E5%90%8D/" class="post-category">
+                                    签名
+                                </a>
+                            
+                            <a href="/categories/%E7%AD%BE%E5%90%8D/%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/" class="post-category">
+                                    加密原理
+                                </a>
+                            
                             
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/OpenSSL/">
+                        <span class="chip bg-color">OpenSSL</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/">
+                        <span class="chip bg-color">非对称加密原理</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%AD%BE%E5%90%8D/">
+                        <span class="chip bg-color">签名</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -1169,7 +1197,7 @@ $ cat dec.bin
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">3.2k</span>&nbsp;字
+                class="white-color">11.9k</span>&nbsp;字
             
             
             
