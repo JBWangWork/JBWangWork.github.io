@@ -1,6 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>了解Base64编码解码</title>
+    <url>/2019/01/05/base64/</url>
+    <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-161cc8afdcaec6f5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="了解Base64编码解码"></p>
+<blockquote>
+<p>我们经常说Base64，那Base64到底是什么呢？<br><a href="https://zh.wikipedia.org/zh-hans/Base64"><strong>Base64</strong></a>是一种基于64个可打印字符来表示<a href="https://zh.wikipedia.org/wiki/%E4%BA%8C%E8%BF%9B%E5%88%B6" title="二进制">二进制数据</a>的表示方法，常用于在通常处理文本<a href="https://zh.wikipedia.org/wiki/%E6%95%B0%E6%8D%AE" title="数据">数据</a>的场合，表示、传输、存储一些二进制数据，会将不便于查看的二进制数据用Base64进行表示。所以Bsea64经常用于密码学中，因为密码学通常用二进制进行加密，加密的结果用Base64编码来表示并传输。</p>
+</blockquote>
+<p>我们想了解Base64，其实看下面的Base64索引表就可以了。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-f9b1a93c393d27f8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Base64索引表"></p>
+<p>在Base64中的可打印字符包括<a href="https://zh.wikipedia.org/wiki/%E6%8B%89%E4%B8%81%E5%AD%97%E6%AF%8D" title="拉丁字母">字母</a><code>A-Z</code>、<code>a-z</code>、<a href="https://zh.wikipedia.org/wiki/%E6%95%B0%E5%AD%97" title="数字">数字</a><code>0-9</code>共有62个字符，加上<code>+</code>、<code>/</code>共64个字符，实际上还有一个字符<code>=</code>来作为后缀。比如：编码Man<br><img src="https://upload-images.jianshu.io/upload_images/5741330-578423235d58ea16.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="编码Man"></p>
+<p>当Base64对一个二进制数据进行编码时，每6个<a href="https://zh.wikipedia.org/wiki/%E4%BD%8D%E5%85%83" title="位元">位元</a>为一个单元，对应某个可打印字符。3个<a href="https://zh.wikipedia.org/wiki/%E5%AD%97%E8%8A%82" title="字节">字节</a>有24个位元，对应于4个Base64单元，即3个字节可由4个可打印字符来表示，所以最少要24个比特位。如果不足24位，就在后面补0，后面补的0就会用<code>=</code>来表示，所以<code>=</code>也只会在最后面。</p>
+<h4 id="终端演示Base64编码"><a href="#终端演示Base64编码" class="headerlink" title="终端演示Base64编码"></a>终端演示Base64编码</h4><pre class="line-numbers language-none"><code class="language-none">// 通过Base64将111图片进行编码，生成111.txt文件
+$ base64 111.png -o 111.txt
+// 对111.txt文件解码，生成222.png
+$ base64 111.txt -o 222.png -D<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-a811b9c976ba1fb5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Base64编码"></p>
+<p>左侧的图片是原始文件，通过Base64编码后输出右侧111.txt文件，再对111.txt文件解码还原。</p>
+<h4 id="代码演示Base64编码"><a href="#代码演示Base64编码" class="headerlink" title="代码演示Base64编码"></a>代码演示Base64编码</h4><p>Base64也是在iOS7以后出现的，接下来用代码简单操作一下<br></p><pre class="line-numbers language-none"><code class="language-none">//
+//  ViewController.m
+//  Base64
+//
+//  Created by Vincent on 2019/1/14.
+//  Copyright © 2019 Vincent. All rights reserved.
+//
+
+#import "ViewController.h"
+
+@interface ViewController ()
+
+@end
+
+@implementation ViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (NSString *)getBase64Encode:(NSString *)encodeStr {
+    // 将传进来的string转成NSData，再进行Base64编码
+    NSData *data = [encodeStr dataUsingEncoding:NSUTF8StringEncoding];
+    return [data base64EncodedStringWithOptions:0];
+}
+
+- (NSString *)getBase64Decode:(NSString *)decodeStr {
+     // 由于传过来的是Base64编码字符串，则不需要先转二进制再解码，可以直接通过NSData初始化方法解码
+    NSData *data = [[NSData alloc] initWithBase64EncodedString:decodeStr options:0];
+    // 将data转成string
+    return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    
+}
+
+- (void)touchesBegan:(NSSet&lt;UITouch *&gt; *)touches withEvent:(UIEvent *)event {
+    NSLog(@"----编码:%@", [self getBase64Encode:@"abc"]);
+    NSLog(@"####解码:%@", [self getBase64Decode:[self getBase64Encode:@"abc"]]);
+}
+
+@end
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<ul>
+<li>打印结果<pre class="line-numbers language-none"><code class="language-none">----编码:YWJj
+####解码:abc<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>终端验证<pre class="line-numbers language-none"><code class="language-none">// 通过Base64将abc进行编码
+$  echo -n abc | base64
+YWJj<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+验证通过！！！但是通过Base64编码，我们会发现编码结果会变大1/3。<br>该文章为记录本人的学习路程，希望能够帮助大家！！！</li>
+</ul>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>加密原理</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>非对称加密原理</tag>
+        <tag>OpenSSL</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>对称加密算法原理--OpenSSL演示、iOS代码运用及CCCrypt安全隐患</title>
     <url>/2019/01/13/cccrypt/</url>
     <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-6fba0bae30b20faa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="对称加密算法原理"></p>
@@ -251,144 +328,9 @@ hello vincent!!!<span aria-hidden="true" class="line-numbers-rows"><span></span>
       </categories>
       <tags>
         <tag>算法</tag>
+        <tag>OpenSSL</tag>
         <tag>对称加密原理</tag>
-        <tag>OpenSSL</tag>
         <tag>CCCrypt安全隐患</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>了解Base64编码解码</title>
-    <url>/2019/01/05/base64/</url>
-    <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-161cc8afdcaec6f5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="了解Base64编码解码"></p>
-<blockquote>
-<p>我们经常说Base64，那Base64到底是什么呢？<br><a href="https://zh.wikipedia.org/zh-hans/Base64"><strong>Base64</strong></a>是一种基于64个可打印字符来表示<a href="https://zh.wikipedia.org/wiki/%E4%BA%8C%E8%BF%9B%E5%88%B6" title="二进制">二进制数据</a>的表示方法，常用于在通常处理文本<a href="https://zh.wikipedia.org/wiki/%E6%95%B0%E6%8D%AE" title="数据">数据</a>的场合，表示、传输、存储一些二进制数据，会将不便于查看的二进制数据用Base64进行表示。所以Bsea64经常用于密码学中，因为密码学通常用二进制进行加密，加密的结果用Base64编码来表示并传输。</p>
-</blockquote>
-<p>我们想了解Base64，其实看下面的Base64索引表就可以了。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-f9b1a93c393d27f8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Base64索引表"></p>
-<p>在Base64中的可打印字符包括<a href="https://zh.wikipedia.org/wiki/%E6%8B%89%E4%B8%81%E5%AD%97%E6%AF%8D" title="拉丁字母">字母</a><code>A-Z</code>、<code>a-z</code>、<a href="https://zh.wikipedia.org/wiki/%E6%95%B0%E5%AD%97" title="数字">数字</a><code>0-9</code>共有62个字符，加上<code>+</code>、<code>/</code>共64个字符，实际上还有一个字符<code>=</code>来作为后缀。比如：编码Man<br><img src="https://upload-images.jianshu.io/upload_images/5741330-578423235d58ea16.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="编码Man"></p>
-<p>当Base64对一个二进制数据进行编码时，每6个<a href="https://zh.wikipedia.org/wiki/%E4%BD%8D%E5%85%83" title="位元">位元</a>为一个单元，对应某个可打印字符。3个<a href="https://zh.wikipedia.org/wiki/%E5%AD%97%E8%8A%82" title="字节">字节</a>有24个位元，对应于4个Base64单元，即3个字节可由4个可打印字符来表示，所以最少要24个比特位。如果不足24位，就在后面补0，后面补的0就会用<code>=</code>来表示，所以<code>=</code>也只会在最后面。</p>
-<h4 id="终端演示Base64编码"><a href="#终端演示Base64编码" class="headerlink" title="终端演示Base64编码"></a>终端演示Base64编码</h4><pre class="line-numbers language-none"><code class="language-none">// 通过Base64将111图片进行编码，生成111.txt文件
-$ base64 111.png -o 111.txt
-// 对111.txt文件解码，生成222.png
-$ base64 111.txt -o 222.png -D<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-a811b9c976ba1fb5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Base64编码"></p>
-<p>左侧的图片是原始文件，通过Base64编码后输出右侧111.txt文件，再对111.txt文件解码还原。</p>
-<h4 id="代码演示Base64编码"><a href="#代码演示Base64编码" class="headerlink" title="代码演示Base64编码"></a>代码演示Base64编码</h4><p>Base64也是在iOS7以后出现的，接下来用代码简单操作一下<br></p><pre class="line-numbers language-none"><code class="language-none">//
-//  ViewController.m
-//  Base64
-//
-//  Created by Vincent on 2019/1/14.
-//  Copyright © 2019 Vincent. All rights reserved.
-//
-
-#import "ViewController.h"
-
-@interface ViewController ()
-
-@end
-
-@implementation ViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-}
-
-- (NSString *)getBase64Encode:(NSString *)encodeStr {
-    // 将传进来的string转成NSData，再进行Base64编码
-    NSData *data = [encodeStr dataUsingEncoding:NSUTF8StringEncoding];
-    return [data base64EncodedStringWithOptions:0];
-}
-
-- (NSString *)getBase64Decode:(NSString *)decodeStr {
-     // 由于传过来的是Base64编码字符串，则不需要先转二进制再解码，可以直接通过NSData初始化方法解码
-    NSData *data = [[NSData alloc] initWithBase64EncodedString:decodeStr options:0];
-    // 将data转成string
-    return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    
-}
-
-- (void)touchesBegan:(NSSet&lt;UITouch *&gt; *)touches withEvent:(UIEvent *)event {
-    NSLog(@"----编码:%@", [self getBase64Encode:@"abc"]);
-    NSLog(@"####解码:%@", [self getBase64Decode:[self getBase64Encode:@"abc"]]);
-}
-
-@end
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
-<ul>
-<li>打印结果<pre class="line-numbers language-none"><code class="language-none">----编码:YWJj
-####解码:abc<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
-<li>终端验证<pre class="line-numbers language-none"><code class="language-none">// 通过Base64将abc进行编码
-$  echo -n abc | base64
-YWJj<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-验证通过！！！但是通过Base64编码，我们会发现编码结果会变大1/3。<br>该文章为记录本人的学习路程，希望能够帮助大家！！！</li>
-</ul>
-]]></content>
-      <categories>
-        <category>算法</category>
-        <category>加密原理</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>OpenSSL</tag>
-        <tag>非对称加密原理</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh</title>
-    <url>/2019/03/05/mac-pei-zhi/</url>
-    <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-d655dfa497bbcfd7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="电脑配置"></p>
-<p>哎，一年换了个21-inch iMac，两个27-inch iMac，加上重做系统就更不说了，每次都要下载各种软件，各种配置。。。故记录这篇文章以免自己以后老了记不住，希望可以帮到更多人吧！</p>
-<h4 id="效率神器Alfred、Go2shell"><a href="#效率神器Alfred、Go2shell" class="headerlink" title="效率神器Alfred、Go2shell"></a>效率神器Alfred、Go2shell</h4><p>首先，拿到新电脑，需要下载很多软件，第一时间把<code>Alfred</code>和<code>Go2shell</code>安装好，这里有<a href="xclient.info">各种破解软件免费下载平台</a>，里面安装教程很详细，默认<code>alt + 空格</code>打开Alfred，Go2shell就是可以快速打开当前路径的终端，用起来还是很方便的。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-8400d17b9f794546.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Go2shell"></p>
-<h4 id="终端配置"><a href="#终端配置" class="headerlink" title="终端配置"></a>终端配置</h4><p>接下来根据个人喜好配置终端，之前也一直在用苹果自带的终端，但是自从接触了iTerm2后就无法自拔了。</p>
-<ul>
-<li><p>安装iTerm2<br>先去官网下载iTerm2，<a href="http s://www.iterm2.com/downloads.html">iTerm2下载地址：</a><a href="https://www.iterm2.com/downloads.html">https://www.iterm2.com/downloads.html</a></p>
-</li>
-<li><p>配置iTerm2<br>目前iTerm2 最常用的主题是<code>Solarized Dark theme</code>，下载地址：<a href="http://ethanschoonover.com/solarized">http://ethanschoonover.com/solarized</a>，下载好的压缩文件解压后，打开 iTerm2的<code>Preferences</code>配置界面，可以按<code>Command + ,</code>键打开 ，然后<code>Profiles -&gt; Colors -&gt; Color Presets -&gt; Import</code></p>
-</li>
-</ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-889dc79aadf6e185.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="添加主题文件"></p>
-<p>选择刚才解压的solarized-&gt;iterm2-colors-solarized-&gt;Solarized Dark.itermcolors文件，导入成功，最后选择 Solarized Dark 主题。</p>
-<h4 id="配置Oh-My-Zsh"><a href="#配置Oh-My-Zsh" class="headerlink" title="配置Oh My Zsh"></a>配置Oh My Zsh</h4><p>一款用于管理zsh配置，可以提供超级多而强大的插件和漂亮的主题。可以去GitHub下载<a href="https://github.com/robbyrussell/oh-my-zsh">Oh My Zsh</a></p>
-<ul>
-<li>安装Oh My Zsh<pre class="line-numbers language-none"><code class="language-none">// 使用 crul 安装：
-$ sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-或者<pre class="line-numbers language-none"><code class="language-none">// 使用wget：
-$ sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-安装成功后</li>
-</ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-3fe231151c615c15.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="配置Oh My Zsh"></p>
-<ul>
-<li>卸载Oh My Zsh<pre class="line-numbers language-none"><code class="language-none">// 卸载oh-my-zsh命令：
-$ uninstall_oh_my_zsh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
-<li>设置当前用户的默认Shell为Zsh<pre class="line-numbers language-none"><code class="language-none">$ chsh -s /bin/zsh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-接下来，将主题配置修改为ZSH_THEME=”agnoster”<pre class="line-numbers language-none"><code class="language-none">$ vim ~/.zshrc<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-到目前为止，不出意外的话，iTerm2外观应该是这样的</li>
-</ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-92007dc6e28a9a86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="iTerm2外观"></p>
-<p>界面显示乱码原因是没有安装<code>Meslo</code>字体，字体下载地址：<a href="https://github.com/powerline/fonts/blob/master/Meslo%20Slashed/Meslo%20LG%20M%20Regular%20for%20Powerline.ttf">Meslo LG M Regular for Powerline.ttf</a>，下载后安装接下来还是打开 iTerm2的Preferences 配置界面，可以按<code>Command + ,</code>键打开 ，然后<code>Profiles -&gt; Text -&gt; Font -&gt; Chanage Font</code></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-ffed44579f071798.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="配置Meslo字体"><br>成功后的截图<br><img src="https://upload-images.jianshu.io/upload_images/5741330-e95f6971f45f9469.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="iTerm2+Oh My Zsh"></p>
-<p>也可以修改合适的字体大小。</p>
-<h4 id="自动填充"><a href="#自动填充" class="headerlink" title="自动填充"></a>自动填充</h4><p>这个功能是非常实用的，可以方便我们快速的敲命令。</p>
-<p>配置步骤，先克隆<code>zsh-autosuggestions</code>项目，到指定目录：<br></p><pre class="line-numbers language-none"><code class="language-none">$ git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>然后编辑<code>vim ~/.zshrc</code>文件，找到<code>plugins</code>配置，增加<code>zsh-autosuggestions</code>插件。如果配置不生效增加zsh-syntax-highlighting插件试试。<p></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-275b4a55100f9dac.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="自动填充"></p>
-<h4 id="隐藏用户名和主机名"><a href="#隐藏用户名和主机名" class="headerlink" title="隐藏用户名和主机名"></a>隐藏用户名和主机名</h4><p>进入Oh My Zsh主题文件列表<br></p><pre class="line-numbers language-none"><code class="language-none">$ cd ~/.oh-my-zsh/themes<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>进入已选的主题，并找到<code>prompt_context</code>，然后进行修改<br><pre class="line-numbers language-none"><code class="language-none">### Prompt components
-# Each component will draw itself, and hide itself if no information needs to be shown
-
-# Context: user@hostname (who am I and where am I)
-prompt_context() {
-  if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    # prompt_segment black default "%(!.%{%F{yellow}%}.)%n@%m"
-    prompt_segment black default "Vincent" // Vincent是写死的名字 可以根据个人爱好随意设置
-  fi
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br><img src="https://upload-images.jianshu.io/upload_images/5741330-3c6300f5a99d9272.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="隐藏用户名和主机名"><p></p>
-<p>还有一些插件和功能网上很多，暂不做更多介绍。</p>
-<p>该文章为记录本人的电脑配置，希望能够帮助大家！！！</p>
-]]></content>
-      <categories>
-        <category>软件</category>
-      </categories>
-      <tags>
-        <tag>Mac配置</tag>
       </tags>
   </entry>
   <entry>
@@ -509,23 +451,67 @@ $ cat dec.bin
       </categories>
       <tags>
         <tag>算法</tag>
-        <tag>OpenSSL</tag>
         <tag>非对称加密原理</tag>
+        <tag>OpenSSL</tag>
       </tags>
   </entry>
   <entry>
-    <title>Hello World</title>
-    <url>/2021/02/02/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo new <span class="token string">"My New Post"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo generate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo deploy<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+    <title>Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh</title>
+    <url>/2019/03/05/mac-pei-zhi/</url>
+    <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-d655dfa497bbcfd7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="电脑配置"></p>
+<p>哎，一年换了个21-inch iMac，两个27-inch iMac，加上重做系统就更不说了，每次都要下载各种软件，各种配置。。。故记录这篇文章以免自己以后老了记不住，希望可以帮到更多人吧！</p>
+<h4 id="效率神器Alfred、Go2shell"><a href="#效率神器Alfred、Go2shell" class="headerlink" title="效率神器Alfred、Go2shell"></a>效率神器Alfred、Go2shell</h4><p>首先，拿到新电脑，需要下载很多软件，第一时间把<code>Alfred</code>和<code>Go2shell</code>安装好，这里有<a href="xclient.info">各种破解软件免费下载平台</a>，里面安装教程很详细，默认<code>alt + 空格</code>打开Alfred，Go2shell就是可以快速打开当前路径的终端，用起来还是很方便的。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-8400d17b9f794546.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Go2shell"></p>
+<h4 id="终端配置"><a href="#终端配置" class="headerlink" title="终端配置"></a>终端配置</h4><p>接下来根据个人喜好配置终端，之前也一直在用苹果自带的终端，但是自从接触了iTerm2后就无法自拔了。</p>
+<ul>
+<li><p>安装iTerm2<br>先去官网下载iTerm2，<a href="http s://www.iterm2.com/downloads.html">iTerm2下载地址：</a><a href="https://www.iterm2.com/downloads.html">https://www.iterm2.com/downloads.html</a></p>
+</li>
+<li><p>配置iTerm2<br>目前iTerm2 最常用的主题是<code>Solarized Dark theme</code>，下载地址：<a href="http://ethanschoonover.com/solarized">http://ethanschoonover.com/solarized</a>，下载好的压缩文件解压后，打开 iTerm2的<code>Preferences</code>配置界面，可以按<code>Command + ,</code>键打开 ，然后<code>Profiles -&gt; Colors -&gt; Color Presets -&gt; Import</code></p>
+</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-889dc79aadf6e185.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="添加主题文件"></p>
+<p>选择刚才解压的solarized-&gt;iterm2-colors-solarized-&gt;Solarized Dark.itermcolors文件，导入成功，最后选择 Solarized Dark 主题。</p>
+<h4 id="配置Oh-My-Zsh"><a href="#配置Oh-My-Zsh" class="headerlink" title="配置Oh My Zsh"></a>配置Oh My Zsh</h4><p>一款用于管理zsh配置，可以提供超级多而强大的插件和漂亮的主题。可以去GitHub下载<a href="https://github.com/robbyrussell/oh-my-zsh">Oh My Zsh</a></p>
+<ul>
+<li>安装Oh My Zsh<pre class="line-numbers language-none"><code class="language-none">// 使用 crul 安装：
+$ sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+或者<pre class="line-numbers language-none"><code class="language-none">// 使用wget：
+$ sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+安装成功后</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-3fe231151c615c15.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="配置Oh My Zsh"></p>
+<ul>
+<li>卸载Oh My Zsh<pre class="line-numbers language-none"><code class="language-none">// 卸载oh-my-zsh命令：
+$ uninstall_oh_my_zsh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>设置当前用户的默认Shell为Zsh<pre class="line-numbers language-none"><code class="language-none">$ chsh -s /bin/zsh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+接下来，将主题配置修改为ZSH_THEME=”agnoster”<pre class="line-numbers language-none"><code class="language-none">$ vim ~/.zshrc<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+到目前为止，不出意外的话，iTerm2外观应该是这样的</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-92007dc6e28a9a86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="iTerm2外观"></p>
+<p>界面显示乱码原因是没有安装<code>Meslo</code>字体，字体下载地址：<a href="https://github.com/powerline/fonts/blob/master/Meslo%20Slashed/Meslo%20LG%20M%20Regular%20for%20Powerline.ttf">Meslo LG M Regular for Powerline.ttf</a>，下载后安装接下来还是打开 iTerm2的Preferences 配置界面，可以按<code>Command + ,</code>键打开 ，然后<code>Profiles -&gt; Text -&gt; Font -&gt; Chanage Font</code></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-ffed44579f071798.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="配置Meslo字体"><br>成功后的截图<br><img src="https://upload-images.jianshu.io/upload_images/5741330-e95f6971f45f9469.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="iTerm2+Oh My Zsh"></p>
+<p>也可以修改合适的字体大小。</p>
+<h4 id="自动填充"><a href="#自动填充" class="headerlink" title="自动填充"></a>自动填充</h4><p>这个功能是非常实用的，可以方便我们快速的敲命令。</p>
+<p>配置步骤，先克隆<code>zsh-autosuggestions</code>项目，到指定目录：<br></p><pre class="line-numbers language-none"><code class="language-none">$ git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>然后编辑<code>vim ~/.zshrc</code>文件，找到<code>plugins</code>配置，增加<code>zsh-autosuggestions</code>插件。如果配置不生效增加zsh-syntax-highlighting插件试试。<p></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-275b4a55100f9dac.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="自动填充"></p>
+<h4 id="隐藏用户名和主机名"><a href="#隐藏用户名和主机名" class="headerlink" title="隐藏用户名和主机名"></a>隐藏用户名和主机名</h4><p>进入Oh My Zsh主题文件列表<br></p><pre class="line-numbers language-none"><code class="language-none">$ cd ~/.oh-my-zsh/themes<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>进入已选的主题，并找到<code>prompt_context</code>，然后进行修改<br><pre class="line-numbers language-none"><code class="language-none">### Prompt components
+# Each component will draw itself, and hide itself if no information needs to be shown
+
+# Context: user@hostname (who am I and where am I)
+prompt_context() {
+  if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
+    # prompt_segment black default "%(!.%{%F{yellow}%}.)%n@%m"
+    prompt_segment black default "Vincent" // Vincent是写死的名字 可以根据个人爱好随意设置
+  fi
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br><img src="https://upload-images.jianshu.io/upload_images/5741330-3c6300f5a99d9272.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="隐藏用户名和主机名"><p></p>
+<p>还有一些插件和功能网上很多，暂不做更多介绍。</p>
+<p>该文章为记录本人的电脑配置，希望能够帮助大家！！！</p>
 ]]></content>
+      <categories>
+        <category>软件</category>
+      </categories>
+      <tags>
+        <tag>Mac配置</tag>
+      </tags>
   </entry>
   <entry>
     <title>Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh</title>
@@ -639,8 +625,8 @@ Verifying - Enter Export Password:<span aria-hidden="true" class="line-numbers-r
         <category>加密原理</category>
       </categories>
       <tags>
-        <tag>OpenSSL</tag>
         <tag>非对称加密原理</tag>
+        <tag>OpenSSL</tag>
         <tag>签名</tag>
       </tags>
   </entry>
