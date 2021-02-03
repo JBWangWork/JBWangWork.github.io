@@ -6,7 +6,7 @@
   <link href="https://jbwblog.com/atom.xml" rel="self"/>
   
   <link href="https://jbwblog.com/"/>
-  <updated>2021-02-02T12:54:08.153Z</updated>
+  <updated>2021-02-03T03:14:10.906Z</updated>
   <id>https://jbwblog.com/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Runloop底层原理--源码分析</title>
-    <link href="https://jbwblog.com/2021/02/02/runtime-fan-hui-bian/"/>
-    <id>https://jbwblog.com/2021/02/02/runtime-fan-hui-bian/</id>
-    <published>2021-02-02T12:52:09.000Z</published>
-    <updated>2021-02-02T12:54:08.153Z</updated>
+    <title>快速了解iOS单元测试</title>
+    <link href="https://jbwblog.com/2021/07/23/dan-yuan-ce-shi/"/>
+    <id>https://jbwblog.com/2021/07/23/dan-yuan-ce-shi/</id>
+    <published>2021-07-23T03:12:48.000Z</published>
+    <updated>2021-02-03T03:14:10.906Z</updated>
     
     
       
@@ -34,16 +34,12 @@
     
     
     
-    <category term="底层原理" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
-    
-    <category term="源码分析" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    <category term="测试" scheme="https://jbwblog.com/categories/%E6%B5%8B%E8%AF%95/"/>
     
     
-    <category term="Runtime" scheme="https://jbwblog.com/tags/Runtime/"/>
+    <category term="Xcode调试" scheme="https://jbwblog.com/tags/Xcode%E8%B0%83%E8%AF%95/"/>
     
-    <category term="反汇编" scheme="https://jbwblog.com/tags/%E5%8F%8D%E6%B1%87%E7%BC%96/"/>
-    
-    <category term="源码分析" scheme="https://jbwblog.com/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    <category term="单元测试" scheme="https://jbwblog.com/tags/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/"/>
     
   </entry>
   
@@ -73,11 +69,420 @@
   </entry>
   
   <entry>
+    <title>自定义NSOperation子类-图片下载器</title>
+    <link href="https://jbwblog.com/2020/01/07/zi-ding-yi-nsoperation/"/>
+    <id>https://jbwblog.com/2020/01/07/zi-ding-yi-nsoperation/</id>
+    <published>2020-01-07T10:37:57.000Z</published>
+    <updated>2021-02-03T03:11:52.353Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="底层原理" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="源码分析" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+    
+    <category term="源码分析" scheme="https://jbwblog.com/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+    <category term="底层原理" scheme="https://jbwblog.com/tags/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="NSOperation" scheme="https://jbwblog.com/tags/NSOperation/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>多线程原理--NSOperation、NSOperationQueue</title>
+    <link href="https://jbwblog.com/2020/01/06/nsoperation-yuan-li/"/>
+    <id>https://jbwblog.com/2020/01/06/nsoperation-yuan-li/</id>
+    <published>2020-01-06T07:33:55.000Z</published>
+    <updated>2021-02-03T03:07:39.541Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="底层原理" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="源码分析" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+    
+    <category term="源码分析" scheme="https://jbwblog.com/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+    <category term="底层原理" scheme="https://jbwblog.com/tags/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="NSOperation" scheme="https://jbwblog.com/tags/NSOperation/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>React简述</title>
+    <link href="https://jbwblog.com/2019/12/05/react-jian-shu/"/>
+    <id>https://jbwblog.com/2019/12/05/react-jian-shu/</id>
+    <published>2019-12-05T03:33:55.000Z</published>
+    <updated>2021-02-03T03:03:02.763Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="前端" scheme="https://jbwblog.com/categories/%E5%89%8D%E7%AB%AF/"/>
+    
+    
+    <category term="React" scheme="https://jbwblog.com/tags/React/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>多线程原理--GCD源码分析</title>
+    <link href="https://jbwblog.com/2019/11/03/gcd-yuan-ma-fen-xi/"/>
+    <id>https://jbwblog.com/2019/11/03/gcd-yuan-ma-fen-xi/</id>
+    <published>2019-11-03T04:39:56.000Z</published>
+    <updated>2021-02-03T03:03:23.744Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="底层原理" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="源码分析" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+    
+    <category term="源码分析" scheme="https://jbwblog.com/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+    <category term="底层原理" scheme="https://jbwblog.com/tags/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="GCD" scheme="https://jbwblog.com/tags/GCD/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>多线程简介</title>
+    <link href="https://jbwblog.com/2019/10/22/duo-xian-cheng-jian-jie/"/>
+    <id>https://jbwblog.com/2019/10/22/duo-xian-cheng-jian-jie/</id>
+    <published>2019-10-22T03:30:57.000Z</published>
+    <updated>2021-02-03T02:49:36.044Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="底层原理" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="源码分析" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+    
+    <category term="底层原理" scheme="https://jbwblog.com/tags/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="多线程" scheme="https://jbwblog.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>多线程原理--了解GCD</title>
+    <link href="https://jbwblog.com/2019/10/17/gcd-jian-jie/"/>
+    <id>https://jbwblog.com/2019/10/17/gcd-jian-jie/</id>
+    <published>2019-10-17T12:57:55.000Z</published>
+    <updated>2021-02-03T03:03:36.181Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="底层原理" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="源码分析" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+    
+    <category term="底层原理" scheme="https://jbwblog.com/tags/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="GCD" scheme="https://jbwblog.com/tags/GCD/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>KVO底层原理—利用Runtime自定义KVO</title>
+    <link href="https://jbwblog.com/2019/08/16/kvo-di-ceng-yuan-li/"/>
+    <id>https://jbwblog.com/2019/08/16/kvo-di-ceng-yuan-li/</id>
+    <published>2019-08-16T08:46:44.000Z</published>
+    <updated>2021-02-03T03:04:06.622Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="底层原理" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="源码分析" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+    
+    <category term="源码分析" scheme="https://jbwblog.com/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+    <category term="底层原理" scheme="https://jbwblog.com/tags/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="KVO" scheme="https://jbwblog.com/tags/KVO/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Category实现原理--源码分析</title>
+    <link href="https://jbwblog.com/2019/07/27/categort-yuan-li/"/>
+    <id>https://jbwblog.com/2019/07/27/categort-yuan-li/</id>
+    <published>2019-07-27T07:24:04.000Z</published>
+    <updated>2021-02-03T02:26:04.881Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;&lt;img src=&quot;https://upload-images.jianshu.io/upload_images/5741330-b9c059d5a3119823.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&quot; alt=&quot;Category实现原理&quot;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;在Objective-C 2.0中新增的Category可以动态地为已有类添加新的对象方法、类方法、协议、和属性。注：这里的属性只会生成set/get方法的声明，并不会自动生成成员变量（分类是在运行时才去加载，对象的内存布局已经确定，无法在程序运行时将分类的成员变量添加到实例对象的结构体中），可以利用关联对象来实现。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="底层原理" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="源码分析" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+    
+    <category term="Categort" scheme="https://jbwblog.com/tags/Categort/"/>
+    
+    <category term="源码分析" scheme="https://jbwblog.com/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+    <category term="底层原理" scheme="https://jbwblog.com/tags/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>KVC底层原理--YYModel简述</title>
+    <link href="https://jbwblog.com/2019/07/15/yymodel-jian-jie/"/>
+    <id>https://jbwblog.com/2019/07/15/yymodel-jian-jie/</id>
+    <published>2019-07-15T07:16:18.000Z</published>
+    <updated>2021-02-03T03:04:31.462Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;&lt;img src=&quot;https://upload-images.jianshu.io/upload_images/5741330-29717fbfde50dc23.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&quot; alt=&quot;KVC底层原理&quot;&gt;&lt;/p&gt;
+&lt;p&gt;YYModel的作用就是字典转模型，在了解YYModel前，我们先了解下KVC的知识。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;KVC：也称之键值编码，是一种采用了&lt;code&gt;NSKeyValueCoding&lt;/code&gt;协议的对象（直接或间接继承NSObject时会为基本方法提供默认实现）通过间接访问其属性的机制，也就是符合键值编码，对象可通过字符串参数来简单而统一的消息对其属性进行寻址，例如&lt;code&gt;valueForKey:&lt;/code&gt;和 &lt;code&gt;setValue:forKey:&lt;/code&gt;。在一些特殊情况下，KVC还可以简化代码。&lt;a href=&quot;https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/KeyValueCoding/index.html#//apple_ref/doc/uid/10000107-SW1&quot;&gt;官方文档直通车&lt;/a&gt;&lt;br&gt;&lt;/p&gt;&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="底层原理" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="源码分析" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+    
+    <category term="源码分析" scheme="https://jbwblog.com/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+    <category term="底层原理" scheme="https://jbwblog.com/tags/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="KVC" scheme="https://jbwblog.com/tags/KVC/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Runloop底层原理--源码分析</title>
+    <link href="https://jbwblog.com/2019/06/23/runloop-yuan-ma-fen-xi/"/>
+    <id>https://jbwblog.com/2019/06/23/runloop-yuan-ma-fen-xi/</id>
+    <published>2019-06-23T11:58:22.000Z</published>
+    <updated>2021-02-03T02:18:29.927Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="底层原理" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="源码分析" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+    
+    <category term="源码分析" scheme="https://jbwblog.com/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+    <category term="底层原理" scheme="https://jbwblog.com/tags/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="Runtime" scheme="https://jbwblog.com/tags/Runtime/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>iOS中实例变量、成员变量和属性变量的区别</title>
+    <link href="https://jbwblog.com/2019/06/23/ios-shu-xing/"/>
+    <id>https://jbwblog.com/2019/06/23/ios-shu-xing/</id>
+    <published>2019-06-23T03:31:35.000Z</published>
+    <updated>2021-02-03T02:18:18.882Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="底层原理" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+    
+    <category term="底层原理" scheme="https://jbwblog.com/tags/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Runtime底层原理总结--反汇编分析消息转发</title>
+    <link href="https://jbwblog.com/2019/06/22/runtime-fan-hui-bian/"/>
+    <id>https://jbwblog.com/2019/06/22/runtime-fan-hui-bian/</id>
+    <published>2019-06-22T12:52:09.000Z</published>
+    <updated>2021-02-03T02:18:56.881Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="底层原理" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="源码分析" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+    
+    <category term="源码分析" scheme="https://jbwblog.com/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+    <category term="Runtime" scheme="https://jbwblog.com/tags/Runtime/"/>
+    
+    <category term="反汇编" scheme="https://jbwblog.com/tags/%E5%8F%8D%E6%B1%87%E7%BC%96/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Xcode无线调试</title>
+    <link href="https://jbwblog.com/2019/06/13/xcode-diao-shi/"/>
+    <id>https://jbwblog.com/2019/06/13/xcode-diao-shi/</id>
+    <published>2019-06-13T01:50:57.000Z</published>
+    <updated>2021-02-03T02:18:44.645Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;Xcode无线调试是WWDC2017的一个新功能，首先要满足iOS11以上，Xcode9以上；&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;首先，把iOS11以上的iOS设备连接到Xcode9，&lt;code&gt;shift + Commond +</summary>
+        
+      
+    
+    
+    
+    <category term="测试" scheme="https://jbwblog.com/categories/%E6%B5%8B%E8%AF%95/"/>
+    
+    
+    <category term="Xcode调试" scheme="https://jbwblog.com/tags/Xcode%E8%B0%83%E8%AF%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Runtime底层原理--动态方法解析总结</title>
+    <link href="https://jbwblog.com/2019/05/28/dong-tai-fang-fa/"/>
+    <id>https://jbwblog.com/2019/05/28/dong-tai-fang-fa/</id>
+    <published>2019-05-28T11:33:55.000Z</published>
+    <updated>2021-02-03T02:18:11.553Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="底层原理" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="源码分析" scheme="https://jbwblog.com/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+    
+    <category term="源码分析" scheme="https://jbwblog.com/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+    <category term="底层原理" scheme="https://jbwblog.com/tags/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
+    
+    <category term="Runtime" scheme="https://jbwblog.com/tags/Runtime/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Runtime底层原理--IMP查找流程、动态方法解析、消息转发源码分析</title>
-    <link href="https://jbwblog.com/2019/04/12/imp-yuan-ma-fen-xi/"/>
-    <id>https://jbwblog.com/2019/04/12/imp-yuan-ma-fen-xi/</id>
-    <published>2019-04-12T10:48:01.000Z</published>
-    <updated>2021-02-02T12:52:59.978Z</updated>
+    <link href="https://jbwblog.com/2019/04/10/imp-yuan-ma-fen-xi/"/>
+    <id>https://jbwblog.com/2019/04/10/imp-yuan-ma-fen-xi/</id>
+    <published>2019-04-10T10:48:01.000Z</published>
+    <updated>2021-02-03T01:50:23.506Z</updated>
     
     
       
@@ -179,134 +584,6 @@
     <category term="代码签名" scheme="https://jbwblog.com/tags/%E4%BB%A3%E7%A0%81%E7%AD%BE%E5%90%8D/"/>
     
     <category term="双层代码签名" scheme="https://jbwblog.com/tags/%E5%8F%8C%E5%B1%82%E4%BB%A3%E7%A0%81%E7%AD%BE%E5%90%8D/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>本地进行证书签名</title>
-    <link href="https://jbwblog.com/2019/01/17/ben-di-qian-ming/"/>
-    <id>https://jbwblog.com/2019/01/17/ben-di-qian-ming/</id>
-    <published>2019-01-17T09:28:52.000Z</published>
-    <updated>2021-02-02T11:03:12.967Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;&lt;img</summary>
-        
-      
-    
-    
-    
-    <category term="签名" scheme="https://jbwblog.com/categories/%E7%AD%BE%E5%90%8D/"/>
-    
-    <category term="加密原理" scheme="https://jbwblog.com/categories/%E7%AD%BE%E5%90%8D/%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/"/>
-    
-    
-    <category term="非对称加密原理" scheme="https://jbwblog.com/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/"/>
-    
-    <category term="OpenSSL" scheme="https://jbwblog.com/tags/OpenSSL/"/>
-    
-    <category term="签名" scheme="https://jbwblog.com/tags/%E7%AD%BE%E5%90%8D/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>对称加密算法原理--OpenSSL演示、iOS代码运用及CCCrypt安全隐患</title>
-    <link href="https://jbwblog.com/2019/01/13/cccrypt/"/>
-    <id>https://jbwblog.com/2019/01/13/cccrypt/</id>
-    <published>2019-01-13T07:32:28.000Z</published>
-    <updated>2021-02-02T11:01:48.620Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;&lt;img</summary>
-        
-      
-    
-    
-    
-    <category term="算法" scheme="https://jbwblog.com/categories/%E7%AE%97%E6%B3%95/"/>
-    
-    <category term="加密原理" scheme="https://jbwblog.com/categories/%E7%AE%97%E6%B3%95/%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/"/>
-    
-    
-    <category term="算法" scheme="https://jbwblog.com/tags/%E7%AE%97%E6%B3%95/"/>
-    
-    <category term="OpenSSL" scheme="https://jbwblog.com/tags/OpenSSL/"/>
-    
-    <category term="对称加密原理" scheme="https://jbwblog.com/tags/%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/"/>
-    
-    <category term="CCCrypt安全隐患" scheme="https://jbwblog.com/tags/CCCrypt%E5%AE%89%E5%85%A8%E9%9A%90%E6%82%A3/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>了解Base64编码解码</title>
-    <link href="https://jbwblog.com/2019/01/05/base64/"/>
-    <id>https://jbwblog.com/2019/01/05/base64/</id>
-    <published>2019-01-05T10:29:21.000Z</published>
-    <updated>2021-02-02T10:51:06.362Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;&lt;img</summary>
-        
-      
-    
-    
-    
-    <category term="算法" scheme="https://jbwblog.com/categories/%E7%AE%97%E6%B3%95/"/>
-    
-    <category term="加密原理" scheme="https://jbwblog.com/categories/%E7%AE%97%E6%B3%95/%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/"/>
-    
-    
-    <category term="算法" scheme="https://jbwblog.com/tags/%E7%AE%97%E6%B3%95/"/>
-    
-    <category term="非对称加密原理" scheme="https://jbwblog.com/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/"/>
-    
-    <category term="OpenSSL" scheme="https://jbwblog.com/tags/OpenSSL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>非对称加密算法--RSA加密原理及运用</title>
-    <link href="https://jbwblog.com/2018/12/02/rsa-jia-mi-yuan-li-ji-yun-yong/"/>
-    <id>https://jbwblog.com/2018/12/02/rsa-jia-mi-yuan-li-ji-yun-yong/</id>
-    <published>2018-12-02T07:50:24.000Z</published>
-    <updated>2021-02-02T10:50:16.509Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;&lt;img src=&quot;https://s.im5i.com/2021/02/02/kIFKH.png&quot; alt=&quot;RSA加密原理及运用&quot;&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a</summary>
-        
-      
-    
-    
-    
-    <category term="算法" scheme="https://jbwblog.com/categories/%E7%AE%97%E6%B3%95/"/>
-    
-    <category term="加密原理" scheme="https://jbwblog.com/categories/%E7%AE%97%E6%B3%95/%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/"/>
-    
-    
-    <category term="算法" scheme="https://jbwblog.com/tags/%E7%AE%97%E6%B3%95/"/>
-    
-    <category term="非对称加密原理" scheme="https://jbwblog.com/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/"/>
-    
-    <category term="OpenSSL" scheme="https://jbwblog.com/tags/OpenSSL/"/>
     
   </entry>
   

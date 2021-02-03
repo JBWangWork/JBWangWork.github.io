@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Runloop底层原理--源码分析, OC, Swift">
+    <meta name="keywords" content="Category实现原理--源码分析, OC, Swift">
     <meta name="description" content="iOS开发技术分享">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Runloop底层原理--源码分析 | Vincent&#39;s blogs</title>
+    <title>Category实现原理--源码分析 | Vincent&#39;s blogs</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -306,7 +306,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Runloop底层原理--源码分析</h1>
+                    <h1 class="description center-align post-title">Category实现原理--源码分析</h1>
                 </div>
             </div>
         </div>
@@ -422,16 +422,16 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Runtime/">
-                                <span class="chip bg-color">Runtime</span>
-                            </a>
-                        
-                            <a href="/tags/%E5%8F%8D%E6%B1%87%E7%BC%96/">
-                                <span class="chip bg-color">反汇编</span>
+                            <a href="/tags/Categort/">
+                                <span class="chip bg-color">Categort</span>
                             </a>
                         
                             <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
                                 <span class="chip bg-color">源码分析</span>
+                            </a>
+                        
+                            <a href="/tags/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">
+                                <span class="chip bg-color">底层原理</span>
                             </a>
                         
                     </div>
@@ -459,7 +459,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-02-02
+                    2019-07-27
                 </div>
                 
 
@@ -470,7 +470,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    11 分
                 </div>
                 
 
@@ -488,108 +488,310 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://upload-images.jianshu.io/upload_images/5741330-0353c6ce7788cf39.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="反汇编分析消息转发"></p>
+                <p><img src="https://upload-images.jianshu.io/upload_images/5741330-b9c059d5a3119823.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Category实现原理"></p>
 <blockquote>
-<p>消息转发：发送一个消息，也就是sel查找imp，当没有找到imp，接下来进入动态方法解析，如果开发者并没有处理，会进入消息转发。</p>
-<h4 id="消息转发"><a href="#消息转发" class="headerlink" title="消息转发"></a>消息转发</h4><p>前几篇文章介绍了<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/1ddd15e47343">Runtime底层原理</a>和<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a7db9f0c82d6">动态方法解析总结</a></p>
+<p>在Objective-C 2.0中新增的Category可以动态地为已有类添加新的对象方法、类方法、协议、和属性。注：这里的属性只会生成set/get方法的声明，并不会自动生成成员变量（分类是在运行时才去加载，对象的内存布局已经确定，无法在程序运行时将分类的成员变量添加到实例对象的结构体中），可以利用关联对象来实现。</p>
 </blockquote>
-<p>，我们知道如果前面的动态方法解析也没有解决问题的话，那么就会进入消息转发<code>_objc_msgForward_impcache</code>方法，会有快速消息转发和慢速消息转发。<br><code>_objc_msgForward_impcache</code>方法会从C转换到汇编部分<code>__objc_msgForward_impcache</code>进行快速消息转发，执行闭源<code>__objc_msgForward</code>。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-3eb7d8eb18b221b2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="汇编部分__objc_msgForward"></p>
-<p>如果我们的方法没有查找到会报错<code>_forwarding_prep_0</code><br><img src="https://upload-images.jianshu.io/upload_images/5741330-9ef2ef6fcc43679a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="崩溃信息"></p>
-<p>但是我们在源代码中找不到该方法，除了前面文章—<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/1ddd15e47343">Runtime底层原理—动态方法解析、消息转发源码分析</a>提到的方法外，我们可以用反汇编分析消息转发。</p>
-<p>首先进入<code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/System/Library/Frameworks/CoreFoundation.framework</code>中，找到可执行文件<code>CoreFoundation</code>，将该文件拖入hopper中，找到<code>CFInitialze</code>可以看到了<code>___forwarding_prep_0___</code><br><img src="https://upload-images.jianshu.io/upload_images/5741330-0b90c8c5ea93efc0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="forwarding_prep_0"></p>
-<p>进入<code>___forwarding_prep_0___</code>内部，<br><img src="https://upload-images.jianshu.io/upload_images/5741330-05fba25f458f9938.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="____forwarding___"></p>
-<p>从崩溃堆栈信息中看到有执行forwarding，进入forwarding内部，里面判断了_objc_msgSend_stret、_objc_msgSend、taggedpointer之后有个<code>forwardingTargetForSelector:</code>，判断<code>forwardingTargetForSelector:</code>没有实现，没有实现跳转到loc_126fc7，<br><img src="https://upload-images.jianshu.io/upload_images/5741330-0a615756710dd4d5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="forwardingTargetForSelector"></p>
-<p>进入loc_126fc7，判断僵尸对象之后执行方法签名<code>methodSignatureForSelector:</code>，如果有值，获取Name、是否有效的位移等，之后会响应<code>_forwardStackInvocation:</code>，</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-828729004c8eb7f0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="_forwardStackInvocation"></p>
-<p>如果没有响应<code>_forwardStackInvocation:</code>，则会响应<code>forwardInvocation:</code>，给rdi发送rax消息，rdi就是NSInvocation，rax就是sel<code>forwardInvocation:</code>，<strong>这就是消息转发的流程</strong></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-025bfb972fbb00fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="selforwardInvocation"></p>
-<p>对<code>_objc_msgForward</code>部分进行反汇编成OC代码：<br></p><pre class="line-numbers language-none"><code class="language-none">
-int __forwarding__(void *frameStackPointer, int isStret) {
-    id receiver = *(id *)frameStackPointer;
-    SEL sel = *(SEL *)(frameStackPointer + 8);
-    const char *selName = sel_getName(sel);
-    Class receiverClass = object_getClass(receiver);
-    
-    // 调用 forwardingTargetForSelector:
-    if (class_respondsToSelector(receiverClass, @selector(forwardingTargetForSelector:))) {
-        id forwardingTarget = [receiver forwardingTargetForSelector:sel];
-        if (forwardingTarget &amp;&amp; forwarding != receiver) {
-            if (isStret == 1) {
-                int ret;
-                objc_msgSend_stret(&amp;ret,forwardingTarget, sel, ...);
-                return ret;
+<a id="more"></a>
+<p>在Runtime层，Category用结构体category_t表示，<code>name</code>：类的名字，<code>cls</code>：类，<code>instanceMethods</code>：Category中所有给类添加的实例方法的列表，<code>classMethods</code>：Category中所有添加的类方法的列表，<code>protocols</code>：Category实现的所有协议的列表，<code>instanceProperties</code>：Category中添加的所有属性。我们在分类中声明的方法、属性等都会存在对应的字段中，有多少个分类就会有多少的category_t结构体。<br></p><pre class="line-numbers language-none"><code class="language-none">struct category_t {
+    const char *name;    // 类的名字
+    classref_t cls;    // 类
+    struct method_list_t *instanceMethods;
+    struct method_list_t *classMethods;
+    struct protocol_list_t *protocols;
+    struct property_list_t *instanceProperties;
+    // Fields below this point are not always present on disk.
+    struct property_list_t *_classProperties;
+
+    method_list_t *methodsForMeta(bool isMeta) {
+        if (isMeta) return classMethods;
+        else return instanceMethods;
+    }
+
+    property_list_t *propertiesForMeta(bool isMeta, struct header_info *hi);
+};<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h4 id="源码分析Category加载过程"><a href="#源码分析Category加载过程" class="headerlink" title="源码分析Category加载过程"></a>源码分析Category加载过程</h4><p>首先从镜像加载开始，<code>_objc_init</code>通过<code>map_images</code>加载并缓存所有镜像文件，比如类、方法编号等信息加载。<code>map_images</code>内部执行<code>_getObjc2CategoryList</code>来获取category<em>t数组，<code>addUnattachedCategoryForClass</code>把类和Category做一个关联映射，然后执行<code>remethodizeClass</code>。<br></em></p><pre class="line-numbers language-none"><em><code class="language-none">/ Discover categories. 
+    for (EACH_HEADER) {
+        category_t **catlist = 
+            _getObjc2CategoryList(hi, &amp;count);
+        bool hasClassProperties = hi-&gt;info()-&gt;hasCategoryClassProperties();
+
+        for (i = 0; i &lt; count; i++) {
+            category_t *cat = catlist[i];
+            Class cls = remapClass(cat-&gt;cls);
+
+            if (!cls) {
+                // Category's target class is missing (probably weak-linked).
+                // Disavow any knowledge of this category.
+                catlist[i] = nil;
+                if (PrintConnecting) {
+                    _objc_inform("CLASS: IGNORING category \?\?\?(%s) %p with "
+                                 "missing weak-linked target class", 
+                                 cat-&gt;name, cat);
+                }
+                continue;
             }
-            return objc_msgSend(forwardingTarget, sel, ...);
+
+            // Process this category. 
+            // First, register the category with its target class. 
+            // Then, rebuild the class's method lists (etc) if 
+            // the class is realized. 
+            bool classExists = NO;
+            if (cat-&gt;instanceMethods ||  cat-&gt;protocols  
+                ||  cat-&gt;instanceProperties) 
+            {
+                addUnattachedCategoryForClass(cat, cls, hi);
+                if (cls-&gt;isRealized()) {
+                    remethodizeClass(cls);
+                    classExists = YES;
+                }
+                if (PrintConnecting) {
+                    _objc_inform("CLASS: found category -%s(%s) %s", 
+                                 cls-&gt;nameForLogging(), cat-&gt;name, 
+                                 classExists ? "on existing class" : "");
+                }
+            }
+
+            if (cat-&gt;classMethods  ||  cat-&gt;protocols  
+                ||  (hasClassProperties &amp;&amp; cat-&gt;_classProperties)) 
+            {
+                addUnattachedCategoryForClass(cat, cls-&gt;ISA(), hi);
+                if (cls-&gt;ISA()-&gt;isRealized()) {
+                    remethodizeClass(cls-&gt;ISA());
+                }
+                if (PrintConnecting) {
+                    _objc_inform("CLASS: found category +%s(%s)", 
+                                 cls-&gt;nameForLogging(), cat-&gt;name);
+                }
+            }
+        }
+    }<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></em></pre><em><br><code>remethodizeClass</code>通过<code>attachCategories</code>，将方法列表、属性列表和协议列表写入rw中（这里分类和类都是一样的）。<br><pre class="line-numbers language-none"><code class="language-none">// Attach method lists and properties and protocols from categories to a class.
+// Assumes the categories in cats are all loaded and sorted by load order, 
+// oldest categories first.
+static void 
+attachCategories(Class cls, category_list *cats, bool flush_caches)
+{
+    if (!cats) return;
+    if (PrintReplacedMethods) printReplacements(cls, cats);
+
+    bool isMeta = cls-&gt;isMetaClass();
+
+    // fixme rearrange to remove these intermediate allocations
+    method_list_t **mlists = (method_list_t **)
+        malloc(cats-&gt;count * sizeof(*mlists));
+    property_list_t **proplists = (property_list_t **)
+        malloc(cats-&gt;count * sizeof(*proplists));
+    protocol_list_t **protolists = (protocol_list_t **)
+        malloc(cats-&gt;count * sizeof(*protolists));
+
+    // Count backwards through cats to get newest categories first
+    int mcount = 0;
+    int propcount = 0;
+    int protocount = 0;
+    int i = cats-&gt;count;
+    bool fromBundle = NO;
+    while (i--) {
+        auto&amp; entry = cats-&gt;list[i];
+
+        method_list_t *mlist = entry.cat-&gt;methodsForMeta(isMeta);
+        if (mlist) {
+            mlists[mcount++] = mlist;
+            fromBundle |= entry.hi-&gt;isBundle();
+        }
+
+        property_list_t *proplist = 
+            entry.cat-&gt;propertiesForMeta(isMeta, entry.hi);
+        if (proplist) {
+            proplists[propcount++] = proplist;
+        }
+
+        protocol_list_t *protolist = entry.cat-&gt;protocols;
+        if (protolist) {
+            protolists[protocount++] = protolist;
         }
     }
-    
-    // 僵尸对象
-    const char *className = class_getName(receiverClass);
-    const char *zombiePrefix = "_NSZombie_";
-    size_t prefixLen = strlen(zombiePrefix); // 0xa
-    if (strncmp(className, zombiePrefix, prefixLen) == 0) {
-        CFLog(kCFLogLevelError,
-              @"*** -[%s %s]: message sent to deallocated instance %p",
-              className + prefixLen,
-              selName,
-              receiver);
-        &lt;breakpoint-interrupt&gt;
-    }
-    
-    // 调用 methodSignatureForSelector 获取方法签名后再调用 forwardInvocation
-    if (class_respondsToSelector(receiverClass, @selector(methodSignatureForSelector:))) {
-        NSMethodSignature *methodSignature = [receiver methodSignatureForSelector:sel];
-        if (methodSignature) {
-            BOOL signatureIsStret = [methodSignature _frameDescriptor]-&gt;returnArgInfo.flags.isStruct;
-            if (signatureIsStret != isStret) {
-                CFLog(kCFLogLevelWarning ,
-                      @"*** NSForwarding: warning: method signature and compiler disagree on struct-return-edness of '%s'.  Signature thinks it does%s return a struct, and compiler thinks it does%s.",
-                      selName,
-                      signatureIsStret ? "" : not,
-                      isStret ? "" : not);
-            }
-            if (class_respondsToSelector(receiverClass, @selector(forwardInvocation:))) {
-                NSInvocation *invocation = [NSInvocation _invocationWithMethodSignature:methodSignature frame:frameStackPointer];
-                
-                [receiver forwardInvocation:invocation];
-                
-                void *returnValue = NULL;
-                [invocation getReturnValue:&amp;value];
-                return returnValue;
-            } else {
-                CFLog(kCFLogLevelWarning ,
-                      @"*** NSForwarding: warning: object %p of class '%s' does not implement forwardInvocation: -- dropping message",
-                      receiver,
-                      className);
-                return 0;
-            }
+
+    auto rw = cls-&gt;data();
+
+    prepareMethodLists(cls, mlists, mcount, NO, fromBundle);
+    rw-&gt;methods.attachLists(mlists, mcount);
+    free(mlists);
+    if (flush_caches  &amp;&amp;  mcount &gt; 0) flushCaches(cls);
+
+    rw-&gt;properties.attachLists(proplists, propcount);
+    free(proplists);
+
+    rw-&gt;protocols.attachLists(protolists, protocount);
+    free(protolists);
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>通过<code>attachLists</code>把Category的实例方法列表、协议列表以及属性列表附加到原来类的相应列表中。以方法为例，先判断分类的方法列表hasArray()，然后利用散列表把分类的方法列表和原来类中的方法列表进行合并，如果分类和原来的类中有同名方法，就把分类的方法放在原来的类的前面，合并后copy到新的方法列表，如果原来类没有同名方法则放在方法列表后面，所以<strong>Category并没有覆盖原来类的方法</strong>。举个例子：如果分类和原来的类都有func方法，那么Category附加后，类的方法列表里会有两个func方法并且Category的func方法在前面，原来的类的func方法在后面，运行时在查找方法的时候是顺着方法列表的顺序查找的，当查找func方法时优先返回Category的imp，而不会继续查找下去，这就是<em>_不会执行原来类的同名方法而执行分类的方法的原因</em></em>。<br><pre class="line-numbers language-none"><code class="language-none">void attachLists(List* const * addedLists, uint32_t addedCount) {
+        if (addedCount == 0) return;
+
+        if (hasArray()) {
+            // many lists -&gt; many lists
+            uint32_t oldCount = array()-&gt;count;
+            uint32_t newCount = oldCount + addedCount;
+            setArray((array_t *)realloc(array(), array_t::byteSize(newCount)));
+            array()-&gt;count = newCount;
+            memmove(array()-&gt;lists + addedCount, array()-&gt;lists, 
+                    oldCount * sizeof(array()-&gt;lists[0]));
+            memcpy(array()-&gt;lists, addedLists, 
+                   addedCount * sizeof(array()-&gt;lists[0]));
         }
+        else if (!list  &amp;&amp;  addedCount == 1) {
+            // 0 lists -&gt; 1 list
+            list = addedLists[0];
+        } 
+        else {
+            // 1 list -&gt; many lists
+            List* oldList = list;
+            uint32_t oldCount = oldList ? 1 : 0;
+            uint32_t newCount = oldCount + addedCount;
+            setArray((array_t *)malloc(array_t::byteSize(newCount)));
+            array()-&gt;count = newCount;
+            if (oldList) array()-&gt;lists[addedCount] = oldList;
+            memcpy(array()-&gt;lists, addedLists, 
+                   addedCount * sizeof(array()-&gt;lists[0]));
+        }
+    }<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h4 id="Category的load方法调用栈"><a href="#Category的load方法调用栈" class="headerlink" title="Category的load方法调用栈"></a>Category的load方法调用栈</h4><p>进入开源objc源码<code>_objc_init</code>开始，进入<code>load_images</code>，<code>prepare_load_methods</code>做好准备工作后，<code>call_load_methods</code>开始调用。<br></p><pre class="line-numbers language-none"><code class="language-none">/***********************************************************************
+* load_images
+* Process +load in the given images which are being mapped in by dyld.
+*
+* Locking: write-locks runtimeLock and loadMethodLock
+**********************************************************************/
+extern bool hasLoadMethods(const headerType *mhdr);
+extern void prepare_load_methods(const headerType *mhdr);
+
+void
+load_images(const char *path __unused, const struct mach_header *mh)
+{
+    // Return without taking locks if there are no +load methods here.
+    if (!hasLoadMethods((const headerType *)mh)) return;
+
+    recursive_mutex_locker_t lock(loadMethodLock);
+
+    // Discover load methods
+    {
+        mutex_locker_t lock2(runtimeLock);
+        prepare_load_methods((const headerType *)mh);
     }
-    
-    SEL *registeredSel = sel_getUid(selName);
-    
-    // selector 是否已经在 Runtime 注册过
-    if (sel != registeredSel) {
-        CFLog(kCFLogLevelWarning ,
-              @"*** NSForwarding: warning: selector (%p) for message '%s' does not match selector known to Objective C runtime (%p)-- abort",
-              sel,
-              selName,
-              registeredSel);
-    } // doesNotRecognizeSelector
-    else if (class_respondsToSelector(receiverClass,@selector(doesNotRecognizeSelector:))) {
-        [receiver doesNotRecognizeSelector:sel];
-    }
-    else {
-        CFLog(kCFLogLevelWarning ,
-              @"*** NSForwarding: warning: object %p of class '%s' does not implement doesNotRecognizeSelector: -- abort",
-              receiver,
-              className);
-    }
-    
-    // The point of no return.
-    kill(getpid(), 9);
+
+    // Call +load methods (without runtimeLock - re-entrant)
+    call_load_methods();
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h5 id="prepare-load-methods准备阶段"><a href="#prepare-load-methods准备阶段" class="headerlink" title="prepare_load_methods准备阶段"></a>prepare_load_methods准备阶段</h5><p>进入<code>prepare_load_methods</code>方法内部，<code>_getObjc2NonlazyClassList</code>取出所有加载进去的类列表，然后开始遍历执行<code>schedule_class_load</code>，<code>schedule_class_load</code>内部先递归父类<code>schedule_class_load(cls-&gt;superclass);</code>，然后<code>add_class_to_loadable_list</code>把当前类的load方法加载到list中，这里可以发现，父类永远在子类的前面，所以<strong>在加载类的load方法时先加载父类的load方法，再加载子类的load方法</strong>。类列表加载完执行<code>_getObjc2NonlazyCategoryList</code>开始加载分类列表，按照编译顺序取出分类的数据再for循环执行<code>realizeClass(cls);</code>和<code>add_category_to_loadable_list(cat);</code>加载分类中的load到list。这里可以知道，<strong>分类的load方法加载顺序就是谁先编译的，谁的load方法就被先加载。</strong>可以写个demo看下。<br></p><pre class="line-numbers language-none"><code class="language-none">/***********************************************************************
+* prepare_load_methods
+* Schedule +load for classes in this image, any un-+load-ed 
+* superclasses in other images, and any categories in this image.
+**********************************************************************/
+// Recursively schedule +load for cls and any un-+load-ed superclasses.
+// cls must already be connected.
+static void schedule_class_load(Class cls)
+{
+    if (!cls) return;
+    assert(cls-&gt;isRealized());  // _read_images should realize
+
+    if (cls-&gt;data()-&gt;flags &amp; RW_LOADED) return;
+
+    // Ensure superclass-first ordering
+    schedule_class_load(cls-&gt;superclass);
+
+    add_class_to_loadable_list(cls);
+    cls-&gt;setInfo(RW_LOADED); 
 }
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>该文章为记录本人的学习路程，希望能够帮助大家！！！<p></p>
+
+
+void prepare_load_methods(const headerType *mhdr)
+{
+    size_t count, i;
+
+    runtimeLock.assertLocked();
+
+    classref_t *classlist = 
+        _getObjc2NonlazyClassList(mhdr, &amp;count);
+    for (i = 0; i &lt; count; i++) {
+        schedule_class_load(remapClass(classlist[i]));
+    }
+
+    category_t **categorylist = _getObjc2NonlazyCategoryList(mhdr, &amp;count);
+    for (i = 0; i &lt; count; i++) {
+        category_t *cat = categorylist[i];
+        Class cls = remapClass(cat-&gt;cls);
+        if (!cls) continue;  // category for ignored weak-linked class
+        realizeClass(cls);
+        assert(cls-&gt;ISA()-&gt;isRealized());
+        add_category_to_loadable_list(cat);
+    }
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h5 id="Load方法调用阶段"><a href="#Load方法调用阶段" class="headerlink" title="Load方法调用阶段"></a>Load方法调用阶段</h5><p>进入<code>call_load_methods</code>中，<code>objc_autoreleasePoolPush</code>压栈自动释放池，之后在do-while循环中先执行<code>call_class_loads</code>加载类的load方法，再执行<code>call_category_loads</code>加载分类的load方法，最后<code>objc_autoreleasePoolPop(pool);</code>出栈。<code>call_class_loads</code>和<code>call_category_loads</code>内部都是通过初始化一个指向当前类的load方法的指针来访问load方法。<br></p><pre class="line-numbers language-none"><code class="language-none">/***********************************************************************
+* call_load_methods
+* Call all pending class and category +load methods.
+* Class +load methods are called superclass-first. 
+* Category +load methods are not called until after the parent class's +load.
+* 
+* This method must be RE-ENTRANT, because a +load could trigger 
+* more image mapping. In addition, the superclass-first ordering 
+* must be preserved in the face of re-entrant calls. Therefore, 
+* only the OUTERMOST call of this function will do anything, and 
+* that call will handle all loadable classes, even those generated 
+* while it was running.
+*
+* The sequence below preserves +load ordering in the face of 
+* image loading during a +load, and make sure that no 
+* +load method is forgotten because it was added during 
+* a +load call.
+* Sequence:
+* 1. Repeatedly call class +loads until there aren't any more
+* 2. Call category +loads ONCE.
+* 3. Run more +loads if:
+*    (a) there are more classes to load, OR
+*    (b) there are some potential category +loads that have 
+*        still never been attempted.
+* Category +loads are only run once to ensure "parent class first" 
+* ordering, even if a category +load triggers a new loadable class 
+* and a new loadable category attached to that class. 
+*
+* Locking: loadMethodLock must be held by the caller 
+*   All other locks must not be held.
+**********************************************************************/
+void call_load_methods(void)
+{
+    static bool loading = NO;
+    bool more_categories;
+
+    loadMethodLock.assertLocked();
+
+    // Re-entrant calls do nothing; the outermost call will finish the job.
+    if (loading) return;
+    loading = YES;
+
+    void *pool = objc_autoreleasePoolPush();
+
+    do {
+        // 1. Repeatedly call class +loads until there aren't any more
+        while (loadable_classes_used &gt; 0) {
+            call_class_loads();
+        }
+
+        // 2. Call category +loads ONCE
+        more_categories = call_category_loads();
+
+        // 3. Run more +loads if there are classes OR more untried categories
+    } while (loadable_classes_used &gt; 0  ||  more_categories);
+
+    objc_autoreleasePoolPop(pool);
+
+    loading = NO;
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>这里我们可以知道，<strong>load方法的调用并不是消息发送objc_msgSend机制，而是直接找到类的load方法的地址，接下来调用类的load方法，然后再找到分类的load方法的地址，再去调用它。</strong><p></p>
+<p>这里插一个题外话，我们平时在load方法内做交换方法的原因，一是load方法在main函数之前调用，执行比较早；二是load方法自动执行，不需要手动执行；三是唯一性，不用担心被紫烈覆盖。当然，这里也有很多坑</p>
+<ul>
+<li>找到真正的方法归属—NSArray，__NSSArray</li>
+<li>可能被主动调用—单例原则保证只执行一次</li>
+<li>子类没有实现父类的方法，导致调用交换，会找父类，但是父类没有swizzling的方法，会崩溃—先尝试给自己添加要交换的方法：personInstanceMethod(SEL)-&gt;swiMethod(IMP)，然后再将父类的IMP给swizzle personInstanceMethod(imp)-&gt;swizzledSEL</li>
+<li>交换没有实现的方法—添加一个老方法编号的实现（swiMethod）,把swiMethod的具体实现赋值一个空实现，防止递归。</li>
+<li>交换类方法—类方法存在元类中。</li>
+</ul>
+<p>该文章为记录本人的学习路程，希望能够帮助大家，知识共享，共同成长，共同进步！！！</p>
 
                 
             </div>
@@ -616,7 +818,7 @@ int __forwarding__(void *frameStackPointer, int isStret) {
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://jbwblog.com/2021/02/02/runtime-fan-hui-bian/">https://jbwblog.com/2021/02/02/runtime-fan-hui-bian/</a>
+                    <a href="https://jbwblog.com/2019/07/27/categort-yuan-li/">https://jbwblog.com/2019/07/27/categort-yuan-li/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -654,16 +856,16 @@ int __forwarding__(void *frameStackPointer, int isStret) {
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Runtime/">
-                                    <span class="chip bg-color">Runtime</span>
-                                </a>
-                            
-                                <a href="/tags/%E5%8F%8D%E6%B1%87%E7%BC%96/">
-                                    <span class="chip bg-color">反汇编</span>
+                                <a href="/tags/Categort/">
+                                    <span class="chip bg-color">Categort</span>
                                 </a>
                             
                                 <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
                                     <span class="chip bg-color">源码分析</span>
+                                </a>
+                            
+                                <a href="/tags/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">
+                                    <span class="chip bg-color">底层原理</span>
                                 </a>
                             
                         </div>
@@ -835,18 +1037,17 @@ int __forwarding__(void *frameStackPointer, int isStret) {
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/02/02/runtime-fan-hui-bian/">
+                <a href="/2019/08/16/kvo-di-ceng-yuan-li/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="Runloop底层原理--源码分析">
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="KVO底层原理—利用Runtime自定义KVO">
                         
-                        <span class="card-title">Runloop底层原理--源码分析</span>
+                        <span class="card-title">KVO底层原理—利用Runtime自定义KVO</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -856,8 +1057,72 @@ int __forwarding__(void *frameStackPointer, int isStret) {
                         
                     </div>
                     <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2019-08-16
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="post-category">
+                                    底层原理
+                                </a>
+                            
+                            <a href="/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="post-category">
+                                    源码分析
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+                        <span class="chip bg-color">源码分析</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">
+                        <span class="chip bg-color">底层原理</span>
+                    </a>
+                    
+                    <a href="/tags/KVO/">
+                        <span class="chip bg-color">KVO</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2019/07/15/yymodel-jian-jie/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="KVC底层原理--YYModel简述">
+                        
+                        <span class="card-title">KVC底层原理--YYModel简述</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+YYModel的作用就是字典转模型，在了解YYModel前，我们先了解下KVC的知识。
+
+KVC：也称之键值编码，是一种采用了NSKeyValueCoding协议的对象（直接或间接继承NSObject时会为基本方法提供默认实现）通过间接访
+                        
+                    </div>
+                    <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-02
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-07-15
                             </span>
                         <span class="publish-author">
                             
@@ -875,69 +1140,19 @@ int __forwarding__(void *frameStackPointer, int isStret) {
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
-                    
-                    <a href="/tags/Runtime/">
-                        <span class="chip bg-color">Runtime</span>
-                    </a>
-                    
-                    <a href="/tags/%E5%8F%8D%E6%B1%87%E7%BC%96/">
-                        <span class="chip bg-color">反汇编</span>
-                    </a>
                     
                     <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
                         <span class="chip bg-color">源码分析</span>
                     </a>
                     
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2021/02/02/itunes/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh">
-                        
-                        <span class="card-title">Mac电脑配置福利Alfred、Go2shell、iTerm2+Oh My Zsh</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-02
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E8%BD%AF%E4%BB%B6/" class="post-category">
-                                    软件
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
+                    <a href="/tags/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">
+                        <span class="chip bg-color">底层原理</span>
+                    </a>
                     
-                    <a href="/tags/Mac%E9%85%8D%E7%BD%AE/">
-                        <span class="chip bg-color">Mac配置</span>
+                    <a href="/tags/KVC/">
+                        <span class="chip bg-color">KVC</span>
                     </a>
                     
                 </div>
@@ -1175,7 +1390,7 @@ int __forwarding__(void *frameStackPointer, int isStret) {
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">16.9k</span>&nbsp;字
+                class="white-color">47.4k</span>&nbsp;字
             
             
             

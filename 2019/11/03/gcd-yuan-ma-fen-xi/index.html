@@ -1,0 +1,1773 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="多线程原理--GCD源码分析, OC, Swift">
+    <meta name="description" content="iOS开发技术分享">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>多线程原理--GCD源码分析 | Vincent&#39;s blogs</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="Vincent's blogs" type="application/atom+xml">
+</head>
+
+
+
+   <style>
+    body{
+       background-image: url(https://cdn.jsdelivr.net/gh/Tokisaki-Galaxy/res/site/medias/background.jpg);
+       background-repeat:no-repeat;
+       background-size:cover;
+       background-attachment:fixed;
+    }
+</style>
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Vincent&#39;s blogs</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Vincent&#39;s blogs</div>
+        <div class="logo-desc">
+            
+            iOS开发技术分享
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/JBWangWork" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/JBWangWork" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">多线程原理--GCD源码分析</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+                                <span class="chip bg-color">源码分析</span>
+                            </a>
+                        
+                            <a href="/tags/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">
+                                <span class="chip bg-color">底层原理</span>
+                            </a>
+                        
+                            <a href="/tags/GCD/">
+                                <span class="chip bg-color">GCD</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="post-category">
+                                底层原理
+                            </a>
+                        
+                            <a href="/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="post-category">
+                                源码分析
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2019-11-03
+                </div>
+                
+
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    16 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p><img src="https://upload-images.jianshu.io/upload_images/5741330-0205b4b0f9893149.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="多线程原理--GCD源码分析"></p>
+<p>阅读源码是枯燥的，可能暂时对我们的工作没什么帮助，现在但是作为一个有一定开发经验的开发人员而言，这一步是必须要走的；可能是受到了身边同事、同行的影响，看别人在读源码也跟着读源码，或者是开发中遇到了瓶颈，亦或者是开发不再局限于业务的开发，需要架构设计、设计模式以及数据结构和算法等需要阅读源码等等，一般开始的时候真的很难读懂，看的头大，但是当我们用尽办法研究通后，那个时候真的很爽。我们不再只是知道这样写，我们可以知其然知其所以然，知道有些函数是做什么的，知道其底层原理是怎样的，比如同样实现一个功能可以用很多种方法，我们知道这些方法底层原理后可以知道这些方法的本质区别，我们可以通过阅读源码学习到一些更好的设计思想、有更好的问题解决方案等等，也可以锻炼我们的耐心和毅力，阅读源码对我们来说真的受益无穷。</p>
+<blockquote>
+<p>如果还不是很了解GCD，可以先简单了解一下GCD：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/acc6e7bd6f10">多线程原理—了解GCD</a>，接下来开始分析当前最新版本的源码：<a target="_blank" rel="noopener" href="https://opensource.apple.com/tarballs/libdispatch/libdispatch-1008.200.78.tar.gz">libdispatch-1008.200.78.tar.gz</a>，建议去获取最新版本GCD源码：<a target="_blank" rel="noopener" href="https://opensource.apple.com/tarballs/">opensource源</a>或者<a target="_blank" rel="noopener" href="https://github.com/apple">github源</a>。</p>
+</blockquote>
+<h4 id="创建队列dispatch-queue-create"><a href="#创建队列dispatch-queue-create" class="headerlink" title="创建队列dispatch_queue_create"></a>创建队列dispatch_queue_create</h4><p>我们可以探索下串行和并发队列的区别。<br>首先跟着创建队列函数<code>dispatch_queue_create</code>进入源码，除了我们赋值的label和attr，系统还将tq赋值<code>DISPATCH_TARGET_QUEUE_DEFAULT</code>，legacy 赋值为<code>true</code>传给<code>dispatch_queue_create_with_target</code>，其内部首先通过<code>_dispatch_queue_attr_to_info</code>和我们传进来的attr来初始化<code>dispatch_queue_attr_info_t</code>。<br></p><pre class="line-numbers language-none"><code class="language-none">dispatch_queue_t
+dispatch_queue_create(const char *label, dispatch_queue_attr_t attr)
+{
+	return _dispatch_lane_create_with_target(label, attr,
+			DISPATCH_TARGET_QUEUE_DEFAULT, true);
+}
+
+---------------------
+
+static dispatch_queue_t
+_dispatch_lane_create_with_target(const char *label, dispatch_queue_attr_t dqa,
+		dispatch_queue_t tq, bool legacy)
+{
+	dispatch_queue_attr_info_t dqai = _dispatch_queue_attr_to_info(dqa);
+  // ...省略N行代码--部分代码
+	const void *vtable;
+	dispatch_queue_flags_t dqf = legacy ? DQF_MUTABLE : 0;
+	if (dqai.dqai_concurrent) {
+		vtable = DISPATCH_VTABLE(queue_concurrent);
+	} else {
+		vtable = DISPATCH_VTABLE(queue_serial);
+	}
+
+    dispatch_lane_t dq = _dispatch_object_alloc(vtable,
+			sizeof(struct dispatch_lane_s));
+	_dispatch_queue_init(dq, dqf, dqai.dqai_concurrent ?
+			DISPATCH_QUEUE_WIDTH_MAX : 1, DISPATCH_QUEUE_ROLE_INNER |
+			(dqai.dqai_inactive ? DISPATCH_QUEUE_INACTIVE : 0));
+	dq-&gt;dq_label = label;
+	dq-&gt;dq_priority = _dispatch_priority_make((dispatch_qos_t)dqai.dqai_qos,
+			dqai.dqai_relpri);
+    // 自定义的queue的目标队列是root队列
+	dq-&gt;do_targetq = tq;
+	_dispatch_object_debug(dq, "%s", __func__);
+	return _dispatch_trace_queue_create(dq)._dq;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>再次通过全局搜索<code>_dispatch_queue_attr_to_info</code>，来查看<code>_dispatch_queue_attr_to_info</code>内部的实现。<br><pre class="line-numbers language-none"><code class="language-none">dispatch_queue_attr_info_t
+_dispatch_queue_attr_to_info(dispatch_queue_attr_t dqa)
+{
+	dispatch_queue_attr_info_t dqai = { };
+
+	if (!dqa) return dqai;
+
+#if DISPATCH_VARIANT_STATIC
+	if (dqa == &amp;_dispatch_queue_attr_concurrent) {
+		dqai.dqai_concurrent = true;
+		return dqai;
+	}
+#endif
+
+	if (dqa &lt; _dispatch_queue_attrs ||
+			dqa &gt;= &amp;_dispatch_queue_attrs[DISPATCH_QUEUE_ATTR_COUNT]) {
+		DISPATCH_CLIENT_CRASH(dqa-&gt;do_vtable, "Invalid queue attribute");
+	}
+
+	size_t idx = (size_t)(dqa - _dispatch_queue_attrs);
+
+	dqai.dqai_inactive = (idx % DISPATCH_QUEUE_ATTR_INACTIVE_COUNT);
+	idx /= DISPATCH_QUEUE_ATTR_INACTIVE_COUNT;
+
+	dqai.dqai_concurrent = !(idx % DISPATCH_QUEUE_ATTR_CONCURRENCY_COUNT);
+	idx /= DISPATCH_QUEUE_ATTR_CONCURRENCY_COUNT;
+
+	dqai.dqai_relpri = -(idx % DISPATCH_QUEUE_ATTR_PRIO_COUNT);
+	idx /= DISPATCH_QUEUE_ATTR_PRIO_COUNT;
+
+	dqai.dqai_qos = idx % DISPATCH_QUEUE_ATTR_QOS_COUNT;
+	idx /= DISPATCH_QUEUE_ATTR_QOS_COUNT;
+
+	dqai.dqai_autorelease_frequency =
+			idx % DISPATCH_QUEUE_ATTR_AUTORELEASE_FREQUENCY_COUNT;
+	idx /= DISPATCH_QUEUE_ATTR_AUTORELEASE_FREQUENCY_COUNT;
+
+	dqai.dqai_overcommit = idx % DISPATCH_QUEUE_ATTR_OVERCOMMIT_COUNT;
+	idx /= DISPATCH_QUEUE_ATTR_OVERCOMMIT_COUNT;
+
+	return dqai;
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br><code>_dispatch_queue_attr_to_info</code>方法内部首先判断我们传进来的dqa是否为空，如果为空则直接返回空结构体，也就是我们所说的串行队列（串行队列我们一般传DISPATCH<em>QUEUE_SERIAL或者NULL，其实DISPATCH_QUEUE_SERIAL的宏定义就是NULL）。如果不为空，则进入苹果的算法，通过结构体位域来设置dqai的属性并返回该结构体<code>dispatch_queue_attr_info_t</code>。结构体：<br><pre class="line-numbers language-none"><code class="language-none">typedef struct dispatch_queue_attr_info_s {
+	dispatch_qos_t dqai_qos : 8;
+	int      dqai_relpri : 8;
+	uint16_t dqai_overcommit:2;
+	uint16_t dqai_autorelease_frequency:2;
+	uint16_t dqai_concurrent:1;
+	uint16_t dqai_inactive:1;
+} dispatch_queue_attr_info_t;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>再次回到<code>_dispatch_lane_create_with_target</code>内部，接下来出来overcommit（如果是串行队列的话默认是开启的，并行是关闭的）、<code>_dispatch_get_root_queue</code>获取一个管理自己队列的root队列，每一个优先级都有对应的root队列，每一个优先级又分为是不是可以过载的队列。再通过<code>dqai.dqai_concurrent</code>来区分并发和串行，<code>DISPATCH_VTABLE</code>内部利用`OS_dispatch</em>##name##_class<code>生成相应的class保存到结构体</code>dispatch_queue_t<code>内的do_vtable变量，接下来开辟内存</code>_dispatch_object_alloc <code>、构造方法</code>_dispatch_queue_init<code>这里的第三个参数判断是否并行队列，如果不是则最多开辟一条线程，如果是并行队列则最多可以开辟DISPATCH_QUEUE_WIDTH_FULL(0x1000) - 2条，也就是0xffe换算成10进制就是4094条线程，接下来就是设置dq的dq_label、dq_priority等属性，最后返回</code>_dispatch_trace_queue_create(dq)._dq<code>。进入其内部再次返回</code>_dispatch_introspection_queue_create(dqu)<code>，直到进入</code>_dispatch_introspection_queue_create_hook<code>内部的</code>dispatch_introspection_queue_get_info<code>返回串行或者并行的结构体用来保存关于队列的信息。</code>dispatch_introspection_queue_s<code>：
+<pre class="line-numbers language-none"><code class="language-none">dispatch_introspection_queue_s diq = {
+		.queue = dq-&gt;_as_dq,
+		.target_queue = dq-&gt;do_targetq,
+		.label = dq-&gt;dq_label,
+		.serialnum = dq-&gt;dq_serialnum,
+		.width = dq-&gt;dq_width,
+		.suspend_count = _dq_state_suspend_cnt(dq_state) + dq-&gt;dq_side_suspend_cnt,
+		.enqueued = _dq_state_is_enqueued(dq_state) &amp;&amp; !global,
+		.barrier = _dq_state_is_in_barrier(dq_state) &amp;&amp; !global,
+		.draining = (dq-&gt;dq_items_head == (void*)~0ul) ||
+				(!dq-&gt;dq_items_head &amp;&amp; dq-&gt;dq_items_tail),
+		.global = global,
+		.main = dx_type(dq) == DISPATCH_QUEUE_MAIN_TYPE,
+	};
+
+---------
+
+dispatch_introspection_queue_s diq = {
+		.queue = dwl-&gt;_as_dq,
+		.target_queue = dwl-&gt;do_targetq,
+		.label = dwl-&gt;dq_label,
+		.serialnum = dwl-&gt;dq_serialnum,
+		.width = 1,
+		.suspend_count = 0,
+		.enqueued = _dq_state_is_enqueued(dq_state),
+		.barrier = _dq_state_is_in_barrier(dq_state),
+		.draining = 0,
+		.global = 0,
+		.main = 0,
+	};<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+对于</code>dispatch_get_global_queue<code>从底层</code>_dispatch_get_root_queue <code>中取得合适的队列，其可以开辟DISPATCH_QUEUE_WIDTH_FULL(0x1000) - 1条线程，也就是0xfff，并且从</code>dispatch_queue_s _dispatch_root_queues[]<code>全局属性里面存放各种global_queue；而对于</code>dispatch_get_main_queue <code>则是通过</code>DISPATCH_GLOBAL_OBJECT(dispatch_queue_main_t, _dispatch_main_q);<code>返回，通过全局搜索
+<pre class="line-numbers language-none"><code class="language-none">DISPATCH_DECL_SUBCLASS(dispatch_queue_main, dispatch_queue_serial);
+#define OS_OBJECT_DECL_SUBCLASS(name, super) \
+		OS_OBJECT_DECL_IMPL(name, &lt;OS_OBJECT_CLASS(super)&gt;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+可以发现</code>dispatch_queue_main<code>就是串行</code>dispatch_queue_serial`的子类，线程的width同样是0x1，也就是只有1条。<p></p>
+<h4 id="同步dispatch-sync"><a href="#同步dispatch-sync" class="headerlink" title="同步dispatch_sync"></a>同步dispatch_sync</h4><p>接下来研究一下同步函数<code>dispatch_sync</code>，查看其源码进入内部方法<code>_dispatch_sync_f</code>，再次进入<code>_dispatch_sync_f_inline</code>内部：</p>
+<pre class="line-numbers language-none"><code class="language-none">DISPATCH_NOINLINE
+static void
+_dispatch_sync_f(dispatch_queue_t dq, void *ctxt, dispatch_function_t func,
+		uintptr_t dc_flags)
+{
+	_dispatch_sync_f_inline(dq, ctxt, func, dc_flags);
+}
+
+---------
+
+DISPATCH_ALWAYS_INLINE
+static inline void
+_dispatch_sync_f_inline(dispatch_queue_t dq, void *ctxt,
+		dispatch_function_t func, uintptr_t dc_flags)
+{
+	if (likely(dq-&gt;dq_width == 1)) {
+		return _dispatch_barrier_sync_f(dq, ctxt, func, dc_flags);
+	}
+
+	if (unlikely(dx_metatype(dq) != _DISPATCH_LANE_TYPE)) {
+		DISPATCH_CLIENT_CRASH(0, "Queue type doesn't support dispatch_sync");
+	}
+
+	dispatch_lane_t dl = upcast(dq)._dl;
+	// Global concurrent queues and queues bound to non-dispatch threads
+	// always fall into the slow case, see DISPATCH_ROOT_QUEUE_STATE_INIT_VALUE
+	if (unlikely(!_dispatch_queue_try_reserve_sync_width(dl))) {
+		return _dispatch_sync_f_slow(dl, ctxt, func, 0, dl, dc_flags);
+	}
+
+	if (unlikely(dq-&gt;do_targetq-&gt;do_targetq)) {
+		return _dispatch_sync_recurse(dl, ctxt, func, dc_flags);
+	}
+	_dispatch_introspection_sync_begin(dl);
+	_dispatch_sync_invoke_and_complete(dl, ctxt, func DISPATCH_TRACE_ARG(
+			_dispatch_trace_item_sync_push_pop(dq, ctxt, func, dc_flags)));
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>首先判断dq<em>width是否等于1,，也就是当前队列是否是串行队列，如果是则执行<code>_dispatch_barrier_sync_f</code>，经过一系列的嵌套最终走到<code>_dispatch_barrier_sync_f_inline</code>，<code>_dispatch_barrier_sync_f_inline</code>内部先通过<code>_dispatch_thread_port</code>获取当前线程ID，进入<code>_dispatch_queue_try_acquire_barrier_sync</code>判断线程状态，进入内部<code>_dispatch_queue_try_acquire_barrier_sync_and_suspend</code>，在这里会通过<code>os_atomic_rmw_loop2o</code>来获取当前队列依赖线程的状态信息；如果判断当前队列是全局并行队列或者绑定的是非调度线程的队列会直接进入if判断内执行<code>_dispatch_sync_f_slow</code>，在<code>_dispatch_sync_f_slow</code>内部会执行同步等待`<em>_DISPATCH_WAIT_FOR_QUEUE</em></em><code>，这里涉及到死锁的问题，其内部会将等待的队列</code>_dispatch_wait_prepare<code>和当前调度的队列进行对比</code>_dq_state_drain_locked_by(dq_state, dsc-&gt;dsc_waiter)<code>，如果相同则直接抛出crash："dispatch_sync called on queue " "already owned by current thread"；如果没有产生死锁，最后执行</code>_dispatch_sync_invoke_and_complete_recurse <code>，其内部先执行</code>_dispatch_thread_frame_push<code>把任务压栈到队列后再执行func（block任务）后mach底层通过hook函数来监听complete，再</code>_dispatch_thread_frame_pop`把任务pop出去，这也就是为什么同步并发会顺序执行的原因。</p>
+<p><code>_dispatch_barrier_sync_f_inline</code>：<br></p><pre class="line-numbers language-none"><code class="language-none">DISPATCH_ALWAYS_INLINE
+static inline void
+_dispatch_barrier_sync_f_inline(dispatch_queue_t dq, void *ctxt,
+		dispatch_function_t func, uintptr_t dc_flags)
+{
+	dispatch_tid tid = _dispatch_tid_self();
+
+	if (unlikely(dx_metatype(dq) != _DISPATCH_LANE_TYPE)) {
+		DISPATCH_CLIENT_CRASH(0, "Queue type doesn't support dispatch_sync");
+	}
+
+	dispatch_lane_t dl = upcast(dq)._dl;
+	// The more correct thing to do would be to merge the qos of the thread
+	// that just acquired the barrier lock into the queue state.
+	//
+	// However this is too expensive for the fast path, so skip doing it.
+	// The chosen tradeoff is that if an enqueue on a lower priority thread
+	// contends with this fast path, this thread may receive a useless override.
+	//
+	// Global concurrent queues and queues bound to non-dispatch threads
+	// always fall into the slow case, see DISPATCH_ROOT_QUEUE_STATE_INIT_VALUE
+	
+	if (unlikely(!_dispatch_queue_try_acquire_barrier_sync(dl, tid))) {
+		return _dispatch_sync_f_slow(dl, ctxt, func, DC_FLAG_BARRIER, dl,
+				DC_FLAG_BARRIER | dc_flags);
+	}
+
+	if (unlikely(dl-&gt;do_targetq-&gt;do_targetq)) {
+		return _dispatch_sync_recurse(dl, ctxt, func,
+				DC_FLAG_BARRIER | dc_flags);
+	}
+	_dispatch_introspection_sync_begin(dl);
+	_dispatch_lane_barrier_sync_invoke_and_complete(dl, ctxt, func
+			DISPATCH_TRACE_ARG(_dispatch_trace_item_sync_push_pop(
+					dq, ctxt, func, dc_flags | DC_FLAG_BARRIER)));
+}
+
+DISPATCH_NOINLINE
+static void
+_dispatch_barrier_sync_f(dispatch_queue_t dq, void *ctxt,
+		dispatch_function_t func, uintptr_t dc_flags)
+{
+	_dispatch_barrier_sync_f_inline(dq, ctxt, func, dc_flags);
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>如果是全局并行队列或者绑定的是非调度线程的队列会直接进入<code>_dispatch_sync_f_slow</code>和上述逻辑相同。如果是加入栅栏函数的则开始验证target是否存在，<code>_dispatch_sync_recurse</code>内递归<code>_dispatch_sync_wait</code>进行查找target，直到找到target后执行<code>_dispatch_sync_invoke_and_complete_recurse</code>完成回调。<p></p>
+<h4 id="异步dispatch-async"><a href="#异步dispatch-async" class="headerlink" title="异步dispatch_async"></a>异步dispatch_async</h4><p>进入<code>dispatch_async</code>源码内部，先进行了初始化操作：<br></p><pre class="line-numbers language-none"><code class="language-none">void
+dispatch_async(dispatch_queue_t dq, dispatch_block_t work)
+{
+	dispatch_continuation_t dc = _dispatch_continuation_alloc();
+	uintptr_t dc_flags = DC_FLAG_CONSUME;
+	dispatch_qos_t qos;
+
+	qos = _dispatch_continuation_init(dc, dq, work, 0, dc_flags);
+	_dispatch_continuation_async(dq, dc, qos, dc-&gt;dc_flags);
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>进入<code>_dispatch_continuation_init</code>内部将<code>dispatch_async</code>的block任务重新赋值给func并保持为dc的dc_func属性。接下来执行<code>_dispatch_continuation_async</code>，最后进入<code>_dispatch_continuation_async</code>内部的<code>dx_push</code>，通过宏定义<code>#define dx_push(x, y, z) dx_vtable(x)-&gt;dq_push(x, y, z)</code>，我们选择进入全局并发队列<code>_dispatch_root_queue_push</code>，最终进入<code>_dispatch_root_queue_poke_slow</code>：<br><pre class="line-numbers language-none"><code class="language-none">static void
+_dispatch_root_queue_poke_slow(dispatch_queue_global_t dq, int n, int floor)
+{
+	int remaining = n;
+	int r = ENOSYS;
+
+	_dispatch_root_queues_init();
+	_dispatch_debug_root_queue(dq, __func__);
+	_dispatch_trace_runtime_event(worker_request, dq, (uint64_t)n);
+
+#if !DISPATCH_USE_INTERNAL_WORKQUEUE
+#if DISPATCH_USE_PTHREAD_ROOT_QUEUES
+	if (dx_type(dq) == DISPATCH_QUEUE_GLOBAL_ROOT_TYPE)
+#endif
+	{
+		_dispatch_root_queue_debug("requesting new worker thread for global "
+				"queue: %p", dq);
+		r = _pthread_workqueue_addthreads(remaining,
+				_dispatch_priority_to_pp_prefer_fallback(dq-&gt;dq_priority));
+		(void)dispatch_assume_zero(r);
+		return;
+	}
+#endif // !DISPATCH_USE_INTERNAL_WORKQUEUE
+#if DISPATCH_USE_PTHREAD_POOL
+	dispatch_pthread_root_queue_context_t pqc = dq-&gt;do_ctxt;
+	if (likely(pqc-&gt;dpq_thread_mediator.do_vtable)) {
+		while (dispatch_semaphore_signal(&amp;pqc-&gt;dpq_thread_mediator)) {
+			_dispatch_root_queue_debug("signaled sleeping worker for "
+					"global queue: %p", dq);
+			if (!--remaining) {
+				return;
+			}
+		}
+	}
+
+	bool overcommit = dq-&gt;dq_priority &amp; DISPATCH_PRIORITY_FLAG_OVERCOMMIT;
+	if (overcommit) {
+		os_atomic_add2o(dq, dgq_pending, remaining, relaxed);
+	} else {
+		if (!os_atomic_cmpxchg2o(dq, dgq_pending, 0, remaining, relaxed)) {
+			_dispatch_root_queue_debug("worker thread request still pending for "
+					"global queue: %p", dq);
+			return;
+		}
+	}
+
+	int can_request, t_count;
+	// seq_cst with atomic store to tail &lt;rdar://problem/16932833&gt;
+	t_count = os_atomic_load2o(dq, dgq_thread_pool_size, ordered);
+	do {
+		can_request = t_count &lt; floor ? 0 : t_count - floor;
+		if (remaining &gt; can_request) {
+			_dispatch_root_queue_debug("pthread pool reducing request from %d to %d",
+					remaining, can_request);
+			os_atomic_sub2o(dq, dgq_pending, remaining - can_request, relaxed);
+			remaining = can_request;
+		}
+		if (remaining == 0) {
+			_dispatch_root_queue_debug("pthread pool is full for root queue: "
+					"%p", dq);
+			return;
+		}
+	} while (!os_atomic_cmpxchgvw2o(dq, dgq_thread_pool_size, t_count,
+			t_count - remaining, &amp;t_count, acquire));
+
+	pthread_attr_t *attr = &amp;pqc-&gt;dpq_thread_attr;
+	pthread_t tid, *pthr = &amp;tid;
+#if DISPATCH_USE_MGR_THREAD &amp;&amp; DISPATCH_USE_PTHREAD_ROOT_QUEUES
+	if (unlikely(dq == &amp;_dispatch_mgr_root_queue)) {
+		pthr = _dispatch_mgr_root_queue_init();
+	}
+#endif
+	do {
+		_dispatch_retain(dq); // released in _dispatch_worker_thread
+		while ((r = pthread_create(pthr, attr, _dispatch_worker_thread, dq))) {
+			if (r != EAGAIN) {
+				(void)dispatch_assume_zero(r);
+			}
+			_dispatch_temporary_resource_shortage();
+		}
+	} while (--remaining);
+#else
+	(void)floor;
+#endif // DISPATCH_USE_PTHREAD_POOL
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br><code>_dispatch_root_queue_poke_slow</code>先判断当前队列是否有问题，接下来执行<code>_pthread_workqueue_addthreads</code>调用底层直接添加线程到工作队列；下面第一个do-while循环来判断当前队列的缓存池的大小能否继续申请线程，如果大于可申请的大小则出现容积崩溃<code>_dispatch_root_queue_debug("pthread pool reducing request from %d to %d",
+                    remaining, can_request);</code>，如果等于0，则报<code>_dispatch_root_queue_debug("pthread pool is full for root queue: "
+                    "%p", dq);</code>。如果可以开辟的话，则进入下一个do-while循环，这时我们可以发现全局并发队列<code>pthread_create</code>来创建线程，直到要创建的线程为0。<p></p>
+<h4 id="单例dispatch-once"><a href="#单例dispatch-once" class="headerlink" title="单例dispatch_once"></a>单例dispatch_once</h4><p>进入dispatch_once源码内部<code>dispatch_once_f</code>方法内，首先对<code>dispatch_once_t</code>做标记，如果当前状态为<code>DLOCK_ONCE_DONE</code>说明有加载过下次就不再次加载；如果从来没加载过则进入<code>_dispatch_once_gate_tryenter</code>，如果当前状态是<code>DLOCK_ONCE_UNLOCKED</code>则执行<code>_dispatch_once_callout</code>内部通过<code>_dispatch_client_callout</code>来进行单例调用，<code>_dispatch_once_gate_broadcast</code>来做<code>DLOCK_ONCE_DONE</code>标记已经加载过。<br></p><pre class="line-numbers language-none"><code class="language-none">void
+dispatch_once_f(dispatch_once_t *val, void *ctxt, dispatch_function_t func)
+{
+	dispatch_once_gate_t l = (dispatch_once_gate_t)val;
+	//DLOCK_ONCE_DONE
+#if !DISPATCH_ONCE_INLINE_FASTPATH || DISPATCH_ONCE_USE_QUIESCENT_COUNTER
+	uintptr_t v = os_atomic_load(&amp;l-&gt;dgo_once, acquire);
+	if (likely(v == DLOCK_ONCE_DONE)) {
+		return;
+	}
+#if DISPATCH_ONCE_USE_QUIESCENT_COUNTER
+	if (likely(DISPATCH_ONCE_IS_GEN(v))) {
+		return _dispatch_once_mark_done_if_quiesced(l, v);
+	}
+#endif
+#endif
+	if (_dispatch_once_gate_tryenter(l)) {
+		// 单利调用 -- v-&gt;DLOCK_ONCE_DONE
+		return _dispatch_once_callout(l, ctxt, func);
+	}
+	return _dispatch_once_wait(l);
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h4 id="信号量dispatch-semaphore"><a href="#信号量dispatch-semaphore" class="headerlink" title="信号量dispatch_semaphore"></a>信号量dispatch_semaphore</h4><p>首先创建信号量dispatch_semaphore_create源码内部主要是初始化信号量的信息和保存信号量dsema_value。接下来进入等待信号量dispatch_wait源码内部<code>dispatch_semaphore_wait</code>，先执行<code>os_atomic_dec2o</code>对信号量-1操作后，再判断当前信号量如果大于等于0则直接返回，否则进入等待<code>_dispatch_semaphore_wait_slow</code>逻辑，其内部会一直等待直到信号量为0或者调用<code>semaphore_signal()</code>才能唤醒。<br></p><pre class="line-numbers language-none"><code class="language-none">long
+dispatch_semaphore_wait(dispatch_semaphore_t dsema, dispatch_time_t timeout)
+{
+	long value = os_atomic_dec2o(dsema, dsema_value, acquire);
+	if (likely(value &gt;= 0)) {
+		return 0;
+	}
+	return _dispatch_semaphore_wait_slow(dsema, timeout);
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>再看dispatch_semaphore_signal的源码内部实现，首先等待信号量dispatch_wait正好相反，执行<code>os_atomic_inc2o</code>对信号量+1操作。<br><pre class="line-numbers language-none"><code class="language-none">long
+dispatch_semaphore_signal(dispatch_semaphore_t dsema)
+{
+	long value = os_atomic_inc2o(dsema, dsema_value, release);
+	if (likely(value &gt; 0)) {
+		return 0;
+	}
+	if (unlikely(value == LONG_MIN)) {
+		DISPATCH_CLIENT_CRASH(value,
+				"Unbalanced call to dispatch_semaphore_signal()");
+	}
+	return _dispatch_semaphore_signal_slow(dsema);
+}
+
+long
+_dispatch_semaphore_signal_slow(dispatch_semaphore_t dsema)
+{
+	_dispatch_sema4_create(&amp;dsema-&gt;dsema_sema, _DSEMA4_POLICY_FIFO);
+	_dispatch_sema4_signal(&amp;dsema-&gt;dsema_sema, 1);
+	return 1;
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h4 id="调度组dispatch-group"><a href="#调度组dispatch-group" class="headerlink" title="调度组dispatch_group"></a>调度组dispatch_group</h4><p>首先进入<code>dispatch_group_create</code>源码内部，利用<code>_dispatch_object_alloc</code>来创建dispatch_group_t并初始化，最后返回。接下来看<code>dispatch_group_enter</code>，其内部先通过<code>os_atomic_sub_orig2o</code>来进行-1操作，<code>dispatch_group_leave</code>则是进行+1操作，这里可以看到如果进行<code>dispatch_group_enter</code>操作信号量不为0或者进行<code>dispatch_group_leave</code>操作后信号量等于0，则说明<code>dispatch_group_enter</code>和<code>dispatch_group_leave</code>不是匹配的，那么直接报出DISPATCH_CLIENT_CRASH信息。如果目前没问题的话那么<code>dispatch_group_leave</code>会执行<code>_dispatch_group_wake</code>，</p>
+<pre class="line-numbers language-none"><code class="language-none">DISPATCH_ALWAYS_INLINE
+static inline dispatch_group_t
+_dispatch_group_create_with_count(uint32_t n)
+{
+	dispatch_group_t dg = _dispatch_object_alloc(DISPATCH_VTABLE(group),
+			sizeof(struct dispatch_group_s));
+	dg-&gt;do_next = DISPATCH_OBJECT_LISTLESS;
+	dg-&gt;do_targetq = _dispatch_get_default_queue(false);
+	if (n) {
+		os_atomic_store2o(dg, dg_bits,
+				-n * DISPATCH_GROUP_VALUE_INTERVAL, relaxed);
+		os_atomic_store2o(dg, do_ref_cnt, 1, relaxed); // &lt;rdar://22318411&gt;
+	}
+	return dg;
+}
+
+void
+dispatch_group_leave(dispatch_group_t dg)
+{
+	// The value is incremented on a 64bits wide atomic so that the carry for
+	// the -1 -&gt; 0 transition increments the generation atomically.
+	uint64_t new_state, old_state = os_atomic_add_orig2o(dg, dg_state,
+			DISPATCH_GROUP_VALUE_INTERVAL, release);
+	uint32_t old_value = (uint32_t)(old_state &amp; DISPATCH_GROUP_VALUE_MASK);
+
+	if (unlikely(old_value == DISPATCH_GROUP_VALUE_1)) {
+		old_state += DISPATCH_GROUP_VALUE_INTERVAL;
+		do {
+			new_state = old_state;
+			if ((old_state &amp; DISPATCH_GROUP_VALUE_MASK) == 0) {
+				new_state &amp;= ~DISPATCH_GROUP_HAS_WAITERS;
+				new_state &amp;= ~DISPATCH_GROUP_HAS_NOTIFS;
+			} else {
+				// If the group was entered again since the atomic_add above,
+				// we can't clear the waiters bit anymore as we don't know for
+				// which generation the waiters are for
+				new_state &amp;= ~DISPATCH_GROUP_HAS_NOTIFS;
+			}
+			if (old_state == new_state) break;
+		} while (unlikely(!os_atomic_cmpxchgv2o(dg, dg_state,
+				old_state, new_state, &amp;old_state, relaxed)));
+		return _dispatch_group_wake(dg, old_state, true);
+	}
+
+	if (unlikely(old_value == 0)) {
+		DISPATCH_CLIENT_CRASH((uintptr_t)old_value,
+				"Unbalanced call to dispatch_group_leave()");
+	}
+}
+
+void
+dispatch_group_enter(dispatch_group_t dg)
+{
+	// The value is decremented on a 32bits wide atomic so that the carry
+	// for the 0 -&gt; -1 transition is not propagated to the upper 32bits.
+	uint32_t old_bits = os_atomic_sub_orig2o(dg, dg_bits,
+			DISPATCH_GROUP_VALUE_INTERVAL, acquire);
+	uint32_t old_value = old_bits &amp; DISPATCH_GROUP_VALUE_MASK;
+	if (unlikely(old_value == 0)) {
+		_dispatch_retain(dg); // &lt;rdar://problem/22318411&gt;
+	}
+	if (unlikely(old_value == DISPATCH_GROUP_VALUE_MAX)) {
+		DISPATCH_CLIENT_CRASH(old_bits,
+				"Too many nested calls to dispatch_group_enter()");
+	}
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>_dispatch_group_wake</code>内部会通过do-while执行<code>_dispatch_continuation_async</code>来循环遍历添加到notify内的任务。这里<code>dispatch_group_leave</code>后和<code>_dispatch_group_notify</code>最后的操作一样都会调用<code>_dispatch_group_wake</code>来执行任务。<br></p><pre class="line-numbers language-none"><code class="language-none">DISPATCH_ALWAYS_INLINE
+static inline void
+_dispatch_group_notify(dispatch_group_t dg, dispatch_queue_t dq,
+		dispatch_continuation_t dsn)
+{
+	uint64_t old_state, new_state;
+	dispatch_continuation_t prev;
+
+	dsn-&gt;dc_data = dq;
+	_dispatch_retain(dq);
+
+	prev = os_mpsc_push_update_tail(os_mpsc(dg, dg_notify), dsn, do_next);
+	if (os_mpsc_push_was_empty(prev)) _dispatch_retain(dg);
+	os_mpsc_push_update_prev(os_mpsc(dg, dg_notify), prev, dsn, do_next);
+	if (os_mpsc_push_was_empty(prev)) {
+		os_atomic_rmw_loop2o(dg, dg_state, old_state, new_state, release, {
+			new_state = old_state | DISPATCH_GROUP_HAS_NOTIFS;
+			if ((uint32_t)old_state == 0) {
+				os_atomic_rmw_loop_give_up({
+					return _dispatch_group_wake(dg, new_state, false);
+				});
+			}
+		});
+	}
+}
+
+DISPATCH_NOINLINE
+static void
+_dispatch_group_wake(dispatch_group_t dg, uint64_t dg_state, bool needs_release)
+{
+	uint16_t refs = needs_release ? 1 : 0; // &lt;rdar://problem/22318411&gt;
+
+	if (dg_state &amp; DISPATCH_GROUP_HAS_NOTIFS) {
+		dispatch_continuation_t dc, next_dc, tail;
+
+		// Snapshot before anything is notified/woken &lt;rdar://problem/8554546&gt;
+		dc = os_mpsc_capture_snapshot(os_mpsc(dg, dg_notify), &amp;tail);
+		do {
+			dispatch_queue_t dsn_queue = (dispatch_queue_t)dc-&gt;dc_data;
+			next_dc = os_mpsc_pop_snapshot_head(dc, tail, do_next);
+			_dispatch_continuation_async(dsn_queue, dc,
+					_dispatch_qos_from_pp(dc-&gt;dc_priority), dc-&gt;dc_flags);
+			_dispatch_release(dsn_queue);
+		} while ((dc = next_dc));
+
+		refs++;
+	}
+
+	if (dg_state &amp; DISPATCH_GROUP_HAS_WAITERS) {
+		_dispatch_wake_by_address(&amp;dg-&gt;dg_gen);
+	}
+
+	if (refs) _dispatch_release_n(dg, refs);
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>说到调度组肯定少不了<code>dispatch_group_async</code>，<code>dispatch_group_async</code>其实就是对<code>dispatch_group_enter</code>和<code>dispatch_group_leave</code>的封装。进入<code>dispatch_group_async</code>源码在初始化<code>_dispatch_continuation_init</code>保存任务后开始执行<code>_dispatch_continuation_group_async</code>操作，我们可以看到内部先进行了<code>dispatch_group_enter</code>，然后经过<code>_dispatch_continuation_async</code>、<code>dx_push</code>、<code>_dispatch_root_queue_poke</code>等操作后最终调用<code>_dispatch_client_callout</code>执行任务，当任务执行完毕后再通过mach底层来通知完成complete操作，最后执行<code>dispatch_group_leave</code>。<br><pre class="line-numbers language-none"><code class="language-none">DISPATCH_ALWAYS_INLINE
+static inline void
+_dispatch_continuation_group_async(dispatch_group_t dg, dispatch_queue_t dq,
+		dispatch_continuation_t dc, dispatch_qos_t qos)
+{
+	dispatch_group_enter(dg);
+	dc-&gt;dc_data = dg;
+	_dispatch_continuation_async(dq, dc, qos, dc-&gt;dc_flags);
+}
+
+static inline void
+_dispatch_continuation_with_group_invoke(dispatch_continuation_t dc)
+{
+	struct dispatch_object_s *dou = dc-&gt;dc_data;
+	unsigned long type = dx_type(dou);
+	if (type == DISPATCH_GROUP_TYPE) {
+		_dispatch_client_callout(dc-&gt;dc_ctxt, dc-&gt;dc_func);
+		_dispatch_trace_item_complete(dc);
+		dispatch_group_leave((dispatch_group_t)dou);
+	} else {
+		DISPATCH_INTERNAL_CRASH(dx_type(dou), "Unexpected object type");
+	}
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>该文章为记录本人的学习路程，也希望能够帮助大家，知识共享，共同成长，共同进步！！！<p></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">Vincent</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://jbwblog.com/2019/11/03/gcd-yuan-ma-fen-xi/">https://jbwblog.com/2019/11/03/gcd-yuan-ma-fen-xi/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">Vincent</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+                                    <span class="chip bg-color">源码分析</span>
+                                </a>
+                            
+                                <a href="/tags/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">
+                                    <span class="chip bg-color">底层原理</span>
+                                </a>
+                            
+                                <a href="/tags/GCD/">
+                                    <span class="chip bg-color">GCD</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.png" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2019/12/05/react-jian-shu/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="React简述">
+                        
+                        <span class="card-title">React简述</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2019-12-05
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%89%8D%E7%AB%AF/" class="post-category">
+                                    前端
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/React/">
+                        <span class="chip bg-color">React</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2019/10/22/duo-xian-cheng-jian-jie/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="多线程简介">
+                        
+                        <span class="card-title">多线程简介</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-10-22
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="post-category">
+                                    底层原理
+                                </a>
+                            
+                            <a href="/categories/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="post-category">
+                                    源码分析
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">
+                        <span class="chip bg-color">底层原理</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
+                        <span class="chip bg-color">多线程</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: Vincent&#39;s blogs<br />'
+            + '文章作者: Vincent<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="144176574"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
+    <div class="container row center-align" style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2017-2021</span>
+            
+            <span id="year">2017</span>
+            <a href="/about" target="_blank">Vincent</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">47.4k</span>&nbsp;字
+            
+            
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link ">
+    <a href="https://github.com/JBWangWork" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:76521244@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=76521244" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 76521244" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
