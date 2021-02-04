@@ -1010,6 +1010,68 @@ typedef NS_ENUM(NSInteger, NSQualityOfService) {
       </tags>
   </entry>
   <entry>
+    <title>React简述</title>
+    <url>/2019/12/05/react-jian-shu/</url>
+    <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-d92ca6829b68471e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="React简述"></p>
+<blockquote>
+<p>React是Facebook在2013年推出的前段框架。React不是一个MVC框架，React是一个构造可组合式用户界面的库。它鼓励创建可重用的UI组件会随着时间而改变的数据。React采用不同的方法，当组件第一次初始化时，render方法调用，为试图生成一个轻量级的表现。通过这个表现，产生一个标签字符串，然后插入文档中。当数据变化时，render方法再次被调用。为了尽可能有效的完成更新，我们比较之前调用的render返回的值与新的值，然后产生一个最小的变更去应用DOM中。</p>
+</blockquote>
+<p><strong>问题出现的根源</strong></p>
+<ul>
+<li>传统 UI 操作关注太多细节</li>
+<li>应用程序状态分散在各处难以追踪和维护</li>
+</ul>
+<p>Facebook认为MVC无法满足他们的扩展需求，由于他们非常巨大的代码库和庞大的组织，使得MVC很快变得复杂，每当需要添加一项新功能或者特性时，系统的复杂就成级数的增长，致使代码变得脆弱而不可预测，结果导致他们的MVC正在土崩瓦解。认为MVC不适合大规模的应用。当系统中有很多模型和相应的视图时，其复杂度就会迅速扩大，非常难以理解和调试，特别是模型和视图可能存在双向数据流动。</p>
+<p>React：始终整体”刷新”页面，无需关心细节。以组件的方式去描述UI，4个必须API，单向数据流，完善的错误提示。</p>
+<h4 id="数据模型如何解决"><a href="#数据模型如何解决" class="headerlink" title="数据模型如何解决"></a>数据模型如何解决</h4><p>传统MVC难以扩展和维护，Model和View之间的关系错综复杂而且双向绑定，如果业务复杂出现问题后很难去追踪是Model的问题还是View的问题。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-b68448c8281d3033.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="传统MVC难以扩展和维护"></p>
+<p>针对这个问题，React提出Flux架构，该设计模式的核心思想就是单向数据流。首先用户操作产生Action，Action经过Dispatcher再发送到Store，Store根据Action来进行处理，View是绑定到Store上的，此时View随Store更新而更新。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-84f6f39938abd0a6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Flux架构：单向数据流"></p>
+<p>Flux架构的衍生项目：Redux、Mobx。</p>
+<h4 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h4><p>React组件由props和state最终得到一个View。状态有外部传过来状态和内部维护状态，两种状态最终决定了View。React一般不提供方法，而是某种状态机，可以理解React组件为一个纯函数，React是单向数据绑定。<br>以组件的方式考虑UI的构建，将UI组织成组件树的形式。</p>
+<p>下面的评论框由CommentBox、CommentList和CommentForm三个组件共同完成，代码部分除了div和h1标准的html的tag外还有CommentList和CommentForm两个自定义组件共同完成。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-d4117fdca7057b4a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="UI的构建"></p>
+<p>受控组件的状态来自外部，要传递value和onChange，非受控组件的状态由内部维护，如果外部需要可以通过其他方式获取，也就不需要传递value和onChange。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-5044d8d3c4000229.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="受控组件和非受控组件"></p>
+<p>在创建组件时要遵守单一职责原则。每个组件只做一件事，组件是构建UI的最小元素，每个组件都应该尽量的小，这样才能够让复杂度分散出去，在以后的开发中如果组件变得复杂，应该拆分成小组件。<br>数据状态管理要遵守DRY原则。能计算得到的状态就不要单独存储；组件尽量无状态，所需数据通过props获取以提高组件的性能。</p>
+<h4 id="JSX的本质"><a href="#JSX的本质" class="headerlink" title="JSX的本质"></a>JSX的本质</h4><p>JSX：在JavaScript代码中直接写HTML标记。JSX并不是模板语言，只是一种语法糖。TIP：自定义组件以大写字母开头，React认为小写的tag是原生DOM节点，如div；JSX标记可以直接使用属性语法，例如<code>&lt;menu.Item /&gt;</code>。</p>
+<p>比如我们定义了一个变量name，又定义了一个HTML的element：<br></p><pre class="line-numbers language-none"><code class="language-none">const name = 'Vincent Wang';
+const element = &lt;h1&gt;Hello, {name}&lt;/h1&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><br>实际上是动态创建了一个组件，而且是用JavaScript语法。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-dc3e9bcfb0456cb9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><p></p>
+<p>JSX本身也是表达式，element返回一个HTML的节点：<br></p><pre class="line-numbers language-none"><code class="language-none">const element = &lt;h1&gt;Hello, world!&lt;/h1&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>在属性中使用表达式，如果给一个组件传递属性的值，这个属性的值可以是JavaScript的表达式：<br><pre class="line-numbers language-none"><code class="language-none">&lt;MyComment foo={1 + 2} /&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>延展属性，如果给一个组件传递一组值，此时我们不需要一个一个填写，只需要<code>...</code>语法，<br><pre class="line-numbers language-none"><code class="language-none">const props = { name: "Red", value: "red" };
+const greeting = &lt;Greeting {...props} /&gt;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><br>表达式作为子元素，子元素是React的一个特殊属性。只需要用大括号将JavaScript语法包起来。<br><pre class="line-numbers language-none"><code class="language-none">const element = &lt;li&gt;{props.message}&lt;/li&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br><strong> JSX的优点</strong><p></p>
+<ul>
+<li>有声明式创建界面的直观</li>
+<li>代码动态创建界面的灵活</li>
+<li>不需要学习新的模板语言</li>
+</ul>
+<h4 id="React生命周期及使用场景"><a href="#React生命周期及使用场景" class="headerlink" title="React生命周期及使用场景"></a>React生命周期及使用场景</h4><p>React主要分三个阶段：Render阶段（计算当前的状态）、Pre-commit阶段（读取DOM内容）和Commit阶段（React把当前状态映射到DOM节点时需要实际更新DOM节点）。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-6a348940407ff2af.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="生命周期"></p>
+<p>图片来源：<a href="http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/">http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/</a></p>
+<p>生命周期可以分为三个类型：挂载时、更新时和卸载时。</p>
+<h5 id="创建时"><a href="#创建时" class="headerlink" title="创建时"></a>创建时</h5><ol>
+<li>constructor<br>一个组件的构造函数的创建，也是唯一可以直接修改state的地方。</li>
+<li>getDerivedStateFromProps<br>从外部的属性初始化内部的状态，在初始安装和后续更新上，都在调用render方法之前立即调用getDerivedStateFromProps。它返回一个对象以更新状态，或者返回null则不更新任何内容。这个方法一般不建议使用，如果state需要从props中获取的时候，可以通过props动态计算等到，不需要单独存储这个状态，否则要维护两者状态一致性，这样会增加复杂度，每次render都会调用。一般表单控件获取默认值。<br>3.render<br>描述UI DOM结构，类组件中唯一需要的方法。</li>
+<li>componentDidMount<br>挂载组件（插入树中）后立即调用<code>componentDidMount（）</code>。我们可以在此处发起请求或者定义外部的资源等。只执行一次，可以获取外部资源。</li>
+</ol>
+<h5 id="更新时"><a href="#更新时" class="headerlink" title="更新时"></a>更新时</h5><p>当组件有新的属性或者修改了state内部状态，当然如果强制刷新<code>forceUpdate</code>可以会触发。</p>
+<ol>
+<li>getDerivedStateFromProps<br>同样是从外部属性得到内部的状态</li>
+<li>shouldComponentUpdate<br>使用shouldComponentUpdate（）让React知道组件的输出是否不受当前状态或道具更改的影响。在这里可以做一些组件的性能优化，比如props即使发生变化且UI不需要更新，这时可以通知React组件直接返回false则不需要Update。一般可以由PureComponent自动实现，来判断当前state和props是否发生变化。</li>
+<li>render<br>计算虚拟的DOM，虚拟DOM维持内部的UI状态，计算diff等。</li>
+<li>getSnapshotBeforeUpdate<br>它使组件可以在DOM可能发生更改之前从DOM捕获一些信息（例如，滚动位置），返回的任何值都将作为参数传递给componentDidUpdate（），一般在获取render之前的DOM状态时使用。</li>
+<li>componentDidUpdate<br>发生更新后，立即调用componentDidUpdate（），初始渲染不调用此方法。React更新的事情做完后可以根据实际业务在此处做一些处理，然后更新到UI上。页面根据props变化来重新获取数据。</li>
+</ol>
+<h5 id="卸载时"><a href="#卸载时" class="headerlink" title="卸载时"></a>卸载时</h5><ul>
+<li>componentWillUnmount<br>当组件移除时，需要销毁组件来释放资源。</li>
+</ul>
+<p>该文章为记录本人的学习路程，也希望能够帮助大家，知识共享，共同成长，共同进步！！！</p>
+]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>React</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>非对称加密算法--RSA加密原理及运用</title>
     <url>/2018/12/02/rsa-jia-mi-yuan-li-ji-yun-yong/</url>
     <content><![CDATA[<p><img src="https://s.im5i.com/2021/02/02/kIFKH.png" alt="RSA加密原理及运用"></p>
@@ -1129,68 +1191,6 @@ $ cat dec.bin
         <tag>算法</tag>
         <tag>非对称加密原理</tag>
         <tag>OpenSSL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>React简述</title>
-    <url>/2019/12/05/react-jian-shu/</url>
-    <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-d92ca6829b68471e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="React简述"></p>
-<blockquote>
-<p>React是Facebook在2013年推出的前段框架。React不是一个MVC框架，React是一个构造可组合式用户界面的库。它鼓励创建可重用的UI组件会随着时间而改变的数据。React采用不同的方法，当组件第一次初始化时，render方法调用，为试图生成一个轻量级的表现。通过这个表现，产生一个标签字符串，然后插入文档中。当数据变化时，render方法再次被调用。为了尽可能有效的完成更新，我们比较之前调用的render返回的值与新的值，然后产生一个最小的变更去应用DOM中。</p>
-</blockquote>
-<p><strong>问题出现的根源</strong></p>
-<ul>
-<li>传统 UI 操作关注太多细节</li>
-<li>应用程序状态分散在各处难以追踪和维护</li>
-</ul>
-<p>Facebook认为MVC无法满足他们的扩展需求，由于他们非常巨大的代码库和庞大的组织，使得MVC很快变得复杂，每当需要添加一项新功能或者特性时，系统的复杂就成级数的增长，致使代码变得脆弱而不可预测，结果导致他们的MVC正在土崩瓦解。认为MVC不适合大规模的应用。当系统中有很多模型和相应的视图时，其复杂度就会迅速扩大，非常难以理解和调试，特别是模型和视图可能存在双向数据流动。</p>
-<p>React：始终整体”刷新”页面，无需关心细节。以组件的方式去描述UI，4个必须API，单向数据流，完善的错误提示。</p>
-<h4 id="数据模型如何解决"><a href="#数据模型如何解决" class="headerlink" title="数据模型如何解决"></a>数据模型如何解决</h4><p>传统MVC难以扩展和维护，Model和View之间的关系错综复杂而且双向绑定，如果业务复杂出现问题后很难去追踪是Model的问题还是View的问题。</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-b68448c8281d3033.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="传统MVC难以扩展和维护"></p>
-<p>针对这个问题，React提出Flux架构，该设计模式的核心思想就是单向数据流。首先用户操作产生Action，Action经过Dispatcher再发送到Store，Store根据Action来进行处理，View是绑定到Store上的，此时View随Store更新而更新。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-84f6f39938abd0a6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Flux架构：单向数据流"></p>
-<p>Flux架构的衍生项目：Redux、Mobx。</p>
-<h4 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h4><p>React组件由props和state最终得到一个View。状态有外部传过来状态和内部维护状态，两种状态最终决定了View。React一般不提供方法，而是某种状态机，可以理解React组件为一个纯函数，React是单向数据绑定。<br>以组件的方式考虑UI的构建，将UI组织成组件树的形式。</p>
-<p>下面的评论框由CommentBox、CommentList和CommentForm三个组件共同完成，代码部分除了div和h1标准的html的tag外还有CommentList和CommentForm两个自定义组件共同完成。</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-d4117fdca7057b4a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="UI的构建"></p>
-<p>受控组件的状态来自外部，要传递value和onChange，非受控组件的状态由内部维护，如果外部需要可以通过其他方式获取，也就不需要传递value和onChange。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-5044d8d3c4000229.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="受控组件和非受控组件"></p>
-<p>在创建组件时要遵守单一职责原则。每个组件只做一件事，组件是构建UI的最小元素，每个组件都应该尽量的小，这样才能够让复杂度分散出去，在以后的开发中如果组件变得复杂，应该拆分成小组件。<br>数据状态管理要遵守DRY原则。能计算得到的状态就不要单独存储；组件尽量无状态，所需数据通过props获取以提高组件的性能。</p>
-<h4 id="JSX的本质"><a href="#JSX的本质" class="headerlink" title="JSX的本质"></a>JSX的本质</h4><p>JSX：在JavaScript代码中直接写HTML标记。JSX并不是模板语言，只是一种语法糖。TIP：自定义组件以大写字母开头，React认为小写的tag是原生DOM节点，如div；JSX标记可以直接使用属性语法，例如<code>&lt;menu.Item /&gt;</code>。</p>
-<p>比如我们定义了一个变量name，又定义了一个HTML的element：<br></p><pre class="line-numbers language-none"><code class="language-none">const name = 'Vincent Wang';
-const element = &lt;h1&gt;Hello, {name}&lt;/h1&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><br>实际上是动态创建了一个组件，而且是用JavaScript语法。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-dc3e9bcfb0456cb9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><p></p>
-<p>JSX本身也是表达式，element返回一个HTML的节点：<br></p><pre class="line-numbers language-none"><code class="language-none">const element = &lt;h1&gt;Hello, world!&lt;/h1&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>在属性中使用表达式，如果给一个组件传递属性的值，这个属性的值可以是JavaScript的表达式：<br><pre class="line-numbers language-none"><code class="language-none">&lt;MyComment foo={1 + 2} /&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br>延展属性，如果给一个组件传递一组值，此时我们不需要一个一个填写，只需要<code>...</code>语法，<br><pre class="line-numbers language-none"><code class="language-none">const props = { name: "Red", value: "red" };
-const greeting = &lt;Greeting {...props} /&gt;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><br>表达式作为子元素，子元素是React的一个特殊属性。只需要用大括号将JavaScript语法包起来。<br><pre class="line-numbers language-none"><code class="language-none">const element = &lt;li&gt;{props.message}&lt;/li&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><br><strong> JSX的优点</strong><p></p>
-<ul>
-<li>有声明式创建界面的直观</li>
-<li>代码动态创建界面的灵活</li>
-<li>不需要学习新的模板语言</li>
-</ul>
-<h4 id="React生命周期及使用场景"><a href="#React生命周期及使用场景" class="headerlink" title="React生命周期及使用场景"></a>React生命周期及使用场景</h4><p>React主要分三个阶段：Render阶段（计算当前的状态）、Pre-commit阶段（读取DOM内容）和Commit阶段（React把当前状态映射到DOM节点时需要实际更新DOM节点）。</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-6a348940407ff2af.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="生命周期"></p>
-<p>图片来源：<a href="http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/">http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/</a></p>
-<p>生命周期可以分为三个类型：挂载时、更新时和卸载时。</p>
-<h5 id="创建时"><a href="#创建时" class="headerlink" title="创建时"></a>创建时</h5><ol>
-<li>constructor<br>一个组件的构造函数的创建，也是唯一可以直接修改state的地方。</li>
-<li>getDerivedStateFromProps<br>从外部的属性初始化内部的状态，在初始安装和后续更新上，都在调用render方法之前立即调用getDerivedStateFromProps。它返回一个对象以更新状态，或者返回null则不更新任何内容。这个方法一般不建议使用，如果state需要从props中获取的时候，可以通过props动态计算等到，不需要单独存储这个状态，否则要维护两者状态一致性，这样会增加复杂度，每次render都会调用。一般表单控件获取默认值。<br>3.render<br>描述UI DOM结构，类组件中唯一需要的方法。</li>
-<li>componentDidMount<br>挂载组件（插入树中）后立即调用<code>componentDidMount（）</code>。我们可以在此处发起请求或者定义外部的资源等。只执行一次，可以获取外部资源。</li>
-</ol>
-<h5 id="更新时"><a href="#更新时" class="headerlink" title="更新时"></a>更新时</h5><p>当组件有新的属性或者修改了state内部状态，当然如果强制刷新<code>forceUpdate</code>可以会触发。</p>
-<ol>
-<li>getDerivedStateFromProps<br>同样是从外部属性得到内部的状态</li>
-<li>shouldComponentUpdate<br>使用shouldComponentUpdate（）让React知道组件的输出是否不受当前状态或道具更改的影响。在这里可以做一些组件的性能优化，比如props即使发生变化且UI不需要更新，这时可以通知React组件直接返回false则不需要Update。一般可以由PureComponent自动实现，来判断当前state和props是否发生变化。</li>
-<li>render<br>计算虚拟的DOM，虚拟DOM维持内部的UI状态，计算diff等。</li>
-<li>getSnapshotBeforeUpdate<br>它使组件可以在DOM可能发生更改之前从DOM捕获一些信息（例如，滚动位置），返回的任何值都将作为参数传递给componentDidUpdate（），一般在获取render之前的DOM状态时使用。</li>
-<li>componentDidUpdate<br>发生更新后，立即调用componentDidUpdate（），初始渲染不调用此方法。React更新的事情做完后可以根据实际业务在此处做一些处理，然后更新到UI上。页面根据props变化来重新获取数据。</li>
-</ol>
-<h5 id="卸载时"><a href="#卸载时" class="headerlink" title="卸载时"></a>卸载时</h5><ul>
-<li>componentWillUnmount<br>当组件移除时，需要销毁组件来释放资源。</li>
-</ul>
-<p>该文章为记录本人的学习路程，也希望能够帮助大家，知识共享，共同成长，共同进步！！！</p>
-]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>React</tag>
       </tags>
   </entry>
   <entry>
@@ -2325,65 +2325,6 @@ void *pthreadTest(void *para){
       </tags>
   </entry>
   <entry>
-    <title>本地进行证书签名</title>
-    <url>/2019/01/17/ben-di-qian-ming/</url>
-    <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-fb33597ad95d93e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="本地进行证书签名"></p>
-<blockquote>
-<p>之前说过<a href="https://www.jianshu.com/p/ad3d1dea63af">生成公私钥.pem文件</a>，实际上，我们在工作中一般不会用到.pem文件，我们完全可以在钥匙串中证书助理直接从证书颁发机构中申请证书，当然本地也可以。</p>
-</blockquote>
-<ul>
-<li>终端生成证书<br>首先生成.csr请求证书文件，之后用这个.csr文件去证书颁发机构请求证书。<pre class="line-numbers language-none"><code class="language-none">// 通过private.pem，new一个rsacert.csr文件
-$ openssl req -new -key private.pem -out rsacert.csr
-You are about to be asked to enter information that will be incorporated
-into your certificate request.
-What you are about to enter is what is called a Distinguished Name or a DN.
-There are quite a few fields but you can leave some blank
-For some fields there will be a default value,
-If you enter '.', the field will be left blank.
------
-// 输入一些信息，地址、公司和邮箱等
-Country Name (2 letter code) []:cn
-State or Province Name (full name) []:shanghai
-Locality Name (eg, city) []:shanghai
-Organization Name (eg, company) []:personal
-Organizational Unit Name (eg, section) []:personal
-Common Name (eg, fully qualified host name) []:personal.com
-Email Address []:76521244@qq.com
-
-Please enter the following 'extra' attributes
-to be sent with your certificate request
-// 可以直接回车，不设置密码
-A challenge password []:<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-这样，终端就生成好了一个.csr文件了，接下来继续用终端申请证书</li>
-</ul>
-<pre class="line-numbers language-none"><code class="language-none">// x509标准格式，-req签名，-days 3650 时间，也就是10年，用刚刚生成的csr文件和private.pem私钥进行签名，输出rsacert.crt证书
-$ openssl x509 -req -days 3650 -in rsacert.csr -signkey private.pem -out rsacert.crt
-Signature ok
-subject=/C=cn/ST=shanghai/L=shanghai/O=personal/OU=personal/CN=personal.com/emailAddress=76521244@qq.com
-Getting Private key<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>证书生成好后，显示证书的信息，下面是生成好的两个文件</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/5741330-7da3590dde1c108c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="证书文件"></p>
-<p>这个证书大概一年5000大洋，刚刚的一个操作5W就出去了，哈哈哈。。。那这个证书可以用来干嘛呢</p>
-<ul>
-<li>用途<br>比如HTTPS协议，这个协议需要认证这个证书，我们把证书放在服务器，别人去接受。<br>当我们查看这个证书时，会发现这个证书还是Base64编码，所以开发的时候还是不能直接用，需要将其内容提取出来<pre class="line-numbers language-none"><code class="language-none">$ openssl x509 -outform der -in rsacert.crt -out rsacert.der<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-通过命令，生成一个rsacert.der文件，这个文件主要包含了公钥和一些信息，再通过这个.der文件生成可以直接用的P12文件，也就是对应这个公钥的私钥。</li>
-</ul>
-<pre class="line-numbers language-none"><code class="language-none">$ openssl pkcs12 -export -out p.p12 -inkey private.pem -in rsacert.crt
-Enter Export Password:
-Verifying - Enter Export Password:<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p>用刚刚生成crt的private.pem和.crt文件提取出P12文件，提取过程中需要设置密码，输入两次相同的密码回车后，一个对应的P12文件已经生成了。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-a3c20781e11c6bd0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="证书文件"><br>有了它俩就可以进行加密和解密了，我们iOS开发就是用的这两个文件。当然这两个文件不需要都拿到，只用.der就OK，这里只是为了演示。</p>
-]]></content>
-      <categories>
-        <category>签名</category>
-        <category>加密原理</category>
-      </categories>
-      <tags>
-        <tag>非对称加密原理</tag>
-        <tag>OpenSSL</tag>
-        <tag>签名</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>自定义NSOperation子类-图片下载器</title>
     <url>/2020/01/07/zi-ding-yi-nsoperation/</url>
     <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-a8bb9a75deb0f182.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="自定义NSOperation子类-图片下载器"></p>
@@ -2509,6 +2450,377 @@ Verifying - Enter Export Password:<span aria-hidden="true" class="line-numbers-r
         <tag>源码分析</tag>
         <tag>底层原理</tag>
         <tag>NSOperation</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>本地进行证书签名</title>
+    <url>/2019/01/17/ben-di-qian-ming/</url>
+    <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-fb33597ad95d93e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="本地进行证书签名"></p>
+<blockquote>
+<p>之前说过<a href="https://www.jianshu.com/p/ad3d1dea63af">生成公私钥.pem文件</a>，实际上，我们在工作中一般不会用到.pem文件，我们完全可以在钥匙串中证书助理直接从证书颁发机构中申请证书，当然本地也可以。</p>
+</blockquote>
+<ul>
+<li>终端生成证书<br>首先生成.csr请求证书文件，之后用这个.csr文件去证书颁发机构请求证书。<pre class="line-numbers language-none"><code class="language-none">// 通过private.pem，new一个rsacert.csr文件
+$ openssl req -new -key private.pem -out rsacert.csr
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+// 输入一些信息，地址、公司和邮箱等
+Country Name (2 letter code) []:cn
+State or Province Name (full name) []:shanghai
+Locality Name (eg, city) []:shanghai
+Organization Name (eg, company) []:personal
+Organizational Unit Name (eg, section) []:personal
+Common Name (eg, fully qualified host name) []:personal.com
+Email Address []:76521244@qq.com
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+// 可以直接回车，不设置密码
+A challenge password []:<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+这样，终端就生成好了一个.csr文件了，接下来继续用终端申请证书</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">// x509标准格式，-req签名，-days 3650 时间，也就是10年，用刚刚生成的csr文件和private.pem私钥进行签名，输出rsacert.crt证书
+$ openssl x509 -req -days 3650 -in rsacert.csr -signkey private.pem -out rsacert.crt
+Signature ok
+subject=/C=cn/ST=shanghai/L=shanghai/O=personal/OU=personal/CN=personal.com/emailAddress=76521244@qq.com
+Getting Private key<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>证书生成好后，显示证书的信息，下面是生成好的两个文件</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5741330-7da3590dde1c108c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="证书文件"></p>
+<p>这个证书大概一年5000大洋，刚刚的一个操作5W就出去了，哈哈哈。。。那这个证书可以用来干嘛呢</p>
+<ul>
+<li>用途<br>比如HTTPS协议，这个协议需要认证这个证书，我们把证书放在服务器，别人去接受。<br>当我们查看这个证书时，会发现这个证书还是Base64编码，所以开发的时候还是不能直接用，需要将其内容提取出来<pre class="line-numbers language-none"><code class="language-none">$ openssl x509 -outform der -in rsacert.crt -out rsacert.der<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+通过命令，生成一个rsacert.der文件，这个文件主要包含了公钥和一些信息，再通过这个.der文件生成可以直接用的P12文件，也就是对应这个公钥的私钥。</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">$ openssl pkcs12 -export -out p.p12 -inkey private.pem -in rsacert.crt
+Enter Export Password:
+Verifying - Enter Export Password:<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>用刚刚生成crt的private.pem和.crt文件提取出P12文件，提取过程中需要设置密码，输入两次相同的密码回车后，一个对应的P12文件已经生成了。<br><img src="https://upload-images.jianshu.io/upload_images/5741330-a3c20781e11c6bd0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="证书文件"><br>有了它俩就可以进行加密和解密了，我们iOS开发就是用的这两个文件。当然这两个文件不需要都拿到，只用.der就OK，这里只是为了演示。</p>
+]]></content>
+      <categories>
+        <category>签名</category>
+        <category>加密原理</category>
+      </categories>
+      <tags>
+        <tag>非对称加密原理</tag>
+        <tag>OpenSSL</tag>
+        <tag>签名</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>多线程原理--了解GCD</title>
+    <url>/2019/10/17/gcd-jian-jie/</url>
+    <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-7fde16d065552b2e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="多线程原理--了解GCD"></p>
+<h4 id="GCD-简介"><a href="#GCD-简介" class="headerlink" title="GCD 简介"></a>GCD 简介</h4><p>在iOS 4版本之后引用GCD。GCD全称是 Grand Central Dispatch，纯 C 语言，提供了非常多强大的函数。GCD是苹果公司为多核的并行运算提出的解决方案，会自动利用更多的CPU内核（比如双核、四核），GCD 会自动管理线程的生命周期（创建线程、调度任务、销毁线程），iOS开发人员只需要告诉 GCD 想要执行什么任务，不需要编写任何线程管理代码，在多线程中GCD使用特别简单，这也是GCD 的优势。</p>
+<p>GCD的任务使用没有参数也没有返回值的<code>block</code>封装，执行任务的函数：异步 <code>dispatch_async</code>（具备开启新线程的能力来执行<code>block</code>的任务，不用等待当前语句执行完毕，就可以执行下一条语句）；同步 <code>dispatch_sync</code>（不会开启线程，必须等待当前语句执行完毕，才会执行下一条语句）。先简单来个例子：把任务添加到队列，并指定函数</p>
+<pre class="line-numbers language-none"><code class="language-none">- (void)syncTest{
+    dispatch_block_t block = ^{
+        NSLog(@"hello GCD");
+    };
+    //串行队列
+    dispatch_queue_t queue = dispatch_queue_create("com.gcdTest", NULL);
+    // 同步执行任务
+//    dispatch_sync(queue, block);
+//    dispatch_sync(queue, ^{
+//        // 同步执行任务代码
+//        NSLog(@"hello GCD");
+//    });
+
+    // 异步执行任务
+//    dispatch_async(queue, block);
+    dispatch_async(queue, ^{
+    // 异步执行任务代码
+        NSLog(@"hello GCD");
+    });
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="任务队列"><a href="#任务队列" class="headerlink" title="任务队列"></a>任务队列</h4><p>使用<code>dispatch_queue_create</code>来创建队列，需要传入两个参数，第一个参数表示队列的唯一标识符，推荐使用<code>AppId</code>这种逆序域名，可用于DEBUG；第二个参数用来识别是串行队列还是并发队列。用<code>DISPATCH_QUEUE_SERIAL</code> 表示串行队列，<code>DISPATCH_QUEUE_CONCURRENT</code> 表示并发队列，还有两种特殊队列：全局并发队列、主队列。</p>
+<h5 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h5><ul>
+<li>串行队列（Serial Dispatch Queue）：<br>每次只有一个任务被执行。让任务一个接着一个地执行（只开启一个线程，一个任务执行完毕后，再执行下一个任务）。<pre class="line-numbers language-none"><code class="language-none">dispatch_queue_t queue = 
+dispatch_queue_create("com.gcdTest", DISPATCH_QUEUE_SERIAL);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>并发队列（Concurrent Dispatch Queue）：<br>可以让多个任务并发（同时）执行（可以开启多个线程，并且同时执行任务。）。只有在异步<code>dispatch_async</code>函数下才有效。<pre class="line-numbers language-none"><code class="language-none">dispatch_queue_t queue = 
+dispatch_queue_create("com.gcdTest", DISPATCH_QUEUE_CONCURRENT);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>全局并发队列（Global Dispatch Queue）：<br>GCD默认提供的全局并发队列，可以使用dispatch_get_global_queue来获取，需要传入两个参数。第一个参数表示队列优先级，一般用DISPATCH_QUEUE_PRIORITY_DEFAULT。第二个参数暂时没用，用0即可：<pre class="line-numbers language-none"><code class="language-none">/**
+* arg1:队列优先级
+* arg2:保留字段备用，一般为0
+*/
+dispatch_queue_t queue = 
+dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li>主队列（Main Dispatch Queue）：<br>GCD提供的一种特殊的串行队列，所有放在主队列中的任务，都会放到主线程中执行。我们可以使用dispatch_get_main_queue()获得主队列：<pre class="line-numbers language-none"><code class="language-none">dispatch_queue_t queue = dispatch_get_main_queue();<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+其中全局并发队列可以作为普通并发队列使用，这样我们在创建任务的时候，可以选择6种不同的任务执行方式，同步执行 + 并发队列；异步执行 + 并发队列；同步执行 + 串行队列；异步执行 + 串行队列；同步执行 + 主队列；异步执行 + 主队列；6种组合方式的区别：<br>区别|并发队列|串行队列|主队列<br>|:—-:|:—-:|:—-:|:—-:|<br>同步(sync-) | 没有开启新的线程 | 串行执行任务 | 没有开启新线程，串行执行任务<br>| 异步(async) | 开启新线程，并发执行任务 | 有开启新线程()，串行执行任务 | 没有开启新线程，串行执行任务</li>
+</ul>
+<h4 id="GCD的基本使用"><a href="#GCD的基本使用" class="headerlink" title="GCD的基本使用"></a>GCD的基本使用</h4><p><strong>并发队列异步函数内部再次执行异步函数：</strong><br></p><pre class="line-numbers language-none"><code class="language-none">dispatch_queue_t queue = dispatch_queue_create("com.gcdTest", DISPATCH_QUEUE_CONCURRENT);
+    NSLog(@"1");
+    // 耗时
+    dispatch_async(queue, ^{
+        NSLog(@"2");
+        dispatch_async(queue, ^{
+            NSLog(@"3");
+        });
+        NSLog(@"4");
+    });
+    NSLog(@"5");<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>执行结果为1-5-2-4-3。首先打印1，之后进入耗时操作，打印5，进入第一个异步函数打印2，再次进入耗时操作，打印4，再打印异步函数内的3。<p></p>
+<p><strong>串行队列异步函数内部再次执行同步函数：</strong><br></p><pre class="line-numbers language-none"><code class="language-none">dispatch_queue_t queue = dispatch_queue_create("com.gcdTest", DISPATCH_QUEUE_SERIAL);
+    NSLog(@"1");
+    // 耗时
+    dispatch_async(queue, ^{
+        NSLog(@"2");
+        dispatch_sync(queue, ^{
+            NSLog(@"3");
+        });
+        NSLog(@"4");
+    });
+    NSLog(@"5");<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>以下串行队列：1-5-2 之后崩溃。首先打印1，之后进入耗时操作，打印5，进入第一个异步函数打印2，此时进入串行队列；正常逻辑是需要先执行block，之后打印4，block再执行3，因为串行队列是FIFO的，当任务执行到block的时候，block等待3执行完毕后，继续打印4；而3则是需要等待4执行完毕后才执行；而4需要等待block执行完毕后才执行，这样就形成了死锁，所以打印2后奔溃。<p></p>
+<p><strong>以下代码会产生什么问题？</strong><br></p><pre class="line-numbers language-none"><code class="language-none">int a = 0;
+while (a&lt;10) {
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        a++;
+});
+NSLog(@"主线程%d",a);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br><strong>产生的问题：</strong>首先<code>a</code>会报错，我们需要添加<code>__block</code>修饰，以<code>a</code>的指针和值的struct形式从栈区copy到堆区的新的<code>A</code>；其次在while循环内是异步并发，需要开辟新线程，是个耗时操作，可能在上一个线程没有执行完毕的时候又创建一个新的线程继续执行<code>a++</code>操作，结果就是可能多条线程内的<code>a</code>的值都是相同的，这样导致最后<code>a</code>的结果可能大于等于10，即使已经打印了<code>a</code>的值后可能还会有很多线程在执行，导致最后<code>a</code>的真正的值会很大。<p></p>
+<p><strong>解决问题：</strong>我们知道最后会创建出大于等于10条线程，我们可以利用锁的方式来保证最后只创建10条线程，以NSLock为例：</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a><pre class="line-numbers language-none"><code class="language-none">int a = 0;
+NSLock *lock = [NSLock new];
+while (a&lt;10) {
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        a++;
+        [lock unlock];
+});
+[lock lock];
+NSLog(@"主线程%d",a);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></h2><p> <strong>开发中我们经常会碰到一些有依赖关系的任务，比如在A请求后再进行B、C请求这样的操作。解决办法很多，比如直接先同步执行A，再异步执行B、C，或者可以把A、B和C放在一个task任务中再进行相同的执行顺序，这样虽然解决了问题但是会堵塞线程，影响其他操作，我们也可以用栅栏函数来解决。</strong></p>
+<h4 id="栅栏函数"><a href="#栅栏函数" class="headerlink" title="栅栏函数"></a>栅栏函数</h4><blockquote>
+<p>TIP :<br>栅栏函数可以保证顺序执行，也可以保证线程安全，但一定要是自定义并发队列。正因为栅栏函数只能控制同一自定义并发队列，所以不利于封装。</p>
+</blockquote>
+<pre class="line-numbers language-none"><code class="language-none">void
+dispatch_barrier_async(dispatch_queue_t queue, dispatch_block_t block);
+
+void
+dispatch_barrier_sync(dispatch_queue_t queue,
+		DISPATCH_NOESCAPE dispatch_block_t block);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>dispatch_barrier_async</code>和<code>dispatch_barrier_sync</code>的区别就是是否阻塞当前线程，很明显<code>dispatch_barrier_async</code>不会阻塞当前线程：<br></p><pre class="line-numbers language-none"><code class="language-none">dispatch_queue_t concurrentQueue = dispatch_queue_create("concurrentQueue", DISPATCH_QUEUE_CONCURRENT);
+    /* 1.异步函数 */
+    dispatch_async(concurrentQueue, ^{
+        for (NSUInteger i = 0; i &lt; 5; i++) {
+            NSLog(@"加载1-%zd-%@",i,[NSThread currentThread]);
+        }
+    });
+    
+    dispatch_async(concurrentQueue, ^{
+        for (NSUInteger i = 0; i &lt; 5; i++) {
+            NSLog(@"加载2-%zd-%@",i,[NSThread currentThread]);
+        }
+    });
+    
+    /* 2. 栅栏函数 */
+    dispatch_barrier_async(concurrentQueue, ^{
+        NSLog(@"---------------------%@------------------------",[NSThread currentThread]);
+    });
+    NSLog(@"**********加载完毕!!!**********");
+    /* 3. 异步函数 */
+    dispatch_async(concurrentQueue, ^{
+        for (NSUInteger i = 0; i &lt; 5; i++) {
+            NSLog(@"处理结果3-%zd-%@",i,[NSThread currentThread]);
+        }
+    });
+    NSLog(@"**********继续!!!**********");
+    
+    dispatch_async(concurrentQueue, ^{
+        for (NSUInteger i = 0; i &lt; 5; i++) {
+            NSLog(@"处理结果4-%zd-%@",i,[NSThread currentThread]);
+        }
+    });<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>用栅栏函数<code>dispatch_barrier_async</code>打印效果：<br><pre class="line-numbers language-none"><code class="language-none">**********加载完毕!!!**********
+加载2-0-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
+加载1-0-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
+加载2-1-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
+加载1-1-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
+**********继续!!!**********
+加载2-2-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
+加载1-2-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
+加载2-3-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
+加载1-3-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
+加载2-4-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
+加载1-4-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
+---------------------&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}------------------------
+处理结果3-0-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
+处理结果4-0-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
+处理结果3-1-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
+处理结果4-1-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
+处理结果3-2-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
+处理结果4-2-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
+处理结果3-3-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
+处理结果4-3-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
+处理结果3-4-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
+处理结果4-4-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>同样代码，如果用栅栏函数<code>dispatch_barrier_sync</code>，打印结果为：<p></p>
+<pre class="line-numbers language-none"><code class="language-none">加载2-0-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
+加载1-0-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
+加载2-1-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
+加载1-1-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
+加载2-2-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
+加载1-2-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
+加载2-3-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
+加载1-3-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
+加载2-4-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
+加载1-4-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
+---------------------&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}------------------------
+**********加载完毕!!!**********
+**********继续!!!**********
+处理结果3-0-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
+处理结果4-0-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
+处理结果3-1-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
+处理结果4-1-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
+处理结果3-2-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
+处理结果4-2-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
+处理结果3-3-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
+处理结果4-3-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
+处理结果3-4-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
+处理结果4-4-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="调度组"><a href="#调度组" class="headerlink" title="调度组"></a>调度组</h4><p>虽然栅栏函数很好用，但是还不是很完美，可以利用调度组来解决栅栏函数的不足。<br>TIP：<code>dispatch_group_create</code>：创建调度组，<code>dispatch_group_async</code>：异步提交任务到调度组中，<code>dispatch_group_notify</code>：监听调度组任务是否执行完毕。<br></p><pre class="line-numbers language-none"><code class="language-none">//创建调度组
+dispatch_group_t group = dispatch_group_create();
+dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
+
+// SIGNAL
+dispatch_group_async(group, queue, ^{
+    NSLog(@"第一个走完了");
+});
+
+dispatch_group_async(group, queue, ^{
+    NSLog(@"第二个走完了");
+});
+
+dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+    NSLog(@"所有任务完成,可以更新UI");
+});<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>当我们不使用<code>dispatch_group_async</code>来提交任务的时候，我们也可以使用<code>dispatch_group_enter和</code>dispatch_group_leave`来实现：<p></p>
+<pre class="line-numbers language-none"><code class="language-none">dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
+dispatch_group_t group = dispatch_group_create();
+
+dispatch_group_enter(group);
+dispatch_async(queue, ^{
+    NSLog(@"第一个走完了");
+    dispatch_group_leave(group);
+});
+
+dispatch_group_enter(group);
+dispatch_async(queue, ^{
+    NSLog(@"第二个走完了");
+    dispatch_group_leave(group);
+});
+
+dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+    NSLog(@"所有任务完成,可以更新UI");
+});<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>TIP：<code>dispatch_group_enter</code>和<code>dispatch_group_leave</code>必须配合使用。</p>
+</blockquote>
+<p>两种写法结果都是先执行前面两个任务，最后执行notify内部的block任务。</p>
+<h4 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h4><p>GCD中的信号量是指<code>Dispatch Semaphore</code>，是持有计数的信号。除了调度组外，还可以使用信号量来解决问题。</p>
+<p>GCD信号量机制主要提供了以下三个函数：<br></p><pre class="line-numbers language-none"><code class="language-none">dispatch_semaphore_create(long value); // 创建信号量
+dispatch_semaphore_signal(dispatch_semaphore_t deem); // 发送信号量
+dispatch_semaphore_wait(dispatch_semaphore_t dsema, dispatch_time_t timeout); // 等待信号量<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><br><code>dispatch_semaphore_create</code>：创建一个<code>dispatch_semaphore_t</code>类型的信号量，并设定信号量的大小。<br><code>dispatch_semaphore_wait</code>：等待信号量，对信号量的值进行减1操作，如果信号量值为0，那么该函数就会一直等待，相当于阻塞当前线程，直到该函数等待的信号量的值大于等于1。<br><code>dispatch_semaphore_signal</code>：对信号量的值进行加1操作。<p></p>
+<p>一般等待信号量和发送信号量的函数是成对出现的。在并发执行任务时候，在当前任务执行之前，用<code>dispatch_semaphore_wait</code>函数对信号量的值减1操作（信号量为0时进行等待），执行当前任务后再通过<code>dispatch_semaphore_signal</code>函数对信号量的值加1操作来发送信号量，通知执行下一个任务。这样GCD就可以使用信号量来控制并发数，也可以保持线程同步，保证线程安全，当锁来使用。</p>
+<p>举个例子，以下代码由于<code>dispatch_semaphore_create</code>创建2个信号量，所以先执行任务1和任务2，等任务1和任务2完成后再执行任务3。<br></p><pre class="line-numbers language-none"><code class="language-none">dispatch_semaphore_t semaphore = dispatch_semaphore_create(2);
+
+//任务1
+dispatch_async(queue, ^{
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    NSLog(@"执行任务1");
+    sleep(1);
+    NSLog(@"任务1完成");
+    dispatch_semaphore_signal(semaphore);
+});
+
+//任务2
+dispatch_async(queue, ^{
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    NSLog(@"执行任务2");
+    sleep(1);
+    NSLog(@"任务2完成");
+    dispatch_semaphore_signal(semaphore);
+});
+
+//任务3
+dispatch_async(queue, ^{
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    NSLog(@"执行任务3");
+    sleep(1);
+    NSLog(@"任务3完成");
+    dispatch_semaphore_signal(semaphore);
+});<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h4 id="延迟执行"><a href="#延迟执行" class="headerlink" title="延迟执行"></a>延迟执行</h4><p>GCD中的延迟执行<code>dispatch_after</code>是延时将任务追加到对应队列中，执行block块中的任务，具体延迟多少时间并不一定，对于一些模糊的延迟任务来说还是很有效的，比如在主线程中基本不会用<code>sleep</code>来延迟方法的调用，所以用<code>dispatch_after</code>是最合适的。<br></p><pre class="line-numbers language-none"><code class="language-none">//NSEC_PER_SEC : 1000000000ull 纳秒每秒 0.0000001
+    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC));
+    dispatch_queue_t queue = dispatch_queue_create("com.lg.cn", DISPATCH_QUEUE_CONCURRENT);
+    dispatch_after(time, queue, ^{
+        NSLog(@"延迟执行");
+    });
+    NSLog(@"继续执行");<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
+<h4 id="调度资源"><a href="#调度资源" class="headerlink" title="调度资源"></a>调度资源</h4><p>GCD中的调度资源<code>dispatch_source</code>是一种用于处理事件的数据类型，这些被处理的事件为操作系统中的底层级别。常用于处理跟系统有关的事件，协调处理指定的低级别的系统事件，在系统处理请求时应用程序可以继续处理自己的事情。 </p>
+<p><strong>优势：</strong></p>
+<ul>
+<li>其CPU负荷非常小，尽量不占用资源。</li>
+<li>联结的优势<br>当你配置一个dispatch source时，你指定要监测的事件、dispatch queue、以及处理事件的代码(block或函数)。当事件发生时（在任一线程上调用它的函数<code>dispatch_source_merge_data</code>），dispatch source会提交你的block或函数到指定的queue去执行和手工提交到queue的任务不同，dispatch source为应用提供连续的事件源。除非你显式地取消，dispatch source会一直保留与dispatch queue的关联。</li>
+</ul>
+<p><strong>使用：</strong></p>
+<ul>
+<li>创建源<code>dispatch_source_create</code>：<pre class="line-numbers language-none"><code class="language-none">/**
+*  arg1：用于标识Dispatch Source要监听的事件类型，共有11个类型。
+*  arg2：取决于要监听的事件类型，如果是监听Mach端口相关的事件，那么该参数就是mach_port_t类型的Mach端口号，如果是监听事件变量数据类型的事件那么该参数就不需要，设置为0就可以了。
+* arg3：取决于要监听的事件类型，如果是监听文件属性更改的事件，那么该参数就标识文件的哪个属性，比如DISPATCH_VNODE_RENAME。Apple的API介绍说，使用DISPATCH_TIMER_STRICT，会引起电量消耗加剧，毕竟要求精确时间，所以一般传0即可，视业务情况而定。
+* arg4：设置回调函数所在的队列，可以传Null，默认为全局队列。
+*/
+dispatch_source_t
+dispatch_source_create(dispatch_source_type_t type,
+	                   uintptr_t handle,
+	                   unsigned long mask,
+	                   dispatch_queue_t _Nullable queue);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li>设置源事件回调<code>dispatch_source_set_event_handler</code>(block形式)或者<code>dispatch_source_set_event_handler_f</code>(函数形式)<br>以<code>dispatch_source_set_event_handler</code>为例:<pre class="line-numbers language-none"><code class="language-none">void
+dispatch_source_set_event_handler(dispatch_source_t source,
+	dispatch_block_t _Nullable handler);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+<li>源事件设置数据<code>dispatch_source_merge_data</code>：<pre class="line-numbers language-none"><code class="language-none">void
+dispatch_source_merge_data(dispatch_source_t source, unsigned long value);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>获取源事件数据<code>dispatch_source_get_data</code>：<pre class="line-numbers language-none"><code class="language-none">unsigned long
+dispatch_source_get_data(dispatch_source_t source);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>继续<code>dispatch_resume</code>：<pre class="line-numbers language-none"><code class="language-none">void
+dispatch_resume(dispatch_object_t object);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>挂起<code>dispatch_suspend</code>：<pre class="line-numbers language-none"><code class="language-none">void
+dispatch_suspend(dispatch_object_t object);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<p>模拟下载进度部分业务代码：<br></p><pre class="line-numbers language-none"><code class="language-none">self.source = dispatch_source_create(DISPATCH_SOURCE_TYPE_DATA_ADD, 0, 0, dispatch_get_main_queue());
+// 封装我们需要回调的触发函数 -- 响应
+dispatch_source_set_event_handler(self.source, ^{
+    
+    NSUInteger value = dispatch_source_get_data(self.source); // 取回来值 1 响应式
+    self.totalComplete += value;
+    NSLog(@"进度：%.2f", self.totalComplete/100.0);
+    self.progressView.progress = self.totalComplete/100.0;
+});
+dispatch_resume(self.source);
+self.isRunning     = YES;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>触发函数：<br><pre class="line-numbers language-none"><code class="language-none">- (void)touchesBegan:(NSSet&lt;UITouch *&gt; *)touches withEvent:(UIEvent *)event{
+
+    NSLog(@"点击开始加载");
+    
+    for (NSUInteger index = 0; index &lt; 100; index++) {
+        dispatch_async(self.queue, ^{
+            if (!self.isRunning) {
+                NSLog(@"暂停下载");
+                return ;
+            }
+            sleep(2);
+
+            dispatch_source_merge_data(self.source, 1); // source 值响应
+        });
+    }
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>具体代码：<a href="https://github.com/JBWangWork/DispatchSourceTest">Github直通车—&gt;https://github.com/JBWangWork/DispatchSourceTest</a><p></p>
+<p>该文章为记录本人的学习路程，也希望能够帮助大家，知识共享，共同成长，共同进步！！！</p>
+]]></content>
+      <categories>
+        <category>底层原理</category>
+        <category>源码分析</category>
+      </categories>
+      <tags>
+        <tag>底层原理</tag>
+        <tag>GCD</tag>
       </tags>
   </entry>
   <entry>
@@ -3254,318 +3566,6 @@ IMP _class_lookupMethodAndLoadCache3(id obj, SEL sel, Class cls)
       </categories>
       <tags>
         <tag>Runtime</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>多线程原理--了解GCD</title>
-    <url>/2019/10/17/gcd-jian-jie/</url>
-    <content><![CDATA[<p><img src="https://upload-images.jianshu.io/upload_images/5741330-7fde16d065552b2e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="多线程原理--了解GCD"></p>
-<h4 id="GCD-简介"><a href="#GCD-简介" class="headerlink" title="GCD 简介"></a>GCD 简介</h4><p>在iOS 4版本之后引用GCD。GCD全称是 Grand Central Dispatch，纯 C 语言，提供了非常多强大的函数。GCD是苹果公司为多核的并行运算提出的解决方案，会自动利用更多的CPU内核（比如双核、四核），GCD 会自动管理线程的生命周期（创建线程、调度任务、销毁线程），iOS开发人员只需要告诉 GCD 想要执行什么任务，不需要编写任何线程管理代码，在多线程中GCD使用特别简单，这也是GCD 的优势。</p>
-<p>GCD的任务使用没有参数也没有返回值的<code>block</code>封装，执行任务的函数：异步 <code>dispatch_async</code>（具备开启新线程的能力来执行<code>block</code>的任务，不用等待当前语句执行完毕，就可以执行下一条语句）；同步 <code>dispatch_sync</code>（不会开启线程，必须等待当前语句执行完毕，才会执行下一条语句）。先简单来个例子：把任务添加到队列，并指定函数</p>
-<pre class="line-numbers language-none"><code class="language-none">- (void)syncTest{
-    dispatch_block_t block = ^{
-        NSLog(@"hello GCD");
-    };
-    //串行队列
-    dispatch_queue_t queue = dispatch_queue_create("com.gcdTest", NULL);
-    // 同步执行任务
-//    dispatch_sync(queue, block);
-//    dispatch_sync(queue, ^{
-//        // 同步执行任务代码
-//        NSLog(@"hello GCD");
-//    });
-
-    // 异步执行任务
-//    dispatch_async(queue, block);
-    dispatch_async(queue, ^{
-    // 异步执行任务代码
-        NSLog(@"hello GCD");
-    });
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h4 id="任务队列"><a href="#任务队列" class="headerlink" title="任务队列"></a>任务队列</h4><p>使用<code>dispatch_queue_create</code>来创建队列，需要传入两个参数，第一个参数表示队列的唯一标识符，推荐使用<code>AppId</code>这种逆序域名，可用于DEBUG；第二个参数用来识别是串行队列还是并发队列。用<code>DISPATCH_QUEUE_SERIAL</code> 表示串行队列，<code>DISPATCH_QUEUE_CONCURRENT</code> 表示并发队列，还有两种特殊队列：全局并发队列、主队列。</p>
-<h5 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h5><ul>
-<li>串行队列（Serial Dispatch Queue）：<br>每次只有一个任务被执行。让任务一个接着一个地执行（只开启一个线程，一个任务执行完毕后，再执行下一个任务）。<pre class="line-numbers language-none"><code class="language-none">dispatch_queue_t queue = 
-dispatch_queue_create("com.gcdTest", DISPATCH_QUEUE_SERIAL);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
-<li>并发队列（Concurrent Dispatch Queue）：<br>可以让多个任务并发（同时）执行（可以开启多个线程，并且同时执行任务。）。只有在异步<code>dispatch_async</code>函数下才有效。<pre class="line-numbers language-none"><code class="language-none">dispatch_queue_t queue = 
-dispatch_queue_create("com.gcdTest", DISPATCH_QUEUE_CONCURRENT);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
-<li>全局并发队列（Global Dispatch Queue）：<br>GCD默认提供的全局并发队列，可以使用dispatch_get_global_queue来获取，需要传入两个参数。第一个参数表示队列优先级，一般用DISPATCH_QUEUE_PRIORITY_DEFAULT。第二个参数暂时没用，用0即可：<pre class="line-numbers language-none"><code class="language-none">/**
-* arg1:队列优先级
-* arg2:保留字段备用，一般为0
-*/
-dispatch_queue_t queue = 
-dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-<li>主队列（Main Dispatch Queue）：<br>GCD提供的一种特殊的串行队列，所有放在主队列中的任务，都会放到主线程中执行。我们可以使用dispatch_get_main_queue()获得主队列：<pre class="line-numbers language-none"><code class="language-none">dispatch_queue_t queue = dispatch_get_main_queue();<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-其中全局并发队列可以作为普通并发队列使用，这样我们在创建任务的时候，可以选择6种不同的任务执行方式，同步执行 + 并发队列；异步执行 + 并发队列；同步执行 + 串行队列；异步执行 + 串行队列；同步执行 + 主队列；异步执行 + 主队列；6种组合方式的区别：<br>区别|并发队列|串行队列|主队列<br>|:—-:|:—-:|:—-:|:—-:|<br>同步(sync-) | 没有开启新的线程 | 串行执行任务 | 没有开启新线程，串行执行任务<br>| 异步(async) | 开启新线程，并发执行任务 | 有开启新线程()，串行执行任务 | 没有开启新线程，串行执行任务</li>
-</ul>
-<h4 id="GCD的基本使用"><a href="#GCD的基本使用" class="headerlink" title="GCD的基本使用"></a>GCD的基本使用</h4><p><strong>并发队列异步函数内部再次执行异步函数：</strong><br></p><pre class="line-numbers language-none"><code class="language-none">dispatch_queue_t queue = dispatch_queue_create("com.gcdTest", DISPATCH_QUEUE_CONCURRENT);
-    NSLog(@"1");
-    // 耗时
-    dispatch_async(queue, ^{
-        NSLog(@"2");
-        dispatch_async(queue, ^{
-            NSLog(@"3");
-        });
-        NSLog(@"4");
-    });
-    NSLog(@"5");<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>执行结果为1-5-2-4-3。首先打印1，之后进入耗时操作，打印5，进入第一个异步函数打印2，再次进入耗时操作，打印4，再打印异步函数内的3。<p></p>
-<p><strong>串行队列异步函数内部再次执行同步函数：</strong><br></p><pre class="line-numbers language-none"><code class="language-none">dispatch_queue_t queue = dispatch_queue_create("com.gcdTest", DISPATCH_QUEUE_SERIAL);
-    NSLog(@"1");
-    // 耗时
-    dispatch_async(queue, ^{
-        NSLog(@"2");
-        dispatch_sync(queue, ^{
-            NSLog(@"3");
-        });
-        NSLog(@"4");
-    });
-    NSLog(@"5");<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>以下串行队列：1-5-2 之后崩溃。首先打印1，之后进入耗时操作，打印5，进入第一个异步函数打印2，此时进入串行队列；正常逻辑是需要先执行block，之后打印4，block再执行3，因为串行队列是FIFO的，当任务执行到block的时候，block等待3执行完毕后，继续打印4；而3则是需要等待4执行完毕后才执行；而4需要等待block执行完毕后才执行，这样就形成了死锁，所以打印2后奔溃。<p></p>
-<p><strong>以下代码会产生什么问题？</strong><br></p><pre class="line-numbers language-none"><code class="language-none">int a = 0;
-while (a&lt;10) {
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        a++;
-});
-NSLog(@"主线程%d",a);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br><strong>产生的问题：</strong>首先<code>a</code>会报错，我们需要添加<code>__block</code>修饰，以<code>a</code>的指针和值的struct形式从栈区copy到堆区的新的<code>A</code>；其次在while循环内是异步并发，需要开辟新线程，是个耗时操作，可能在上一个线程没有执行完毕的时候又创建一个新的线程继续执行<code>a++</code>操作，结果就是可能多条线程内的<code>a</code>的值都是相同的，这样导致最后<code>a</code>的结果可能大于等于10，即使已经打印了<code>a</code>的值后可能还会有很多线程在执行，导致最后<code>a</code>的真正的值会很大。<p></p>
-<p><strong>解决问题：</strong>我们知道最后会创建出大于等于10条线程，我们可以利用锁的方式来保证最后只创建10条线程，以NSLock为例：</p>
-<h2 id=""><a href="#" class="headerlink" title=""></a><pre class="line-numbers language-none"><code class="language-none">int a = 0;
-NSLock *lock = [NSLock new];
-while (a&lt;10) {
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        a++;
-        [lock unlock];
-});
-[lock lock];
-NSLog(@"主线程%d",a);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></h2><p> <strong>开发中我们经常会碰到一些有依赖关系的任务，比如在A请求后再进行B、C请求这样的操作。解决办法很多，比如直接先同步执行A，再异步执行B、C，或者可以把A、B和C放在一个task任务中再进行相同的执行顺序，这样虽然解决了问题但是会堵塞线程，影响其他操作，我们也可以用栅栏函数来解决。</strong></p>
-<h4 id="栅栏函数"><a href="#栅栏函数" class="headerlink" title="栅栏函数"></a>栅栏函数</h4><blockquote>
-<p>TIP :<br>栅栏函数可以保证顺序执行，也可以保证线程安全，但一定要是自定义并发队列。正因为栅栏函数只能控制同一自定义并发队列，所以不利于封装。</p>
-</blockquote>
-<pre class="line-numbers language-none"><code class="language-none">void
-dispatch_barrier_async(dispatch_queue_t queue, dispatch_block_t block);
-
-void
-dispatch_barrier_sync(dispatch_queue_t queue,
-		DISPATCH_NOESCAPE dispatch_block_t block);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><code>dispatch_barrier_async</code>和<code>dispatch_barrier_sync</code>的区别就是是否阻塞当前线程，很明显<code>dispatch_barrier_async</code>不会阻塞当前线程：<br></p><pre class="line-numbers language-none"><code class="language-none">dispatch_queue_t concurrentQueue = dispatch_queue_create("concurrentQueue", DISPATCH_QUEUE_CONCURRENT);
-    /* 1.异步函数 */
-    dispatch_async(concurrentQueue, ^{
-        for (NSUInteger i = 0; i &lt; 5; i++) {
-            NSLog(@"加载1-%zd-%@",i,[NSThread currentThread]);
-        }
-    });
-    
-    dispatch_async(concurrentQueue, ^{
-        for (NSUInteger i = 0; i &lt; 5; i++) {
-            NSLog(@"加载2-%zd-%@",i,[NSThread currentThread]);
-        }
-    });
-    
-    /* 2. 栅栏函数 */
-    dispatch_barrier_async(concurrentQueue, ^{
-        NSLog(@"---------------------%@------------------------",[NSThread currentThread]);
-    });
-    NSLog(@"**********加载完毕!!!**********");
-    /* 3. 异步函数 */
-    dispatch_async(concurrentQueue, ^{
-        for (NSUInteger i = 0; i &lt; 5; i++) {
-            NSLog(@"处理结果3-%zd-%@",i,[NSThread currentThread]);
-        }
-    });
-    NSLog(@"**********继续!!!**********");
-    
-    dispatch_async(concurrentQueue, ^{
-        for (NSUInteger i = 0; i &lt; 5; i++) {
-            NSLog(@"处理结果4-%zd-%@",i,[NSThread currentThread]);
-        }
-    });<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>用栅栏函数<code>dispatch_barrier_async</code>打印效果：<br><pre class="line-numbers language-none"><code class="language-none">**********加载完毕!!!**********
-加载2-0-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
-加载1-0-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
-加载2-1-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
-加载1-1-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
-**********继续!!!**********
-加载2-2-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
-加载1-2-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
-加载2-3-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
-加载1-3-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
-加载2-4-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
-加载1-4-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
----------------------&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}------------------------
-处理结果3-0-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
-处理结果4-0-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
-处理结果3-1-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
-处理结果4-1-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
-处理结果3-2-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
-处理结果4-2-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
-处理结果3-3-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
-处理结果4-3-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
-处理结果3-4-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
-处理结果4-4-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>同样代码，如果用栅栏函数<code>dispatch_barrier_sync</code>，打印结果为：<p></p>
-<pre class="line-numbers language-none"><code class="language-none">加载2-0-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
-加载1-0-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
-加载2-1-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
-加载1-1-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
-加载2-2-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
-加载1-2-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
-加载2-3-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
-加载1-3-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
-加载2-4-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
-加载1-4-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
----------------------&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}------------------------
-**********加载完毕!!!**********
-**********继续!!!**********
-处理结果3-0-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
-处理结果4-0-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
-处理结果3-1-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
-处理结果4-1-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
-处理结果3-2-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
-处理结果4-2-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
-处理结果3-3-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
-处理结果4-3-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}
-处理结果3-4-&lt;NSThread: 0x6000002797c0&gt;{number = 5, name = (null)}
-处理结果4-4-&lt;NSThread: 0x600000246100&gt;{number = 4, name = (null)}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h4 id="调度组"><a href="#调度组" class="headerlink" title="调度组"></a>调度组</h4><p>虽然栅栏函数很好用，但是还不是很完美，可以利用调度组来解决栅栏函数的不足。<br>TIP：<code>dispatch_group_create</code>：创建调度组，<code>dispatch_group_async</code>：异步提交任务到调度组中，<code>dispatch_group_notify</code>：监听调度组任务是否执行完毕。<br></p><pre class="line-numbers language-none"><code class="language-none">//创建调度组
-dispatch_group_t group = dispatch_group_create();
-dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
-
-// SIGNAL
-dispatch_group_async(group, queue, ^{
-    NSLog(@"第一个走完了");
-});
-
-dispatch_group_async(group, queue, ^{
-    NSLog(@"第二个走完了");
-});
-
-dispatch_group_notify(group, dispatch_get_main_queue(), ^{
-    NSLog(@"所有任务完成,可以更新UI");
-});<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>当我们不使用<code>dispatch_group_async</code>来提交任务的时候，我们也可以使用<code>dispatch_group_enter和</code>dispatch_group_leave`来实现：<p></p>
-<pre class="line-numbers language-none"><code class="language-none">dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
-dispatch_group_t group = dispatch_group_create();
-
-dispatch_group_enter(group);
-dispatch_async(queue, ^{
-    NSLog(@"第一个走完了");
-    dispatch_group_leave(group);
-});
-
-dispatch_group_enter(group);
-dispatch_async(queue, ^{
-    NSLog(@"第二个走完了");
-    dispatch_group_leave(group);
-});
-
-dispatch_group_notify(group, dispatch_get_main_queue(), ^{
-    NSLog(@"所有任务完成,可以更新UI");
-});<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<blockquote>
-<p>TIP：<code>dispatch_group_enter</code>和<code>dispatch_group_leave</code>必须配合使用。</p>
-</blockquote>
-<p>两种写法结果都是先执行前面两个任务，最后执行notify内部的block任务。</p>
-<h4 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h4><p>GCD中的信号量是指<code>Dispatch Semaphore</code>，是持有计数的信号。除了调度组外，还可以使用信号量来解决问题。</p>
-<p>GCD信号量机制主要提供了以下三个函数：<br></p><pre class="line-numbers language-none"><code class="language-none">dispatch_semaphore_create(long value); // 创建信号量
-dispatch_semaphore_signal(dispatch_semaphore_t deem); // 发送信号量
-dispatch_semaphore_wait(dispatch_semaphore_t dsema, dispatch_time_t timeout); // 等待信号量<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><br><code>dispatch_semaphore_create</code>：创建一个<code>dispatch_semaphore_t</code>类型的信号量，并设定信号量的大小。<br><code>dispatch_semaphore_wait</code>：等待信号量，对信号量的值进行减1操作，如果信号量值为0，那么该函数就会一直等待，相当于阻塞当前线程，直到该函数等待的信号量的值大于等于1。<br><code>dispatch_semaphore_signal</code>：对信号量的值进行加1操作。<p></p>
-<p>一般等待信号量和发送信号量的函数是成对出现的。在并发执行任务时候，在当前任务执行之前，用<code>dispatch_semaphore_wait</code>函数对信号量的值减1操作（信号量为0时进行等待），执行当前任务后再通过<code>dispatch_semaphore_signal</code>函数对信号量的值加1操作来发送信号量，通知执行下一个任务。这样GCD就可以使用信号量来控制并发数，也可以保持线程同步，保证线程安全，当锁来使用。</p>
-<p>举个例子，以下代码由于<code>dispatch_semaphore_create</code>创建2个信号量，所以先执行任务1和任务2，等任务1和任务2完成后再执行任务3。<br></p><pre class="line-numbers language-none"><code class="language-none">dispatch_semaphore_t semaphore = dispatch_semaphore_create(2);
-
-//任务1
-dispatch_async(queue, ^{
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    NSLog(@"执行任务1");
-    sleep(1);
-    NSLog(@"任务1完成");
-    dispatch_semaphore_signal(semaphore);
-});
-
-//任务2
-dispatch_async(queue, ^{
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    NSLog(@"执行任务2");
-    sleep(1);
-    NSLog(@"任务2完成");
-    dispatch_semaphore_signal(semaphore);
-});
-
-//任务3
-dispatch_async(queue, ^{
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    NSLog(@"执行任务3");
-    sleep(1);
-    NSLog(@"任务3完成");
-    dispatch_semaphore_signal(semaphore);
-});<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
-<h4 id="延迟执行"><a href="#延迟执行" class="headerlink" title="延迟执行"></a>延迟执行</h4><p>GCD中的延迟执行<code>dispatch_after</code>是延时将任务追加到对应队列中，执行block块中的任务，具体延迟多少时间并不一定，对于一些模糊的延迟任务来说还是很有效的，比如在主线程中基本不会用<code>sleep</code>来延迟方法的调用，所以用<code>dispatch_after</code>是最合适的。<br></p><pre class="line-numbers language-none"><code class="language-none">//NSEC_PER_SEC : 1000000000ull 纳秒每秒 0.0000001
-    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC));
-    dispatch_queue_t queue = dispatch_queue_create("com.lg.cn", DISPATCH_QUEUE_CONCURRENT);
-    dispatch_after(time, queue, ^{
-        NSLog(@"延迟执行");
-    });
-    NSLog(@"继续执行");<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p></p>
-<h4 id="调度资源"><a href="#调度资源" class="headerlink" title="调度资源"></a>调度资源</h4><p>GCD中的调度资源<code>dispatch_source</code>是一种用于处理事件的数据类型，这些被处理的事件为操作系统中的底层级别。常用于处理跟系统有关的事件，协调处理指定的低级别的系统事件，在系统处理请求时应用程序可以继续处理自己的事情。 </p>
-<p><strong>优势：</strong></p>
-<ul>
-<li>其CPU负荷非常小，尽量不占用资源。</li>
-<li>联结的优势<br>当你配置一个dispatch source时，你指定要监测的事件、dispatch queue、以及处理事件的代码(block或函数)。当事件发生时（在任一线程上调用它的函数<code>dispatch_source_merge_data</code>），dispatch source会提交你的block或函数到指定的queue去执行和手工提交到queue的任务不同，dispatch source为应用提供连续的事件源。除非你显式地取消，dispatch source会一直保留与dispatch queue的关联。</li>
-</ul>
-<p><strong>使用：</strong></p>
-<ul>
-<li>创建源<code>dispatch_source_create</code>：<pre class="line-numbers language-none"><code class="language-none">/**
-*  arg1：用于标识Dispatch Source要监听的事件类型，共有11个类型。
-*  arg2：取决于要监听的事件类型，如果是监听Mach端口相关的事件，那么该参数就是mach_port_t类型的Mach端口号，如果是监听事件变量数据类型的事件那么该参数就不需要，设置为0就可以了。
-* arg3：取决于要监听的事件类型，如果是监听文件属性更改的事件，那么该参数就标识文件的哪个属性，比如DISPATCH_VNODE_RENAME。Apple的API介绍说，使用DISPATCH_TIMER_STRICT，会引起电量消耗加剧，毕竟要求精确时间，所以一般传0即可，视业务情况而定。
-* arg4：设置回调函数所在的队列，可以传Null，默认为全局队列。
-*/
-dispatch_source_t
-dispatch_source_create(dispatch_source_type_t type,
-	                   uintptr_t handle,
-	                   unsigned long mask,
-	                   dispatch_queue_t _Nullable queue);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-<li>设置源事件回调<code>dispatch_source_set_event_handler</code>(block形式)或者<code>dispatch_source_set_event_handler_f</code>(函数形式)<br>以<code>dispatch_source_set_event_handler</code>为例:<pre class="line-numbers language-none"><code class="language-none">void
-dispatch_source_set_event_handler(dispatch_source_t source,
-	dispatch_block_t _Nullable handler);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
-<li>源事件设置数据<code>dispatch_source_merge_data</code>：<pre class="line-numbers language-none"><code class="language-none">void
-dispatch_source_merge_data(dispatch_source_t source, unsigned long value);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
-<li>获取源事件数据<code>dispatch_source_get_data</code>：<pre class="line-numbers language-none"><code class="language-none">unsigned long
-dispatch_source_get_data(dispatch_source_t source);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
-<li>继续<code>dispatch_resume</code>：<pre class="line-numbers language-none"><code class="language-none">void
-dispatch_resume(dispatch_object_t object);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
-<li>挂起<code>dispatch_suspend</code>：<pre class="line-numbers language-none"><code class="language-none">void
-dispatch_suspend(dispatch_object_t object);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-</li>
-</ul>
-<p>模拟下载进度部分业务代码：<br></p><pre class="line-numbers language-none"><code class="language-none">self.source = dispatch_source_create(DISPATCH_SOURCE_TYPE_DATA_ADD, 0, 0, dispatch_get_main_queue());
-// 封装我们需要回调的触发函数 -- 响应
-dispatch_source_set_event_handler(self.source, ^{
-    
-    NSUInteger value = dispatch_source_get_data(self.source); // 取回来值 1 响应式
-    self.totalComplete += value;
-    NSLog(@"进度：%.2f", self.totalComplete/100.0);
-    self.progressView.progress = self.totalComplete/100.0;
-});
-dispatch_resume(self.source);
-self.isRunning     = YES;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>触发函数：<br><pre class="line-numbers language-none"><code class="language-none">- (void)touchesBegan:(NSSet&lt;UITouch *&gt; *)touches withEvent:(UIEvent *)event{
-
-    NSLog(@"点击开始加载");
-    
-    for (NSUInteger index = 0; index &lt; 100; index++) {
-        dispatch_async(self.queue, ^{
-            if (!self.isRunning) {
-                NSLog(@"暂停下载");
-                return ;
-            }
-            sleep(2);
-
-            dispatch_source_merge_data(self.source, 1); // source 值响应
-        });
-    }
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><br>具体代码：<a href="https://github.com/JBWangWork/DispatchSourceTest">Github直通车—&gt;https://github.com/JBWangWork/DispatchSourceTest</a><p></p>
-<p>该文章为记录本人的学习路程，也希望能够帮助大家，知识共享，共同成长，共同进步！！！</p>
-]]></content>
-      <categories>
-        <category>底层原理</category>
-        <category>源码分析</category>
-      </categories>
-      <tags>
-        <tag>底层原理</tag>
-        <tag>GCD</tag>
       </tags>
   </entry>
   <entry>
